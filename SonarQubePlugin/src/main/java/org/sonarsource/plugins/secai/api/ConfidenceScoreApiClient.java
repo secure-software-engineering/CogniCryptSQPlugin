@@ -12,7 +12,7 @@ public class ConfidenceScoreApiClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfidenceScoreApiClient.class);
 
-    private static final String API_ENDPOINT = "http://131.234.29.71/fp";
+    private static final String API_ENDPOINT = "http://127.0.0.1/fp";
 
     private final Gson gson = new Gson();
 
