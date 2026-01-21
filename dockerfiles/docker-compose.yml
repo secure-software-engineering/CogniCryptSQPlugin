@@ -9,7 +9,6 @@ services:
       - GRADLE_HOME=/opt/gradle
       - HOST_USER_HOME=/root
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-      - OPEN_AI_API_KEY=${OPEN_AI_API_KEY}
       - SONAR_JAVA_PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin/java
     volumes:
       - sonarqube_data:/opt/sonarqube/data
@@ -18,41 +17,41 @@ services:
       - ./projects:/projects
       - /root/secai:/home/sonarqube/secai
     networks:
-      -  scoobydoo
+      -  secai
     restart: always
 
-  flaskapp:
-    build: ./flaskapp
-    container_name: flaskapp
+  aifix:
+    build: ./AIFix
+    container_name: aifix
     ports:
       - "8000:8000"
     expose:
       - "8000"
     env_file:
-      - ./flaskapp/.env
+      - ./AIFix/.env
     networks:
-      -  scoobydoo
+      -  secai
     volumes:
-      - ./flaskapp:/app
+      - ./AIFix:/app
     restart: always
 
   confidence:
-    build: ./confidence
+    build: ./Confidence
     container_name: confidence
     ports:
       - "80:8001"
     expose:
       - "8001"
     networks:
-      - scoobydoo
+      - secai
     volumes:
-      - ./confidence:/app
+      - ./Confidence:/app
     restart: always
 
-  volumes:
-    sonarqube_data:
-    sonarqube_extensions:
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
 
-  networks:
-    scoobydoo:
-      driver: bridge
+networks:
+  secai:
+    driver: bridge
