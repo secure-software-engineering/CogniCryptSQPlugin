@@ -1,0 +1,6 @@
+CWE-ID: 832
+Name: Unlock of a Resource that is not Locked
+Description: The product attempts to unlock a resource that is not locked
+Extended Description: Depending on the locking functionality, an unlock of a non-locked resource might cause memory corruption or other modification to the resource (or its associated metadata that is used for tracking locks)
+Observed Examples: REFERENCECVE-2010-4210DESCRIPTIONfunction in OS kernel unlocks a mutex that was not previously locked, causing a panic or overwrite of arbitrary memoryLINKhttps//wwwcveorg/CVERecord?id=CVE-2010-4210REFERENCECVE-2008-4302DESCRIPTIONChain OS kernel does not properly handle a failure of a function call (CWE-755), leading to an unlock of a resource that was not locked (CWE-832), with resultant crashLINKhttps//wwwcveorg/CVERecord?id=CVE-2008-4302REFERENCECVE-2009-1243DESCRIPTIONOS kernel performs an unlock in some incorrect circumstances, leading to panicLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-1243
+Potential Mitigations: 

@@ -1,0 +1,6 @@
+CWE-ID: 205
+Name: Observable Behavioral Discrepancy
+Description: The product's behaviors indicate important differences that may be observed by unauthorized actors in a way that reveals (1) its internal state or decision process, or (2) differences from other products with equivalent functionality
+Extended Description: Ideally, a product should provide as little information about its internal operations as possible Otherwise, attackers could use knowledge of these internal operations to simplify or optimize their attack In some cases, behavioral discrepancies can be used by attackers to form a side channel
+Observed Examples: REFERENCECVE-2002-0208DESCRIPTIONProduct modifies TCP/IP stack and ICMP error messages in unusual ways that show the product is in useLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0208REFERENCECVE-2004-2252DESCRIPTIONBehavioral infoleak by responding to SYN-FIN packetsLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-2252
+Potential Mitigations: 

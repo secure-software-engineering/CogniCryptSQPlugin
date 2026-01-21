@@ -1,0 +1,6 @@
+CWE-ID: 222
+Name: Truncation of Security-relevant Information
+Description: The product truncates the display, recording, or processing of security-relevant information in a way that can obscure the source or nature of an attack
+Extended Description: 
+Observed Examples: REFERENCECVE-2005-0585DESCRIPTIONWeb browser truncates long sub-domains or paths, facilitating phishingLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-0585REFERENCECVE-2004-2032DESCRIPTIONBypass URL filter via a long URL with a large number of trailing hex-encoded space charactersLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-2032REFERENCECVE-2003-0412DESCRIPTIONapplication server does not log complete URI of a long request (truncation)LINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0412
+Potential Mitigations: 

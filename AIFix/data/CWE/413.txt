@@ -1,0 +1,6 @@
+CWE-ID: 413
+Name: Improper Resource Locking
+Description: The product does not lock or does not correctly lock a resource when the product must have exclusive access to the resource
+Extended Description: When a resource is not properly locked, an attacker could modify the resource while it is being operated on by the product This might violate the product's assumption that the resource will not change, potentially leading to unexpected behaviors
+Observed Examples: REFERENCECVE-2022-20141DESCRIPTIONChain an operating system kernel has insufficent resource locking (CWE-413) leading to a use after free (CWE-416)LINKhttps//wwwcveorg/CVERecord?id=CVE-2022-20141
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONUse a non-conflicting privilege schemePHASEArchitecture and Design ImplementationDESCRIPTIONUse synchronization when locking a resource

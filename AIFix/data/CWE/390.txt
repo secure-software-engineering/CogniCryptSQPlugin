@@ -1,0 +1,6 @@
+CWE-ID: 390
+Name: Detection of Error Condition Without Action
+Description: The product detects a specific error, but takes no actions to handle the error
+Extended Description: 
+Observed Examples: REFERENCECVE-2022-21820DESCRIPTIONA GPU data center manager detects an error due to a malformed request but does not act on it, leading to memory corruptionLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-21820
+Potential Mitigations: PHASEImplementationDESCRIPTIONProperly handle each exception This is the recommended solution Ensure that all exceptions are handled in such a way that you can be sure of the state of your system at any given momentPHASEImplementationDESCRIPTIONIf a function returns an error, it is important to either fix the problem and try again, alert the user that an error has happened and let the program continue, or alert the user and close and cleanup the programPHASETestingDESCRIPTIONSubject the product to extensive testing to discover some of the possible instances of where/how errors or return values are not handled Consider testing techniques such as ad hoc, equivalence partitioning, robustness and fault tolerance, mutation, and fuzzing

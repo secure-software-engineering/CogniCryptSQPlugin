@@ -1,0 +1,6 @@
+CWE-ID: 1068
+Name: Inconsistency Between Implementation and Documented Design
+Description: The implementation of the product is not consistent with the design as described within the relevant documentation
+Extended Description: This issue makes it more difficult to maintain the product due to inconsistencies, which indirectly affects security by making it more difficult or time-consuming to find and/or fix vulnerabilities It also might make it easier to introduce vulnerabilities
+Observed Examples: 
+Potential Mitigations: 

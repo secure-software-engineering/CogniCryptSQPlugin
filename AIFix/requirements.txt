@@ -1,0 +1,13 @@
+langchain-core
+langchain-community
+langchain-openai
+langchain-google-genai
+langchain-huggingface
+langchain-ollama
+sentence-transformers
+faiss-cpu
+pydantic
+flask
+flask-cors
+python-dotenv
+pandas

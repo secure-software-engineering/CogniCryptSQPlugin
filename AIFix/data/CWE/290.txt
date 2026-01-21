@@ -1,0 +1,6 @@
+CWE-ID: 290
+Name: Authentication Bypass by Spoofing
+Description: This attack-focused weakness is caused by incorrectly implemented authentication schemes that are subject to spoofing attacks
+Extended Description: 
+Observed Examples: REFERENCECVE-2022-30319DESCRIPTIONS-bus functionality in a home automation product performs access control using an IP allowlist, which can be bypassed by a forged IP addressLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-30319REFERENCECVE-2009-1048DESCRIPTIONVOIP product allows authentication bypass using 127001 in the Host headerLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-1048
+Potential Mitigations: 

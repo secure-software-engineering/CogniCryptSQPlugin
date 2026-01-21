@@ -1,0 +1,6 @@
+CWE-ID: 694
+Name: Use of Multiple Resources with Duplicate Identifier
+Description: The product uses multiple resources that can have the same identifier, in a context in which unique identifiers are required
+Extended Description: If the product assumes that each resource has a unique identifier, the product could operate on the wrong resource if attackers can cause multiple resources to be associated with the same identifier
+Observed Examples: REFERENCECVE-2013-4787DESCRIPTIONchain mobile OS verifies cryptographic signature of file in an archive, but then installs a different file with the same name that is also listed in the archiveLINKhttps//wwwcveorg/CVERecord?id=CVE-2013-4787
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONWhere possible, use unique identifiers If non-unique identifiers are detected, then do not operate any resource with a non-unique identifier and report the error appropriately

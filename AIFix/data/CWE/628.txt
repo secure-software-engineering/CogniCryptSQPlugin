@@ -1,0 +1,6 @@
+CWE-ID: 628
+Name: Function Call with Incorrectly Specified Arguments
+Description: The product calls a function, procedure, or routine with arguments that are not correctly specified, leading to always-incorrect behavior and resultant weaknesses
+Extended Description: There are multiple ways in which this weakness can be introduced, including the wrong variable or reference an incorrect number of arguments incorrect order of arguments wrong type of arguments or wrong value
+Observed Examples: REFERENCECVE-2006-7049DESCRIPTIONThe method calls the functions with the wrong argument order, which allows remote attackers to bypass intended access restrictionsLINKhttps//wwwcveorg/CVERecord?id=CVE-2006-7049
+Potential Mitigations: PHASEBuild and CompilationDESCRIPTIONOnce found, these issues are easy to fix Use code inspection tools and relevant compiler features to identify potential violations Pay special attention to code that is not likely to be exercised heavily during QAPHASEArchitecture and DesignDESCRIPTIONMake sure your API's are stable before you use them in production code

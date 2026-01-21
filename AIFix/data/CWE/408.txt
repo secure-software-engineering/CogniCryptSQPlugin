@@ -1,0 +1,6 @@
+CWE-ID: 408
+Name: Incorrect Behavior Order Early Amplification
+Description: The product allows an entity to perform a legitimate but expensive operation before authentication or authorization has taken place
+Extended Description: 
+Observed Examples: REFERENCECVE-2004-2458DESCRIPTIONTool creates directories before authenticating userLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-2458
+Potential Mitigations: 

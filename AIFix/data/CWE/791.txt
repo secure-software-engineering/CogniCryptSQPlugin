@@ -1,0 +1,6 @@
+CWE-ID: 791
+Name: Incomplete Filtering of Special Elements
+Description: The product receives data from an upstream component, but does not completely filter special elements before sending it to a downstream component
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: 

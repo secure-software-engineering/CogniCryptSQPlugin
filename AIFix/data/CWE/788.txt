@@ -1,0 +1,6 @@
+CWE-ID: 788
+Name: Access of Memory Location After End of Buffer
+Description: The product reads or writes to a buffer using an index or pointer that references a memory location after the end of the buffer
+Extended Description: This typically occurs when a pointer or its index is incremented to a position after the buffer or when pointer arithmetic results in a position after the buffer
+Observed Examples: REFERENCECVE-2009-2550DESCRIPTIONClassic stack-based buffer overflow in media player using a long entry in a playlistLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-2550REFERENCECVE-2009-2403DESCRIPTIONHeap-based buffer overflow in media player using a long entry in a playlistLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-2403REFERENCECVE-2009-0689DESCRIPTIONlarge precision value in a format string triggers overflowLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-0689REFERENCECVE-2009-0558DESCRIPTIONattacker-controlled array index leads to code executionLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-0558REFERENCECVE-2008-4113DESCRIPTIONOS kernel trusts userland-supplied length value, allowing reading of sensitive informationLINKhttps//wwwcveorg/CVERecord?id=CVE-2008-4113REFERENCECVE-2007-4268DESCRIPTIONChain integer signedness error (CWE-195) passes signed comparison, leading to heap overflow (CWE-122)LINKhttps//wwwcveorg/CVERecord?id=CVE-2007-4268
+Potential Mitigations: 

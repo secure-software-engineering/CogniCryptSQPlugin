@@ -1,0 +1,6 @@
+CWE-ID: 571
+Name: Expression is Always True
+Description: The product contains an expression that will always evaluate to true
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASETestingDESCRIPTIONUse Static Analysis tools to spot such conditions

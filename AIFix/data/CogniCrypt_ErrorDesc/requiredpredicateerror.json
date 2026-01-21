@@ -1,0 +1,177 @@
+{
+    "requiredpredicateerror": {
+        "description": "A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy a required security condition. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "<p>The follow-up error in the CrySL rule <strong>AlgorithmParameterGenerator</strong> occurs because the <code>REQUIRES</code> section, specifically <code>randomized[random]</code>, is not fulfilled. This indicates that the required randomness is not properly ensured, which can lead to security vulnerabilities.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <p>Related Java security object(s):</p> <ul> <li>java.security.SecureRandom (<code>SecureRandom</code>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "This follow-up error occurs in the CrySL rule for AlgorithmParameters because the REQUIRES section conditions are not fully met for the given algorithm and parameter specification. This likely means that the expected preparation step for the provided algorithm is missing or incorrectly specified. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li>javax.crypto.spec.DHGenParameterSpec (DHGenParameterSpec)</li><li>javax.crypto.spec.DHParameterSpec (DHParameterSpec)</li><li>javax.crypto.spec.IvParameterSpec (IvParameterSpec)</li><li>javax.crypto.spec.OAEPParameterSpec (OAEPParameterSpec)</li><li>javax.crypto.spec.PBEParameterSpec (PBEParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "This follow-up error occurs in the CrySL rule CertPathTrustManagerParameters when the section REQUIRES generatedCertPathParameters[params]; is not fulfilled regarding java.security.cert.CertPathParameters. This happens because the required certificate path parameters were not correctly generated or provided, leading to a rule violation. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li>java.security.cert.CertPathParameters (CertPathParameters)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>Cipher</code> because the <code>REQUIRES</code> section is not fully satisfied. Specifically, one or more required conditions related to key generation, algorithm preparation, or initialization parameters are missing or incorrect. This can lead to improper cryptographic usage and potential security vulnerabilities.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>java.security.cert.Certificate</code> (<em>Certificate</em>)</li>  <li><code>java.security.spec.AlgorithmParameterSpec</code> (<em>AlgorithmParameterSpec</em>)</li>  <li><code>java.security.AlgorithmParameters</code> (<em>AlgorithmParameters</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>CipherInputStream</code> when the <code>REQUIRES</code> section is not fulfilled, specifically the requirement <code>generatedCipher[cipher]</code>. This means that an instance of <code>javax.crypto.Cipher</code> was expected to be properly generated before use but was not.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li>javax.crypto.Cipher (Cipher)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>CipherOutputStream</code> because the requirement <code>generatedCipher[cipher]</code> is not fulfilled for <code>javax.crypto.Cipher</code>. This means that the cipher instance used in <code>CipherOutputStream</code> has not been properly generated or initialized according to the CrySL specification, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p><ul><li>javax.crypto.Cipher (<code>Cipher</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "This follow-up error occurs in the CrySL rule DigestInputStream when the section <strong>REQUIRES generatedMessageDigest[digest];</strong> is not fulfilled regarding <code>java.security.MessageDigest</code>. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li><code>java.security.MessageDigest</code> (<em>MessageDigest</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <code>DigestOutputStream</code> because the requirement <code>generatedMessageDigest[digest]</code> is not fulfilled for <code>java.security.MessageDigest</code>. This indicates that a message digest was expected to be generated but was not properly assigned or used in compliance with the rule constraints.</p><p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.MessageDigest</code> (MessageDigest)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "This follow-up error occurs in the CrySL rule for GCMParameterSpec when the section <code>REQUIRES randomized[src];</code> is not fulfilled regarding <code>byte[]</code>. This requirement ensures that the source data is properly randomized to maintain cryptographic security. Failure to comply with this rule may lead to vulnerabilities or incorrect cryptographic operations. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.<br><ul></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>IvParameterSpec</code> when the <code>REQUIRES randomized[iv];</code> section is not fulfilled. The violation indicates that the initialization vector (IV) must be randomized to ensure cryptographic security.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Key",
+                "misuse": "This follow-up error occurs in the CrySL rule 'Key' because the requirement in the REQUIRES section is not fulfilled. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.<br><ul><li>[]</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "<p>This follow-up error occurs because the <strong>REQUIRES</strong> section is not fully satisfied. Specifically, the required conditions for key generation, algorithm preparation, or randomness are not met. As a result, the CrySL rule for <strong>KeyAgreement</strong> fails to validate the expected cryptographic workflow.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li><code>java.security.Key</code> (<em>Key</em>)</li> <li><code>javax.crypto.SecretKey</code> (<em>SecretKey</em>)</li> <li><code>java.security.spec.AlgorithmParameterSpec</code> (<em>AlgorithmParameterSpec</em>)</li> <li><code>java.security.SecureRandom</code> (<em>SecureRandom</em>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyFactory</code> when the <code>REQUIRES</code> section is not fulfilled regarding the specified security objects. This means that the required key specification has not been properly defined or used, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.PrivateKey</code> (PrivateKey)</li><li><code>java.security.PublicKey</code> (PublicKey)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>KeyGenerator</strong> when the <code>REQUIRES</code> section is not fulfilled regarding the requirement <code>randomized[random]</code>. This means that a necessary randomness source was not provided correctly, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li><li><code>javax.crypto.SecretKey</code> (SecretKey)</li><li><code>java.security.SecureRandom</code> (SecureRandom)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyManagerFactory</code> when the <code>REQUIRES</code> section is not fulfilled regarding <code>java.security.KeyStore</code>. The error indicates that a required object has not been properly generated or provided before its use.</p><p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p><ul><li>java.security.KeyStore (<code>KeyStore</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>KeyPair</strong> when the <code>REQUIRES</code> section is not fulfilled. Specifically, the required conditions for generated private and public keys are not met, which leads to inconsistencies in the key generation process. As a result, the rule cannot verify the correct usage of key pairs.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li> <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyPairGenerator</code> when the <code>REQUIRES</code> section is not fulfilled regarding the specified Java security objects. The error arises because the required preparation steps for the given algorithm are missing, leading to an inconsistency in rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyPair</code> (KeyPair)</li><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Mac",
+                "misuse": "<p>This follow-up error occurs because the conditions in the <strong>REQUIRES</strong> section are not fulfilled. Specifically, the rule expects that no encryption has been performed on <code>output1</code> and <code>output2</code>, that an HMAC has been prepared with the given parameters, and that a cryptographic key has been generated. If any of these conditions are not met, the CrySL rule detects a violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>javax.crypto.Mac</code> (Mac)</li><li><code>java.security.Key</code> (Key)</li><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>OAEPParameterSpec</code> when the requirement</p><pre>REQUIRES preparedMGF1[mgfSpec, mdName];</pre><p>is not fulfilled regarding <code>java.security.spec.AlgorithmParameterSpec</code>. This happens because the mandatory preparation of the mask generation function (MGF1) with the specified message digest (mdName) was not completed before its usage.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "<p>The follow-up error in the CrySL rule <code>PBEKeySpec</code> occurs because the requirement <code>randomized[salt]</code> is not fulfilled. This means that the expected salt value, which should be randomized, is either missing or improperly set, leading to a security violation in the rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.ObjectName</code> (<code>ClassName</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>PBEParameterSpec</code> when the <code>REQUIRES randomized[salt];</code> section is not fulfilled regarding <code>java.security.spec.AlgorithmParameterSpec</code>. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "<p>This follow-up error in the CrySL rule <code>PKIXBuilderParameters</code> occurs because the <code>REQUIRES</code> section is not fulfilled regarding <code>java.security.KeyStore</code>. This means that the necessary security object has not been properly generated or provided, leading to a constraint violation in the rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>PKIXParameters</code> when the <code>REQUIRES</code> section specifying <code>generatedKeyStore[keyStore]</code> is not fulfilled. The issue arises due to a missing or improperly initialized instance of the required <code>java.security.KeyStore</code> object.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "<p>This follow-up error occurs because the <code>REQUIRES generatedPrivkey[this];</code> condition is not fulfilled in the CrySL rule for <code>PrivateKey</code>. This means that a private key must be properly generated before it can be used, and the absence of this step leads to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>PrivateKey</code> (<code>java.security.PrivateKey</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <strong>PublicKey</strong> because the <code>REQUIRES</code> condition <code>generatedPubkey[this]</code> is not fulfilled. This means that a required public key was not properly generated or assigned before its usage.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li>java.security.PublicKey (<code>PublicKey</code>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecretKey</strong> because the required condition <code>generatedKey[this, _];</code> is not fulfilled. As a result, the expected security properties or guarantees are not met, leading to a rule violation.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li><code>java.security.Key</code> (Key)</li> <li><code>java.security.KeyPair</code> (KeyPair)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecretKeyFactory</strong> when the <code>REQUIRES</code> section is not fulfilled regarding <code>speccedKey[keySpec, _]</code>. This means that a required precondition involving <code>javax.crypto.SecretKey</code> and <code>java.security.spec.KeySpec</code> has not been satisfied, potentially leading to an invalid or incomplete specification.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li>javax.crypto.SecretKey (<code>SecretKey</code>)</li><li>java.security.spec.KeySpec (<code>KeySpec</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <strong>SecretKeySpec</strong> when the requirement <code>preparedKeyMaterial[keyMaterial]</code> is not fulfilled. This means that the necessary key material has not been properly prepared before use.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.Key</code> (Key)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecureRandom</strong> when the required conditions <code>randomized[seed]</code> and <code>randomized[lSeed]</code> are not fulfilled. This indicates that the necessary randomization steps were not properly executed, leading to a violation of the security rule.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p><ul><li><code>[]</code></li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Signature",
+                "misuse": "This follow-up error occurs in the CrySL rule Signature when the REQUIRES section is not fulfilled regarding the specified java security objects. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><ul><li>java.security.PrivateKey (PrivateKey)</li><li>java.security.PublicKey (PublicKey)</li><li>java.security.spec.AlgorithmParameterSpec (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SSLContext</strong> because the <em>REQUIRES</em> section is not fulfilled. Specifically, the required object <code>java.security.SecureRandom</code> is missing or incorrectly initialized. As a result, the rule's constraints cannot be satisfied, leading to an error.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.SecureRandom</code> (<em>SecureRandom</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>TrustAnchor</strong> because the section <code>REQUIRES generatedPubkey[publicKey];</code> is not fulfilled regarding <code>java.security.PublicKey</code>. This means that the required public key was not properly generated or assigned before being used.</p> <p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.PublicKey</code> (PublicKey)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>TrustManagerFactory</code> because the <code>REQUIRES</code> section is not fulfilled regarding the specified <code>java.security.KeyStore</code>. The rule expects the required objects to be properly generated before use. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>X509EncodedKeySpec</strong> when the section <code>REQUIRES preparedKeyMaterial[encodedKey];</code> is not fulfilled regarding the specified security objects. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyFactory</code> (KeyFactory)</li><li><code>java.security.spec.X509EncodedKeySpec</code> (X509EncodedKeySpec)</li></ul>",
+                "solution": ""
+            }
+        ]
+    }
+}

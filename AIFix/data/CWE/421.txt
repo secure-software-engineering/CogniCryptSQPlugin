@@ -1,0 +1,6 @@
+CWE-ID: 421
+Name: Race Condition During Access to Alternate Channel
+Description: The product opens an alternate channel to communicate with an authorized user, but the channel is accessible to other actors
+Extended Description: This creates a race condition that allows an attacker to access the channel before the authorized user does
+Observed Examples: REFERENCECVE-1999-0351DESCRIPTIONFTP Pizza Thief vulnerability Attacker can connect to a port that was intended for use by another clientLINKhttps//wwwcveorg/CVERecord?id=CVE-1999-0351REFERENCECVE-2003-0230DESCRIPTIONProduct creates Windows named pipe during authentication that another attacker can hijack by connecting to itLINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0230
+Potential Mitigations: 

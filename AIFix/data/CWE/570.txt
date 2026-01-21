@@ -1,0 +1,6 @@
+CWE-ID: 570
+Name: Expression is Always False
+Description: The product contains an expression that will always evaluate to false
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASETestingDESCRIPTIONUse Static Analysis tools to spot such conditions

@@ -1,0 +1,6 @@
+CWE-ID: 1050
+Name: Excessive Platform Resource Consumption within a Loop
+Description: The product has a loop body or loop condition that contains a control element that directly or indirectly consumes platform resources, eg messaging, sessions, locks, or file descriptors
+Extended Description: This issue can make the product perform more slowly If an attacker can influence the number of iterations in the loop, then this performance problem might allow a denial of service by consuming more platform resources than intended
+Observed Examples: 
+Potential Mitigations: 

@@ -1,0 +1,12 @@
+.env
+aifix.log
+.idea/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+Main.class
+Main.jar
+Main.java
+analysis_results.db
+GeneratedCode/

@@ -1,0 +1,6 @@
+CWE-ID: 283
+Name: Unverified Ownership
+Description: The product does not properly verify that a critical resource is owned by the proper entity
+Extended Description: 
+Observed Examples: REFERENCECVE-2001-0178DESCRIPTIONProgram does not verify the owner of a UNIX socket that is used for sending a passwordLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0178REFERENCECVE-2004-2012DESCRIPTIONOwner of special device not checked, allowing rootLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-2012
+Potential Mitigations: PHASEArchitecture and Design OperationDESCRIPTIONVery carefully manage the setting, management, and handling of privileges Explicitly manage trust zones in the softwarePHASEArchitecture and DesignSTRATEGYSeparation of PrivilegeDESCRIPTIONConsider following the principle of separation of privilege Require multiple conditions to be met before permitting access to a system resource

@@ -1,0 +1,6 @@
+CWE-ID: 135
+Name: Incorrect Calculation of Multi-Byte String Length
+Description: The product does not correctly calculate the length of strings that can contain wide or multi-byte characters
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEImplementationSTRATEGYInput ValidationDESCRIPTIONAlways verify the length of the string unit characterPHASEImplementationSTRATEGYLibraries or FrameworksDESCRIPTIONUse length computing functions (eg strlen, wcslen, etc) appropriately with their equivalent type (eg byte, wchar_t, etc)

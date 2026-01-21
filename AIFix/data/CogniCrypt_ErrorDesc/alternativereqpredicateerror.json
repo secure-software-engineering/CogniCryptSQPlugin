@@ -1,0 +1,17 @@
+{
+    "AlternativeReqPredicateError": {
+        "description": "An <b>AlternativeReqPredicateError</b> occurs when a cryptographic object does not satisfy a required security condition, specifically one that consists of a set of alternatives. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property and all relevant alternatives are missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "This follow-up error occurs when none of the following predicates are fulfilled for the <code>key</code> given in the <code>init</code> method:<ul><li>The key for the specified algorithm was properly generated.</li><li>The key is a properly generated public key.</li><li>The key is a properly generated private key.</li></ul>Therefore, consider checking for issue tags involving the following classes:<ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li>  <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Key",
+                "misuse": "This follow-up error occurs when none of the following predicates are fulfilled when calling the <code>getEncoded</code> method:<ul><li>The key was properly generated.</li><li>The key is a properly generated public key.</li><li>The key is a properly generated private key.</li></ul>Therefore, consider checking for issue tags involving the following classes:<ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>javax.crypto.KeyGenerator</code> (<em>KeyGenerator</em>)</li>  <li><code>java.security.KeyStore</code> (<em>KeyStore</em>)</li>  <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li>  <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li>  <li><code>javax.crypto.SecretKeyFactory</code> (<em>SecretKeyFactory</em>)</li>  <li><code>javax.crypto.spec.SecretKeySpec</code> (<em>SecretKeySpec</em>)</li></ul>",
+                "solution": ""
+            }
+        ]
+    }
+}

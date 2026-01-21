@@ -1,0 +1,6 @@
+CWE-ID: 1053
+Name: Missing Documentation for Design
+Description: The product does not have documentation that represents how it is designed
+Extended Description: This issue can make it more difficult to understand and maintain the product It can make it more difficult and time-consuming to detect and/or fix vulnerabilities
+Observed Examples: 
+Potential Mitigations: 

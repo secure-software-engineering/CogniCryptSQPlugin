@@ -1,0 +1,6 @@
+CWE-ID: 66
+Name: Improper Handling of File Names that Identify Virtual Resources
+Description: The product does not handle or incorrectly handles a file name that identifies a virtual resource that is not directly specified within the directory that is associated with the file name, causing the product to perform file-based operations on a resource that is not a file
+Extended Description: Virtual file names are represented like normal file names, but they are effectively aliases for other resources that do not behave like normal files Depending on their functionality, they could be alternate entities They are not necessarily listed in directories
+Observed Examples: REFERENCECVE-1999-0278DESCRIPTIONIn IIS, remote attackers can obtain source code for ASP files by appending $DATA to the URLLINKhttps//wwwcveorg/CVERecord?id=CVE-1999-0278REFERENCECVE-2004-1084DESCRIPTIONServer allows remote attackers to read files and resource fork content via HTTP requests to certain special file names related to multiple data streams in HFS+LINKhttps//wwwcveorg/CVERecord?id=CVE-2004-1084REFERENCECVE-2002-0106DESCRIPTIONServer allows remote attackers to cause a denial of service via a series of requests to JSP files that contain an MS-DOS device nameLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0106
+Potential Mitigations: 

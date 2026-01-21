@@ -1,0 +1,6 @@
+CWE-ID: 783
+Name: Operator Precedence Logic Error
+Description: The product uses an expression in which operator precedence causes incorrect logic to be used
+Extended Description: While often just a bug, operator precedence logic errors can have serious consequences if they are used in security-critical code, such as making an authentication decision
+Observed Examples: REFERENCECVE-2008-2516DESCRIPTIONAuthentication module allows authentication bypass because it uses (x = call(args) == SUCCESS) instead of ((x = call(args)) == SUCCESS)LINKhttps//wwwcveorg/CVERecord?id=CVE-2008-2516REFERENCECVE-2008-0599DESCRIPTIONChain Language interpreter calculates wrong buffer size (CWE-131) by using size = ptr ? X  Y instead of size = (ptr ? X  Y) expressionLINKhttps//wwwcveorg/CVERecord?id=CVE-2008-0599REFERENCECVE-2001-1155DESCRIPTIONChain product does not properly check the result of a reverse DNS lookup because of operator precedence (CWE-783), allowing bypass of DNS-based access restrictionsLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-1155
+Potential Mitigations: PHASEImplementationDESCRIPTIONRegularly wrap sub-expressions in parentheses, especially in security-critical code

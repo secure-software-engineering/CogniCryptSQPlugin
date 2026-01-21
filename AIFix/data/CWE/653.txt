@@ -1,0 +1,6 @@
+CWE-ID: 653
+Name: Improper Isolation or Compartmentalization
+Description: The product does not properly compartmentalize or isolate functionality, processes, or resources that require different privilege levels, rights, or permissions
+Extended Description: When a weakness occurs in functionality that is accessible by lower-privileged users, then without strong boundaries, an attack might extend the scope of the damage to higher-privileged users
+Observed Examples: REFERENCECVE-2021-33096DESCRIPTIONImproper isolation of shared resource in a network-on-chip leads to denial of serviceLINKhttps//wwwcveorg/CVERecord?id=CVE-2021-33096REFERENCECVE-2019-6260DESCRIPTIONBaseboard Management Controller (BMC) device implements Advanced High-performance Bus (AHB) bridges that do not require authentication for arbitrary read and write access to the BMC's physical address space from the host, and possibly the network [REF-1138]LINKhttps//wwwcveorg/CVERecord?id=CVE-2019-6260
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONBreak up privileges between different modules, objects, or entities Minimize the interfaces between modules and require strong access control between them

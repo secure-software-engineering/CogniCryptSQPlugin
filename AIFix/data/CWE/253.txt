@@ -1,0 +1,6 @@
+CWE-ID: 253
+Name: Incorrect Check of Function Return Value
+Description: The product incorrectly checks a return value from a function, which prevents it from detecting errors or exceptional conditions
+Extended Description: Important and common functions will return some value about the success of its actions This will alert the program whether or not to handle any errors caused by that function
+Observed Examples: REFERENCECVE-2023-49286DESCRIPTIONChain function in web caching proxy does not correctly check a return value (CWE-253) leading to a reachable assertion (CWE-617)LINKhttps//wwwcveorg/CVERecord?id=CVE-2023-49286
+Potential Mitigations: PHASEArchitecture and DesignSTRATEGYLanguage SelectionDESCRIPTIONUse a language or compiler that uses exceptions and requires the catching of those exceptionsPHASEImplementationDESCRIPTIONProperly check all functions which return a valuePHASEImplementationDESCRIPTIONWhen designing any function make sure you return a value or throw an exception in case of an error
