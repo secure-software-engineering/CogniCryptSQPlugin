@@ -1,6 +1,6 @@
 # Jar Generation
 
-The [util class](../../src/main/java/org/sonarsource/plugins/secai/utils/jargeneration/JarGenerator.java) `JarGenerator` can generate jars for Maven and Gradle.
+The [util class](../../SonarQubePlugin/src/main/java/org/sonarsource/plugins/secai/utils/jargeneration/JarGenerator.java) `JarGenerator` can generate jars for Maven and Gradle.
 
 ---
 
@@ -21,7 +21,7 @@ The `JarGenerator` has three modes for generating jars, the default is **AUTO**:
 - **MAVEN**: tries to force a Maven build
 - **GRADLE**: tries to force a Gradle build
 
-This setting can be changed by the user, in case both build system are at least partially configured in their project. It is tied to the custom SonarQube property `sonar.secai.build.system`, which only accepts the values specified in [the enum](../../src/main/java/org/sonarsource/plugins/secai/utils/jargeneration/BuildSystem.java) `BuildSystem`.
+This setting can be changed by the user, in case both build system are at least partially configured in their project. It is tied to the custom SonarQube property `sonar.secai.build.system`, which only accepts the values specified in [the enum](../../SonarQubePlugin/src/main/java/org/sonarsource/plugins/secai/utils/jargeneration/BuildSystem.java) `BuildSystem`.
 
 If the build fails or a specific build system (**MAVEN** or **GRADLE**) was given, a `JarGenerationException` is thrown.
 

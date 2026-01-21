@@ -167,7 +167,7 @@ public enum OptionsEnum {
 
 ## Adding the Properties to SonarQube
 
-Within `SecAIPlugin.java` [(link)](../../src/main/java/org/sonarsource/plugins/secai/SecAIPlugin.java) add this new property file using `context.addExtensions(NewToolProperties.getProperties());`. Make sure that the method is `addExtensions` (plural) and not `addExtension` (singular) and that the call to `NewToolProperties.getProperties()` is the only argument. If this is done incorrectly your new properties will not show in SonarQube.
+Within `SecAIPlugin.java` [(link)](../../SonarQubePlugin/src/main/java/org/sonarsource/plugins/secai/SecAIPlugin.java) add this new property file using `context.addExtensions(NewToolProperties.getProperties());`. Make sure that the method is `addExtensions` (plural) and not `addExtension` (singular) and that the call to `NewToolProperties.getProperties()` is the only argument. If this is done incorrectly your new properties will not show in SonarQube.
 
 ---
 

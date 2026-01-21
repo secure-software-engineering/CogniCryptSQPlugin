@@ -1,12 +1,13 @@
 site_name: SecAI Plugin Documentation
 site_description: Hereby is the Documentation of SecAI plugin!
 site_author: Secure-Systems-Engineering Dept., Paderborn University
-site_url: https://secure-software-engineering.github.io/SonarQubePlugin/
+site_url: https://secure-software-engineering.github.io/CogniCryptSQPlugin/
+use_directory_urls: false
 
 
 # Repository info
-repo_name: secure-software-engineering/SonarQubePlugin
-repo_url: https://github.com/secure-software-engineering/SonarQubePlugin
+repo_name: secure-software-engineering/CogniCryptSQPlugin
+repo_url: https://github.com/secure-software-engineering/CogniCryptSQPlugin
 edit_uri: edit/testing/docs/ # Change to main branch when needed!
 
 
@@ -45,6 +46,7 @@ nav:
     - Quick Start: getting-started/quickstart.md
     - Server Setup: getting-started/server-setup.md
   - User Guide:
+    - Issue Management: user-guide/issue-management.md
     - Error Tree: user-guide/error-tree.md
     - AiFix: user-guide/AiFix.md
     - Code Generation: user-guide/code-gen.md
@@ -96,6 +98,6 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/secure-software-engineering/SonarQubePlugin
+      link: https://github.com/secure-software-engineering/CogniCryptSQPlugin
   version:
     provider: mike

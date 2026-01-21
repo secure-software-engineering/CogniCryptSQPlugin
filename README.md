@@ -4,7 +4,27 @@ This repository combines the different components of the *SecAI* SonarQube plugi
 
 ## Documentation
 
-TODO
+You can access the documentation of the plugin using the [*docs* folder](/docs). 
+
+Alternatively, you can build the documentation using the following commands and open the index page in `/site/index.html`:
+
+```bash
+# Install dependencies (you only need to do this once)
+pip install -r requirements.txt
+
+# Build documentation
+mkdocs build
+```
+
+Another method would be to serve the documentation locally. The output of the command will then provide a link to access the pages hosted on the localhost.
+
+```bash
+# Install dependencies (you only need to do this once)
+pip install -r requirements.txt
+
+# Serve documentation locally
+mkdocs serve
+```
 
 ## Components
 
