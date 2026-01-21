@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "DigestOutputStream: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "tags": [
+        "cognicrypt",
+        "digestoutputstream",
+        "ordererror"
+    ]
+}

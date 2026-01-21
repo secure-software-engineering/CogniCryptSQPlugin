@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "X509EncodedKeySpec: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "x509encodedkeyspec",
+        "constrainterror"
+    ]
+}

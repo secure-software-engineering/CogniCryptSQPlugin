@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "DigestOutputStream: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "tags": [
+        "cognicrypt",
+        "digestoutputstream",
+        "requiredpredicateerror"
+    ]
+}

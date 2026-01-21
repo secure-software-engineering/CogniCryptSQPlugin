@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "OAEPParameterSpec: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "oaepparameterspec",
+        "requiredpredicateerror"
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "AlgorithmParameters: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            325,
+            326,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "algorithmparameters",
+        "ordererror"
+    ]
+}

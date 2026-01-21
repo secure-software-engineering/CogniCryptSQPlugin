@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "DigestInputStream: Insecure method call",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "tags": [
+        "cognicrypt",
+        "digestinputstream",
+        "forbiddenmethoderror"
+    ]
+}

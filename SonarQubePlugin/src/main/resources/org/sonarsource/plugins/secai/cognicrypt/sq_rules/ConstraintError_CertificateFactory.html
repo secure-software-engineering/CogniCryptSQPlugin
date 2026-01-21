@@ -1,0 +1,16 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>The type passed to the <code>getInstance</code> method needs to be one of the following:<ul><li>X509</li><li>X.509</li></ul>When passing an encoding to the <code>generateCertPath</code> method one of the following must be used:<ul><li>PKCS7</li><li>PkiPath</li></ul></p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/cert/CertificateFactory">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/cert/CertificateFactory</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul><li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/CertificateFactory.crysl">CertificateFactory</a></li></ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/295.html">CWE-295: Improper Certificate Validation</a></li>
+</ul>

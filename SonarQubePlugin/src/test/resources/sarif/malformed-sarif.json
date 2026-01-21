@@ -1,0 +1,4 @@
+{
+  "sarifVersion": "2.0.0",
+  "runs": [
+    { "results": [ { "violatedRule": "abc"

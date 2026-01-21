@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "Signature: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            295,
+            325,
+            327,
+            780
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "signature",
+        "requiredpredicateerror"
+    ]
+}

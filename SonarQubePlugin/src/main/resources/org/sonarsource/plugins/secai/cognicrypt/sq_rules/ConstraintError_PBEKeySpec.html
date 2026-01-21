@@ -1,0 +1,23 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>While there are multiple possible constructors for <code>PBEKeySpec</code>, the following is the one that should be used:<pre>new PBEKeySpec(char[] password, byte[] salt, int iterationCount, int keyLength);</pre></p>
+<p>The <code>iterationCount</code> should always be greater or equal to 10000.</p>
+<br>
+<p>The password used in the constructor should not be: <ul><li>hard coded</li> <li>of type <code>String</code>. Instead it should be of type <code>char[]</code></li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEKeySpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEKeySpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PBEKeySpec.crysl">PBEKeySpec</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/259.html">CWE-259: Use of Hard-coded Password</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/295.html">CWE-295: Improper Certificate Validation</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/307.html">CWE-307: Improper Restriction of Excessive Authentication Attempts</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/760.html">CWE-760: Use of a One-Way Hash with a Predictable Salt</a></li>
+</ul>

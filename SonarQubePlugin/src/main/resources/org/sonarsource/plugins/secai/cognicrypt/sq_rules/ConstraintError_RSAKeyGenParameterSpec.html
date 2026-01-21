@@ -1,0 +1,28 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>The <code>RSAKeyGenParameterSpec</code> is being used with insecure parameters. the <b>key size</b> here must be either <code>3072</code> or <code>4096</code> bits, and the <b>public exponent</b> must be <code>65537</code>.</p>
+<p>To resolve this issue, you must initialize <code>RSAKeyGenParameterSpec</code> with values that comply with the CRYSL rule. <br><br><b>Compliant Configuration:</b><br><br><ul><li><b>Key size:</b> <code>3072</code> or <code>4096</code></li><li><b>Public exponent:</b> <code>65537</code></li></ul><br><b>Example Fix:</b><br><pre><code>import java.security.spec.RSAKeyGenParameterSpec;
+import java.math.BigInteger;
+
+public class SecureRSAConfig {
+ public void setup() throws Exception {
+ int keySize = 4096;
+ BigInteger publicExponent = BigInteger.valueOf(65537);
+ RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(keySize, publicExponent);
+ // Use this spec with your KeyPairGenerator
+}
+}</code></pre><br><b>Avoid:</b> Using smaller key sizes like <code>2048</code> or public exponents like <code>3</code>.<br><br>This ensures compliance with modern security recommendations and prevents cryptographic vulnerabilities.</p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/RSAKeyGenParameterSpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/RSAKeyGenParameterSpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/RSAKeyGenParameterSpec.crysl">RSAKeyGenParameterSpec</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/326.html">CWE-326: Inadequate Encryption Strength</a></li>
+</ul>

@@ -1,0 +1,19 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "AlgorithmParameters: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            325,
+            326,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "algorithmparameters",
+        "constrainterror"
+    ]
+}

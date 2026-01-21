@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "CipherInputStream: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "tags": [
+        "cognicrypt",
+        "cipherinputstream",
+        "constrainterror"
+    ]
+}

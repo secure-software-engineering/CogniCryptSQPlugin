@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "PublicKey: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            295,
+            347
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "publickey",
+        "requiredpredicateerror"
+    ]
+}

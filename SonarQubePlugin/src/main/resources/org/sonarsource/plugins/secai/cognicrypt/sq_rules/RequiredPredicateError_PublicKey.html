@@ -1,0 +1,19 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy one or more required security pre-conditions. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage</p>
+<h2>How to fix it</h2>
+<p><p>The follow-up error occurs in the CrySL rule <strong>PublicKey</strong> because the <code>REQUIRES</code> condition <code>generatedPubkey[this]</code> is not fulfilled. This means that a required public key was not properly generated or assigned before its usage.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li>java.security.PublicKey (<code>PublicKey</code>)</li> </ul></p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/PublicKey">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/PublicKey</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PublicKey.crysl">PublicKey</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/295.html">CWE-295: Improper Certificate Validation</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/347.html">CWE-347: Improper Verification of Cryptographic Signature</a></li>
+</ul>

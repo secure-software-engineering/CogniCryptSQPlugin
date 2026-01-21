@@ -1,0 +1,21 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "Cipher: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            325,
+            327,
+            329,
+            330,
+            338
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "cipher",
+        "requiredpredicateerror"
+    ]
+}

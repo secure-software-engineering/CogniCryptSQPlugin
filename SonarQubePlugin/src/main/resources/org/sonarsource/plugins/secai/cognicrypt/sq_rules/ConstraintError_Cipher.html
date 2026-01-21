@@ -1,0 +1,36 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>A <b>ConstraintError</b> was triggered due to the use of <b>invalid parameters or transformations</b> in the <code>javax.crypto.Cipher</code> API. This means the current usage violates the defined <code>CONSTRAINTS</code> in the CrySL specification.<br><br>Common violations include:<ul><li>Using a key type that is <b>incompatible</b> with the specified transformation</li><li>Using an <b>unsupported algorithm, mode, or padding</b></li><li>Missing or invalid <code>init()</code> calls</li><li>Calling <code>updateAAD()</code> when it's disallowed</li><li>Providing <b>incorrect offset or length values</b> that cause array index violations</li><li>Failing to call <code>getIV()</code> when required by the mode</li></ul></p>
+<p>To fix this issue, ensure the Cipher instance and parameters comply with all defined constraints. Here are key guidelines based on the CrySL rule:<br><br><b>Key-Algorithm Matching:</b><ul><li>If <code>key</code> is a <code>SecretKey</code>, then <code>transformation</code> must use one of:<br><code>{AES, PBEWithHmacSHAxxxAndAES_xxx}</code></li><li>If using <code>PublicKey</code>, <code>PrivateKey</code>, or <code>Certificate</code> and <code>encmode</code> in <code>{3, 4}</code>, then <code>transformation</code> must be <code>RSA</code></li></ul><br><b>Algorithm, Mode, and Padding Combinations:</b><ul><li><code>AES</code> must use one of these modes: <code>{GCM, CTR, CTS, CFB, OFB}</code> and <b>must use</b> <code>NoPadding</code></li><li><code>RSA</code>:<ul><li><code>mode == ""</code> → <code>pad == ""</code></li><li><code>mode == "ECB"</code> → <code>pad</code> must be one of: <code>NoPadding, PKCS1Padding, OAEPWithSHA-xxxAndMGF1Padding</code></li></ul></li><li><code>PBEWithHmacSHAxxxAndAES_xxx</code> must use <code>PKCS5Padding</code></li></ul><br><b>IV Requirements:</b><ul><li>If mode is <code>{CTR, CTS, CFB, OFB}</code> and <code>encmode == 1</code>, then <code>getIV()</code> must be called</li><li>If <code>encmode != 1</code>, then <code>init()</code> must not use IV-related overloads</li></ul><br><b>AAD Restrictions:</b><ul><li>Only allowed when <code>mode == GCM</code></li><li>Disallowed in modes: <code>CTR, CTS, CFB, ECB, OFB</code></li></ul><br><b>Offset/Length Constraints:</b><ul><li><code>prePlainTextOffset >= 0</code>, <code>prePlainTextLen > 0</code>, and <code>prePlainText.length >= prePlainTextOffset + prePlainTextLen</code></li><li><code>plainTextOffset >= 0</code>, <code>plainTextLen > 0</code>, and <code>plainText.length >= plainTextOffset + plainTextLen</code></li><li><code>preCipherTextOffset >= 0</code> and <code>preCipherText.length >= preCipherTextOffset</code></li><li><code>cipherTextOffset >= 0</code> and <code>cipherText.length >= cipherTextOffset</code></li></ul><br> <b>Mode setting must be valid:</b><ul><li><code>encmode</code> must be one of: <code>{1, 2, 3, 4}</code></li></ul><br><b>Example Fix:</b><br><pre><code>import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+public class AESExample {
+ public byte[] encrypt(byte[] plainText) throws Exception {
+ KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+ keyGen.init(256);
+ SecretKey key = keyGen.generateKey();
+
+ Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+ cipher.init(Cipher.ENCRYPT_MODE, key);
+        return cipher.doFinal(plainText);
+}
+}</code></pre><br><b>Avoid:</b><ul><li>Using <code>RSA</code> with <code>CTR</code> or <code>GCM</code></li><li>Setting incorrect <code>offset</code> and <code>length</code> values on byte arrays</li><li>Calling <code>updateAAD()</code> outside of <code>GCM</code> mode</li><li>Using mismatched <code>Key</code> types and algorithms</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/Cipher">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/Cipher</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/Cipher.crysl">Cipher</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/325.html">CWE-325: Missing Cryptographic Step</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/329.html">CWE-329: Generation of Predictable IV with CBC Mode</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/330.html">CWE-330: Use of Insufficiently Random Values</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/338.html">CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)</a></li>
+</ul>

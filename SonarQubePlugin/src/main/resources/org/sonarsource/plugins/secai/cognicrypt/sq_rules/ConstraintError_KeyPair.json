@@ -1,0 +1,19 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyPair: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            331,
+            338,
+            325
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keypair",
+        "constrainterror"
+    ]
+}

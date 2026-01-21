@@ -1,0 +1,13 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ForbiddenMethodError</b> occurs when an explicitly restricted method is invoked in cryptographic operations. Some methods are banned due to known security vulnerabilities or deprecated functionality. When this error is reported, it means that the method being used is considered insecure or does not comply with best practices. Ignoring this error may lead to weak encryption, insecure randomness, or potential exploitation of deprecated algorithms.</p>
+<h2>How to fix it</h2>
+<p>The method <code>on(boolean on)</code> should not be used.</p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestOutputStream">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestOutputStream</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DigestOutputStream.crysl">DigestOutputStream</a></li>
+</ul>

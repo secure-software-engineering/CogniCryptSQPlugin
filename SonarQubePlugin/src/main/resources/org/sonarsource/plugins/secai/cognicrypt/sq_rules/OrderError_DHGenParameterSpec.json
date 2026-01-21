@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "DHGenParameterSpec: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            326
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "dhgenparameterspec",
+        "ordererror"
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyGenerator: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            325,
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keygenerator",
+        "constrainterror"
+    ]
+}

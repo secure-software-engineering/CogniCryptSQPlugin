@@ -1,0 +1,25 @@
+{
+  "sarifVersion": "2.0.0",
+  "runs": [{
+    "results": [
+      {
+        "violatedRule": "javax.crypto.SecretKeyFactory",
+        "errorType": "AlienErrorType",
+        "locations": [[{
+          "physicalLocation": {
+            "fileLocation": { "uri": "org/example/Alien.java" },
+            "region": {
+              "method": "<org.example.Alien: void badStuff()>",
+              "startLine": "99",
+              "statement": "mysteryCall()"
+            }
+          }
+        }]],
+        "message": {
+          "text": "This is a totally unknown error type.",
+          "richText": "AlienErrorType: mysterious"
+        }
+      }
+    ]
+  }]
+}

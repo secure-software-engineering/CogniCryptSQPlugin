@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "Cookie: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            614
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "cookie",
+        "constrainterror"
+    ]
+}

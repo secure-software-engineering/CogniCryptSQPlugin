@@ -1,0 +1,101 @@
+site_name: SecAI Plugin Documentation
+site_description: Hereby is the Documentation of SecAI plugin!
+site_author: Secure-Systems-Engineering Dept., Paderborn University
+site_url: https://secure-software-engineering.github.io/SonarQubePlugin/
+
+
+# Repository info
+repo_name: secure-software-engineering/SonarQubePlugin
+repo_url: https://github.com/secure-software-engineering/SonarQubePlugin
+edit_uri: edit/testing/docs/ # Change to main branch when needed!
+
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Getting Started: 
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Server Setup: getting-started/server-setup.md
+  - User Guide:
+    - Error Tree: user-guide/error-tree.md
+    - AiFix: user-guide/AiFix.md
+    - Code Generation: user-guide/code-gen.md
+    - Github PR: user-guide/github-pr-integration.md
+    - Diff-View: user-guide/diff-view.md
+  - CogniCrypt:
+    - Overview: cognicrypt/overview.md
+    - Extracting Additional Information: cognicrypt/cc-message-deconstruction.md
+    - Editing the Error Message: cognicrypt/cc-message-edit.md
+    - Accurate Error Location: cognicrypt/cc-location.md
+    - Severity: cognicrypt/severity.md
+    - False Positive Detection: cognicrypt/false-positive-detection.md
+    - CogniCrypt Rules in SonarQube: cognicrypt/cc-rules.md
+  - Extension Guide:
+    - Adding New Analysis Tools: extension-guide/add-tool.md
+    - Custom SonarQube Properties: extension-guide/custom-properties.md
+    - Jar Generation: extension-guide/jar-generation.md
+    - Code Snippet: extension-guide/code-snippet.md
+  - Testing:
+    - Overview: testing/overview.md
+    - Running Tests: testing/running-tests.md
+    - Writing Tests: testing/writing-tests.md
+    - Test Data: testing/test-data.md
+  - API Reference: api-reference.md
+  - Contributing: contributing.md
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+# Plugins
+plugins:
+  - search
+  - git-revision-date-localized
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/secure-software-engineering/SonarQubePlugin
+  version:
+    provider: mike

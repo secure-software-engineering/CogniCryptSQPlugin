@@ -1,0 +1,20 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>While there is a constructor available to create a new <code>SecureRandom</code> or the possiblity of using <code>SecureRandom.getInstanceStrong()</code>, you can also call one of the following:<pre>SecureRandom.getInstance(String algorithm);
+SecureRandom.getInstance(String algorithm, Provider provider);
+SecureRandom.getInstance(String algorithm, String provider);</pre></p>
+<p>In this case, the <code>algorithm</code> must be one of:<ul><li>SHA1PRNG</li><li>Windows-PRNG</li><li>NativePRNG</li><li>NativePRNGBlocking</li><li>NativePRNGNonBlocking</li><li>PKCS11</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/SecureRandom.crysl">SecureRandom</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/338.html">CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)</a></li>
+</ul>

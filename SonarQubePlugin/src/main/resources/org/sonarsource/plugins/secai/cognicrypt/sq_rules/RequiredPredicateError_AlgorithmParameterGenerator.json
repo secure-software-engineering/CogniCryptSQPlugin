@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "AlgorithmParameterGenerator: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            326,
+            327,
+            329,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "algorithmparametergenerator",
+        "requiredpredicateerror"
+    ]
+}

@@ -1,0 +1,13 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>While the <code>write</code> method can be called while only giving a singular byte to write to the output stream, it can also be called using parameters to specify an array of bytes to write, an offset, and a length:<pre>digest.write(byte[] data, int offset, int len);</pre></p>
+<p>In this case, the following constraints must be fulfilled for each parameter:<ul><li>length(data) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestOutputStream">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestOutputStream</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DigestOutputStream.crysl">DigestOutputStream</a></li>
+</ul>

@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "MGF1ParameterSpec: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "mgf1parameterspec",
+        "constrainterror"
+    ]
+}

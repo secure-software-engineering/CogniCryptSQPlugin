@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "GCMParameterSpec: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            327,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "gcmparameterspec",
+        "constrainterror"
+    ]
+}

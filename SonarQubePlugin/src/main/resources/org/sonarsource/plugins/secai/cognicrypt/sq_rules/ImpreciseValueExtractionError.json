@@ -1,0 +1,11 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "Some parameters could not be evaluated",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "tags": [
+        "cognicrypt",
+        "imprecisevalueextractionerror"
+    ]
+}

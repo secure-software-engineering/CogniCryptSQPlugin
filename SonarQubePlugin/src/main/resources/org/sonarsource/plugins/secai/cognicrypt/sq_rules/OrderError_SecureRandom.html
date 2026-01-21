@@ -1,0 +1,85 @@
+<h2>Why is this an issue?</h2>
+<p>An <b>OrderError</b> is reported when a cryptographic operation is not fully completed as expected (<b>IncompleteOperationError</b>) or executed in the wrong order (<b>TypestateError</b>). CrySL rules define a specific order of operations (e.g., an encryption process requires initialization before performing encryption, followed by finalization). If a required step is missing or in the wrong place, the cryptographic process may remain incomplete, potentially leading to unencrypted data, insecure partial outputs, or unexpected runtime failures. This error ensures that cryptographic workflows are executed in their entirety and in their intended sequence to maintain security.</p>
+<h2>How to fix it</h2>
+<p>The following operations must be executed in the correct order:</p>
+<ol>
+	<li>
+		Get a <code>SecureRandom</code> object:
+		<ul>
+			<li>
+				<details>
+					<summary>new SecureRandom</summary>
+					<ul>
+						<li><code>new SecureRandom()</code></li>
+						<li><code>new SecureRandom(byte[] seed)</code></li>
+					</ul>
+				</details>
+			</li>
+			<li>
+				<details>
+					<summary>getInstance</summary>
+					<ul>
+						<li><code>SecureRandom.getInstance(String algorithm)</code></li>
+						<li><code>SecureRandom.getInstance(String algorithm, String provider)</code></li>
+						<li><code>SecureRandom.getInstance(String algorithm, Provider provider)</code></li>
+						<li><code>SecureRandom.getInstance(String algorithm, SecureRandomParameters params)</code></li>
+						<li><code>SecureRandom.getInstance(String algorithm, SecureRandomParameters params, String provider)</code></li>
+						<li><code>SecureRandom.getInstance(String algorithm, SecureRandomParameters params, Provider provider)</code></li>
+						<li><code>SecureRandom.getInstanceStrong()</code></li>
+					</ul>
+				</details>
+			</li>
+		</ul>
+	</li>
+	<li>		
+		set seed and get next [optional, can be called more than once]
+		<ol>
+			<li>
+				<details>
+					<summary>setSeed [optional]</summary>
+					<ul>
+						<li><code>random.setSeed(byte[] seed)</code></li>
+						<li><code>random.setSeed(long seed)</code></li>
+					</ul>
+				</details>
+			</li>
+			<li>
+				End [optional, can be called more than once]
+				<ul>
+					<li>
+						<details>
+							<summary>generateSeed</summary>
+							<ul>
+								<li><code>byte[] seed = random.generateSeed(int numBytes)</code></li>
+							</ul>
+						</details>
+					</li>
+					<li>
+						<details>
+							<summary>next</summary>
+							<ul>
+								<li><code>random.nextBytes(byte[] bytes)</code></li>
+								<li><code>random.nextBytes(byte[] bytes, SecureRandomParameters params)</code></li>
+								<li><code>random.next(int numBits)</code></li>
+							</ul>
+						</details>
+					</li>
+				</ul>
+			</li>
+		</ol>
+	</li>
+</ol>
+
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/SecureRandom.crysl">SecureRandom</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/338.html">CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)</a></li>
+</ul>

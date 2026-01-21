@@ -1,0 +1,24 @@
+services:
+  sonarqube:
+    build: .
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - MAVEN_HOME=/opt/maven
+      - GRADLE_HOME=/opt/gradle
+      - HOST_USER_HOME=/root
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      - OPEN_AI_API_KEY=${OPEN_AI_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - SONAR_JAVA_PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin/java
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - ./plugins:/opt/sonarqube/extensions/plugins
+      - ./projects:/projects
+      - /root/secai:/home/sonarqube/secai
+    restart: always
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:

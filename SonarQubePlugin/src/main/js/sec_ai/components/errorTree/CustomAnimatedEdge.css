@@ -1,0 +1,17 @@
+.custom-edge {
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.custom-edge.hovered {
+    stroke: #f00 !important;
+}
+
+#animated-image {
+    transform: rotate(260deg) translateY(-5%);
+}
+
+@keyframes fillProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}

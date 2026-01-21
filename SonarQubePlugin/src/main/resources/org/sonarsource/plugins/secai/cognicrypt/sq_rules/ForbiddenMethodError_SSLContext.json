@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "SSLContext: Insecure method call",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "sslcontext",
+        "forbiddenmethoderror"
+    ]
+}

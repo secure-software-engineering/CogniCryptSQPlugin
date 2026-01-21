@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "AlgorithmParameterGenerator: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            326,
+            327,
+            329,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "algorithmparametergenerator",
+        "constrainterror"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "MessageDigest: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "messagedigest",
+        "ordererror"
+    ]
+}

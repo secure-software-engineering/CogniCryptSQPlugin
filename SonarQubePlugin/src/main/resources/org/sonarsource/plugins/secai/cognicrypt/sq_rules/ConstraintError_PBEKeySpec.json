@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "PBEKeySpec: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            259,
+            295,
+            307,
+            760
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "pbekeyspec",
+        "constrainterror"
+    ]
+}

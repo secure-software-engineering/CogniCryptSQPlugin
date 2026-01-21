@@ -1,0 +1,21 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyAgreement: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            295,
+            325,
+            327,
+            330,
+            338
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keyagreement",
+        "requiredpredicateerror"
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyPair: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            331,
+            338,
+            325
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keypair",
+        "requiredpredicateerror"
+    ]
+}

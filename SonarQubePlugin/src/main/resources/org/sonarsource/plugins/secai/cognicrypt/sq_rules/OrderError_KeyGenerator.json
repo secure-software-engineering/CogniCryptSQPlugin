@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyGenerator: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            325,
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keygenerator",
+        "ordererror"
+    ]
+}

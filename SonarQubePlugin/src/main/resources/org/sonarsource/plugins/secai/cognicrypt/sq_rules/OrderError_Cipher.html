@@ -1,0 +1,103 @@
+<h2>Why is this an issue?</h2>
+<p>An <b>OrderError</b> is reported when a cryptographic operation is not fully completed as expected (<b>IncompleteOperationError</b>) or executed in the wrong order (<b>TypestateError</b>). CrySL rules define a specific order of operations (e.g., an encryption process requires initialization before performing encryption, followed by finalization). If a required step is missing or in the wrong place, the cryptographic process may remain incomplete, potentially leading to unencrypted data, insecure partial outputs, or unexpected runtime failures. This error ensures that cryptographic workflows are executed in their entirety and in their intended sequence to maintain security.</p>
+<h2>How to fix it</h2>
+<p>The following operations must be executed in the correct order:</p>
+<ol>
+	<li>
+		<details>
+			<summary>getInstance</summary>
+			<ul>
+				<li><code>Cipher.getInstance(String transformation)</code></li>
+				<li><code>Cipher.getInstance(String transformation, String provider)</code></li>
+				<li><code>Cipher.getInstance(String transformation, Provider provider)</code></li>
+			</ul>
+		</details>
+	</li>
+	<li>
+		<details>
+			<summary>init [at least once]</summary>
+			<ul>
+				<li><code>c.init(int opmode, Certificate certificate)</code></li>
+				<li><code>c.init(int opmode, Certificate certificate, SecureRandom random)</code></li>
+				<li><code>c.init(int opmode, Key key)</code></li>
+				<li><code>c.init(int opmode, Key key, SecureRandom random)</code></li>
+				<li><code>c.init(int opmode, Key key, AlgorithmParameters params)</code></li>
+				<li><code>c.init(int opmode, Key key, AlgorithmParameters params, SecureRandom random)</code></li>
+				<li><code>c.init(int opmode, Key key, AlgorithmParameterSpec paramSpec)</code></li>
+				<li><code>c.init(int opmode, Key key, AlgorithmParameterSpec paramSpec, SecureRandom random)</code></li>
+			</ul>
+		</details>
+	</li>
+	<li>
+		<details>
+			<summary>updateAAD [optional, can be called more than once]</summary>
+			<ul>
+				<li><code>c.updateAAD(byte[] aadBytes)</code></li>
+				<li><code>c.updateAAD(byte[] aadBytes, int aadOffset, int aadLen)</code></li>
+				<li><code>c.updateAAD(ByteBuffer aadByteBuffer)</code></li>
+			</ul>
+		</details>
+	</li>
+	<li>
+		Continue with either option 1 or 2 [XOR]:
+		<ol>
+			<li>
+				<details>
+					<summary>wrap [can be called more than once]</summary>
+					<ul>
+						<li><code>byte[] wrappedKeyBytes = c.wrap(Key wrappedKey)</code></li>
+					</ul>
+				</details>
+			</li>
+			<li>
+				Update and finalize [can be called more than once]
+				<ol>
+					<li>
+						<details>
+							<summary>update [optional, can be called more than once]</summary>
+							<ul>
+								<li><code>byte[] preCipherText = c.update(byte[] prePlainText)</code></li>
+								<li><code>byte[] preCipherText = c.update(byte[] prePlainText, int prePlainTextOffset, int prePlainTextLen)</code></li>
+								<li><code>c.update(byte[] prePlainText, int prePlainTextOffset, int prePlainTextLen, byte[] preCipherText)</code></li>
+								<li><code>c.update(byte[] prePlainText, int prePlainTextOffset, int prePlainTextLen, byte[] preCipherText, int preCipherTextOffset)</code></li>
+								<li><code>c.update(ByteBuffer prePlainTextByteBuffer, ByteBuffer preCipherTextByteBuffer)</code></li>
+							</ul>
+						</details>
+					</li>
+					<li>
+						<details>
+							<summary>doFinal</summary>
+							<ul>
+								<li><code>byte[] cipherText = c.doFinal()</code> [only after having previously called <code>update</code>]</li>
+								<li><code>byte[] cipherText = c.doFinal(byte[] plainText)</code></li>
+								<li><code>c.doFinal(byte[] cipherText, int cipherTextOffset)</code> [only after having previously called <code>update</code>]</li>
+								<li><code>byte[] cipherText = c.doFinal(byte[] plainText, int plainTextOffset, int plainTextLen)</code></li>
+								<li><code>c.doFinal(byte[] plainText, int plainTextOffset, int plainTextLen, byte[] cipherText)</code></li>
+								<li><code>c.doFinal(byte[] plainText, int plainTextOffset, int plainTextLen, byte[] cipherText, int cipherTextOffset)</code></li>
+								<li><code>c.doFinal(ByteBuffer plainTextByteBuffer, ByteBuffer cipherTextByteBuffer)</code></li>
+							</ul>
+						</details>
+					</li>
+				</ol>
+			</li>
+		</ol>
+	</li>
+</ol>
+
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/Cipher">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/Cipher</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/Cipher.crysl">Cipher</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/325.html">CWE-325: Missing Cryptographic Step</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/329.html">CWE-329: Generation of Predictable IV with CBC Mode</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/330.html">CWE-330: Use of Insufficiently Random Values</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/338.html">CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)</a></li>
+</ul>

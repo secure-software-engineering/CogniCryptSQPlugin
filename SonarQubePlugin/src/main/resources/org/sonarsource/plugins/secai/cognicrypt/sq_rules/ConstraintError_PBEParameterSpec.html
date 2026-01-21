@@ -1,0 +1,20 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>There are two constructors for <code>PBEParameterSpec</code>:<pre>new PBEParameterSpec(byte[] salt, int iterationCount);
+new PBEParameterSpec(byte[] salt, int iterationCount, AlgorithmParameterSpec params);</pre></p>
+<p>For both the <code>iterationCount</code> should always be greater or equal to 10000.</p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEParameterSpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEParameterSpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PBEParameterSpec.crysl">PBEParameterSpec</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/329.html">CWE-329: Generation of Predictable IV with CBC Mode</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/331.html">CWE-331: Insufficient Entropy</a></li>
+</ul>

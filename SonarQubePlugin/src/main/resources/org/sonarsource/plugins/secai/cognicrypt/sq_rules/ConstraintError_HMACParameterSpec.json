@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "HMACParameterSpec: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "securityStandards": {
+        "CWE": [
+            325,
+            326,
+            327,
+            328
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "hmacparameterspec",
+        "constrainterror"
+    ]
+}

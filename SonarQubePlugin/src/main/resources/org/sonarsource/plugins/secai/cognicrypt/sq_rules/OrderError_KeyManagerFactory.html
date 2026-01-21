@@ -1,0 +1,47 @@
+<h2>Why is this an issue?</h2>
+<p>An <b>OrderError</b> is reported when a cryptographic operation is not fully completed as expected (<b>IncompleteOperationError</b>) or executed in the wrong order (<b>TypestateError</b>). CrySL rules define a specific order of operations (e.g., an encryption process requires initialization before performing encryption, followed by finalization). If a required step is missing or in the wrong place, the cryptographic process may remain incomplete, potentially leading to unencrypted data, insecure partial outputs, or unexpected runtime failures. This error ensures that cryptographic workflows are executed in their entirety and in their intended sequence to maintain security.</p>
+<h2>How to fix it</h2>
+<p>The following operations must be executed in the correct order:</p>
+<ol>
+	<li>
+		<details>
+			<summary>getInstance</summary>
+			<ul>
+				<li><code>KeyManagerFactory.getInstance(String algorithm)</code></li>
+				<li><code>KeyManagerFactory.getInstance(String algorithm, String provider)</code></li>
+				<li><code>KeyManagerFactory.getInstance(String algorithm, Provider provider)</code></li>
+			</ul>
+		</details>
+	</li>
+	<li>
+		<details>
+			<summary>init</summary>
+			<ul>
+				<li><code>keyManFactory.init(KeyStore keyStore, char[] password)</code></li>
+				<li><code>keyManFactory.init(ManagerFactoryParameters params)</code></li>
+			</ul>
+		</details>
+	</li>
+	<li>
+		<details>
+			<summary>getKeyManagers [optional]</summary>
+			<ul>
+				<li><code>KeyManager[] keyManagers = keyManFactory.getKeyManagers()</code></li>
+			</ul>
+		</details>
+	</li>
+</ol>
+
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/net/ssl/KeyManagerFactory">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/net/ssl/KeyManagerFactory</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/KeyManagerFactory.crysl">KeyManagerFactory</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/259.html">CWE-259: Use of Hard-coded Password</a></li>
+</ul>

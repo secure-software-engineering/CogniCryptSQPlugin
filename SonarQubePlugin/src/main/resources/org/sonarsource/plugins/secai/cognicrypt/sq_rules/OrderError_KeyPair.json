@@ -1,0 +1,19 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyPair: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            331,
+            338,
+            325
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keypair",
+        "ordererror"
+    ]
+}

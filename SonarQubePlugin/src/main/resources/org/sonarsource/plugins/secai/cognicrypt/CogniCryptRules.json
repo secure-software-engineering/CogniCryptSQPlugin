@@ -1,0 +1,1357 @@
+{
+    "AlternativeReqPredicateError": {
+        "description": "An <b>AlternativeReqPredicateError</b> occurs when a cryptographic object does not satisfy a required security condition, specifically one that consists of a set of alternatives. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property and all relevant alternatives are missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "This follow-up error occurs when none of the following predicates are fulfilled for the <code>key</code> given in the <code>init</code> method:<ul><li>The key for the specified algorithm was properly generated.</li><li>The key is a properly generated public key.</li><li>The key is a properly generated private key.</li></ul>Therefore, consider checking for issue tags involving the following classes:<ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li>  <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Key",
+                "misuse": "This follow-up error occurs when none of the following predicates are fulfilled when calling the <code>getEncoded</code> method:<ul><li>The key was properly generated.</li><li>The key is a properly generated public key.</li><li>The key is a properly generated private key.</li></ul>Therefore, consider checking for issue tags involving the following classes:<ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>javax.crypto.KeyGenerator</code> (<em>KeyGenerator</em>)</li>  <li><code>java.security.KeyStore</code> (<em>KeyStore</em>)</li>  <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li>  <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li>  <li><code>javax.crypto.SecretKeyFactory</code> (<em>SecretKeyFactory</em>)</li>  <li><code>javax.crypto.spec.SecretKeySpec</code> (<em>SecretKeySpec</em>)</li></ul>",
+                "solution": ""
+            }
+        ]
+    },
+    "CallToError": {
+        "description": "A <b>CallToError</b> occurs when a required method call is missing in the usage of a cryptographic API. CrySL rules define mandatory method invocations that must occur when using a particular cryptographic object. If the expected method is not invoked, the security or functionality of the cryptographic operation may be compromised. This error often arises when a cryptographic object needs explicit initialization, but the developer fails to invoke the required method. Missing such calls may lead to improper configuration, weaker security guarantees, or even runtime exceptions when the API is used incorrectly.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "In order to get a new <code>Cipher</code> object one of the following <code>getInstance</code> methods must be called:<pre>Cipher.getInstance(String transformation);\nCipher.getInstance(String transformation, String provider);\nCipher.getInstance(String transformation, Provider provider);</pre>The <code>String transformation</code> can be either the name of an algorithm or formed as follows: \"algorithm/mode/padding\".<br>Calling the <code>init</code> method could be any of the following calls:<pre>init(encmode, certificate);\ninit(encmode, certificate, random);\ninit(encmode, key);\ninit(encmode, key, paramSpec);\ninit(encmode, key, params);\ninit(encmode, key, paramSpec, random);\ninit(encmode, key, params, random);\ninit(encmode, key, random);</pre>",
+                "solution": "If the <code>encmode</code> is <i>1</i> or <i>ENCRYPT_MODE</i> and the mode part of <code>transformation</code> is among the following:<ul><li>CTR</li><li>CTS</li><li>CFB</li><li>ECB</li><li>OFB</li></ul>then a call to <code>getIV()</code> must be made."
+            }
+        ]
+    },
+    "ConstraintError": {
+        "description": "A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "When passing an algorithm to the <code>getInstance</code> method, the algorithm has to be one of the following:<ul><li>AES</li><li>Camellia</li><li>Shacal2</li><li>Shacal-2</li><li>DH</li><li>DiffieHellman</li><li>DSA</li><li>ElGamal</li></ul>For the <i>init</i> method there is a choice between using an <code>int</code> to convey the size or using an <code>AlgorithmParameterSpec</code> object. When using the former, depending on the algorithm chosen a specific size has to be used.<br><br>Use size <i>3072</i> for the following algorithms:<ul><li>DH</li><li>DiffieHellman</li><li>DSA</li><li>ElGamal</li></ul>Use size <i>128</i>, <i>192</i> or <i>256</i> for the following algorithms:<ul><li>AES</li><li>Camellia</li><li>Shacal2</li><li>Shacal-2</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "When passing an algorithm to the <code>getInstance</code> method, the algorithm has to be one of the following:<ul><li>AES</li><li>DiffieHellman</li><li>DH</li><li>OAEP</li><li>PBEWithHmacSHA224AndAES_128</li><li>PBEWithHmacSHA256AndAES_128</li><li>PBEWithHmacSHA384AndAES_128</li><li>PBEWithHmacSHA512AndAES_128</li><li>PBEWithHmacSHA224AndAES_256</li><li>PBEWithHmacSHA256AndAES_256</li><li>PBEWithHmacSHA384AndAES_256</li><li>PBEWithHmacSHA512AndAES_256</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CertificateFactory",
+                "misuse": "The type passed to the <code>getInstance</code> method needs to be one of the following:<ul><li>X509</li><li>X.509</li></ul>When passing an encoding to the <code>generateCertPath</code> method one of the following must be used:<ul><li>PKCS7</li><li>PkiPath</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "The CrySL rule for <code>CerPathTrustManagerParameters</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "A <b>ConstraintError</b> was triggered due to the use of <b>invalid parameters or transformations</b> in the <code>javax.crypto.Cipher</code> API. This means the current usage violates the defined <code>CONSTRAINTS</code> in the CrySL specification.<br><br>Common violations include:<ul><li>Using a key type that is <b>incompatible</b> with the specified transformation</li><li>Using an <b>unsupported algorithm, mode, or padding</b></li><li>Missing or invalid <code>init()</code> calls</li><li>Calling <code>updateAAD()</code> when it's disallowed</li><li>Providing <b>incorrect offset or length values</b> that cause array index violations</li><li>Failing to call <code>getIV()</code> when required by the mode</li></ul>",
+
+                "solution": "To fix this issue, ensure the Cipher instance and parameters comply with all defined constraints. Here are key guidelines based on the CrySL rule:<br><br><b>Key-Algorithm Matching:</b><ul><li>If <code>key</code> is a <code>SecretKey</code>, then <code>transformation</code> must use one of:<br><code>{AES, PBEWithHmacSHAxxxAndAES_xxx}</code></li><li>If using <code>PublicKey</code>, <code>PrivateKey</code>, or <code>Certificate</code> and <code>encmode</code> in <code>{3, 4}</code>, then <code>transformation</code> must be <code>RSA</code></li></ul><br><b>Algorithm, Mode, and Padding Combinations:</b><ul><li><code>AES</code> must use one of these modes: <code>{GCM, CTR, CTS, CFB, OFB}</code> and <b>must use</b> <code>NoPadding</code></li><li><code>RSA</code>:<ul><li><code>mode == \"\"</code> → <code>pad == \"\"</code></li><li><code>mode == \"ECB\"</code> → <code>pad</code> must be one of: <code>NoPadding, PKCS1Padding, OAEPWithSHA-xxxAndMGF1Padding</code></li></ul></li><li><code>PBEWithHmacSHAxxxAndAES_xxx</code> must use <code>PKCS5Padding</code></li></ul><br><b>IV Requirements:</b><ul><li>If mode is <code>{CTR, CTS, CFB, OFB}</code> and <code>encmode == 1</code>, then <code>getIV()</code> must be called</li><li>If <code>encmode != 1</code>, then <code>init()</code> must not use IV-related overloads</li></ul><br><b>AAD Restrictions:</b><ul><li>Only allowed when <code>mode == GCM</code></li><li>Disallowed in modes: <code>CTR, CTS, CFB, ECB, OFB</code></li></ul><br><b>Offset/Length Constraints:</b><ul><li><code>prePlainTextOffset >= 0</code>, <code>prePlainTextLen > 0</code>, and <code>prePlainText.length >= prePlainTextOffset + prePlainTextLen</code></li><li><code>plainTextOffset >= 0</code>, <code>plainTextLen > 0</code>, and <code>plainText.length >= plainTextOffset + plainTextLen</code></li><li><code>preCipherTextOffset >= 0</code> and <code>preCipherText.length >= preCipherTextOffset</code></li><li><code>cipherTextOffset >= 0</code> and <code>cipherText.length >= cipherTextOffset</code></li></ul><br> <b>Mode setting must be valid:</b><ul><li><code>encmode</code> must be one of: <code>{1, 2, 3, 4}</code></li></ul><br><b>Example Fix:</b><br><pre><code>import javax.crypto.Cipher;\nimport javax.crypto.KeyGenerator;\nimport javax.crypto.SecretKey;\n\npublic class AESExample {\n public byte[] encrypt(byte[] plainText) throws Exception {\n KeyGenerator keyGen = KeyGenerator.getInstance(\"AES\");\n keyGen.init(256);\n SecretKey key = keyGen.generateKey();\n\n Cipher cipher = Cipher.getInstance(\"AES/GCM/NoPadding\");\n cipher.init(Cipher.ENCRYPT_MODE, key);\n        return cipher.doFinal(plainText);\n}\n}</code></pre><br><b>Avoid:</b><ul><li>Using <code>RSA</code> with <code>CTR</code> or <code>GCM</code></li><li>Setting incorrect <code>offset</code> and <code>length</code> values on byte arrays</li><li>Calling <code>updateAAD()</code> outside of <code>GCM</code> mode</li><li>Using mismatched <code>Key</code> types and algorithms</li></ul>"
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "When calling <pre>cipherInputStream.read(byte[] data, int offset, int len);</pre> the following constraints must be fulfilled:<ul><li>offset >= 0</li><li>len > 0</li><li>length of data >= offset + len</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "When calling <pre>cipherOutputStream.write(byte[] data, int offset, int len);</pre> the following constraints must be fulfilled:<ul><li>offset >= 0</li><li>len > 0</li><li>length of data >= offset + len</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Cookie",
+                "misuse": "When calling the method <code>setSecure</code> the boolean given must be true.",
+                "solution": ""
+            },
+            {
+                "rule": "DHGenParameterSpec",
+                "misuse": "The constructor looks as follows:<pre>new DHGenParameterSpec(int primeSize, int exponentSize);</pre>",
+                "solution": "Then the following constraint must be true:<ul><li>primeSize > exponentSize</li></ul>"
+            },
+            {
+                "rule": "DHParameterSpec",
+                "misuse": "The CrySL rule for <code>DHParameterSpec</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "While the <code>read</code> method can be called without giving any parameters (it would then only read 1 byte), it can also be called using parameters to specify an array to read to, an offset, and a length:<pre>digest.read(byte[] data, int offset, int len);</pre>",
+                "solution": "In this case, the following constraints must be fulfilled for each parameter:<ul><li>length(data) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>"
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "While the <code>write</code> method can be called while only giving a singular byte to write to the output stream, it can also be called using parameters to specify an array of bytes to write, an offset, and a length:<pre>digest.write(byte[] data, int offset, int len);</pre>",
+                "solution": "In this case, the following constraints must be fulfilled for each parameter:<ul><li>length(data) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>"
+            },
+            {
+                "rule": "DSAGenParameterSpec",
+                "misuse": "In order to create a new <code>DSAGenParameterSpec</code> either of the following constructors can be used:<pre>new DSAGenParameterSpec(int primePLen, int subPrimeQLen);\nnew DSAGenParameterSpec(int primePLen, int subPrimeQLen, int seedLen);</pre>",
+                "solution": "Then the following constraints have to be fulfilled:<ul><li>primePLen = 3072</li><li>subPrimeQLen = 256</li></ul>"
+            },
+            {
+                "_comment": "BigInteger is class of java.math package which allows to work with numbers that are too big to fit in standard integer types like int. Cryptographic algorithm require very large prime numbers-often 2048 bits or more and regular int or long max out at 32 or 64bits.", 
+                "rule": "DSAParameterSpec",
+                "misuse": "<p><strong>Misuse:</strong> Using insecure DSA parameters that violate minimum bit-length constraints.</p>\n<pre><code>BigInteger p = new BigInteger(\"123456789\"); // Too short\nBigInteger q = new BigInteger(\"12345\");\nBigInteger g = new BigInteger(\"67890\"); // Too short\nDSAParameterSpec spec = new DSAParameterSpec(p, q, g);</code></pre>\n<p>This creates a <code>DSAParameterSpec</code> with parameters that do not meet security requirements (e.g., p &lt; 2048 bits).</p>",
+                "solution": "<p><strong>Solution:</strong> Use strong DSA parameters that meet the minimum 2048-bit requirement.</p>\n<pre><code>// Example of generating secure parameters using KeyPairGenerator\nKeyPairGenerator keyGen = KeyPairGenerator.getInstance(\"DSA\");\nkeyGen.initialize(2048);\nKeyPair pair = keyGen.generateKeyPair();\nDSAParams dsaParams = ((DSAPublicKey) pair.getPublic()).getParams();\nDSAParameterSpec spec = new DSAParameterSpec(dsaParams.getP(), dsaParams.getQ(), dsaParams.getG());</code></pre>\n<p>This ensures that the parameters used in <code>DSAParameterSpec</code> are secure and conform to modern cryptographic standards.</p>"
+            },
+            {
+                "rule": "ECGenParameterSpec",
+                "misuse": "The constructor is as follows:<pre>new ECGenParameterSpec(String stdName);</pre",
+                "solution": "The parameter <code>stdName</code> has to take one of the following values:<ul><li>brainpoolP224r1</li><li>1.3.36.3.3.2.8.1.1.5</li><li>brainpoolP256r1</li><li>1.3.36.3.3.2.8.1.1.7</li><li>brainpoolP320r1</li><li>1.3.36.3.3.2.8.1.1.9</li><li>brainpoolP384r1</li><li>1.3.36.3.3.2.8.1.1.11</li><li>brainpoolP512r1</li><li>1.3.36.3.3.2.8.1.1.13</li><li>secp224r1</li><li>NIST P-224</li><li>1.3.132.0.33</li><li>secp256r1</li><li>NIST P-256</li><li>X9.62 prime256v1</li><li>1.2.840.10045.3.1.7</li><li>secp384r1</li><li>NIST P-384</li><li>1.3.132.0.34</li><li>secp521r1</li><li>NIST P-521</li><li>1.3.132.0.35</li></ul>"
+            },
+            {
+                "rule": "ECParameterSpec",
+                "misuse": "The CrySL rule for <code>ECParameterSpec</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "There are two possible constructors available:<pre>GCMParameterSpec(int tagLen, byte[] src);\nGCMParameterSpec(int tagLen, byte[] src, int offset, int len);</pre>",
+                "solution": "For both constructors the <code>tagLen</code> has to be one of the following:<ul><li>96</li><li>104</li><li>112</li><li>120</li><li>128</li></ul>For the second constructor there are additional constraints that must be fulfilled:<ul><li>length(src) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>"
+            },
+            {
+                "rule": "HMACParameterSpec",
+                "misuse": "The CrySL rule for <code>HMACParameterSpec</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "There are two options for calling the constructor:<pre>new IvParameterSpec(byte[] iv);\nnew IvParameterSpec(byte[] iv, int offset, int len);</pre>",
+                "solution": "For the second constructor there are additional constraints that must be fulfilled:<ul><li>length(iv) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>"
+            },
+            {
+                "rule": "Key",
+                "misuse": "The CrySL rule for <code>Key</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "A new <code>KeyAgreement</code> is created not through a constructor but by calling one of the following:<pre>KeyAgreement.getInstance(String algorithm);\nKeyAgreement.getInstance(String algorithm, Provider provider);\nKeyAgreement.getInstance(String algorithm, String provider);</pre>",
+                "solution": "Here, the <code>algorithm</code> given must be one of:<ul><li>DH</li><li>DiffieHellman</li><li>ECDH</li></ul>"
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "A new <code>KeyFactory</code> is created not through a constructor but by calling one of the following:<pre>KeyFactory.getInstance(String algorithm);\nKeyFactory.getInstance(String algorithm, Provider provider);\nKeyFactory.getInstance(String algorithm, String provider);</pre>",
+                "solution": "Here, the <code>algorithm</code> given must be one of:<ul><li>RSA</li><li>DiffieHellman</li><li>DH</li><li>DSA</li><li>EC</li></ul>"
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "A new <code>KeyGenerator</code> is created not through a constructor but by calling one of the following:<pre>KeyGenerator.getInstance(String algorithm);\nKeyGenerator.getInstance(String algorithm, Provider provider);\nKeyGenerator.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The algorithm must be one of:<ul><li>AES</li><li>HmacSHA256</li><li>HmacSHA384</li><li>HmacSHA512</li></ul>If the chosen <code>algortithm</code> is <code>AES</code>, then the <code>keySize</code> passed through the <code>init</code> method must be one of the following:<ul><li>128</li><li>192</li><li>256</li></ul>"
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "A new <code>KeyManagerFactory</code> is created not through a constructor but by calling one of the following:<pre>KeyManagerFactory.getInstance(String algorithm);\nKeyManagerFactory.getInstance(String algorithm, Provider provider);\nKeyManagerFactory.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The <code>algorithm</code> must be one of:<ul><li>PKIX</li><li>SunX509</li></ul>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "The CrySL rule for <code>KeyPair</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "A <b>ConstraintError</b> has occurred due to the use of invalid parameter values with <code>KeyPairGenerator</code>. <br><br>This error typically happens when the <b>key size</b> does not match the required value for the selected algorithm, or when an <b>unsupported algorithm</b> is used. <br><br>To solve the issue, following constraints must be satisfied:<ul><li><code>algorithm</code> must be one of: <code>{\"RSA\", \"EC\", \"DSA\", \"DiffieHellman\", \"DH\"}</code></li><li>If <code>algorithm == \"RSA\"</code>, then <code>keysize</code> must be <code>3072</code> or <code>4096</code></li><li>If <code>algorithm == \"DSA\"</code>, then <code>keysize</code> must be <code>3072</code></li><li>If <code>algorithm == \"DiffieHellman\"</code> or <code>\"DH\"</code>, then <code>keysize</code> must be <code>3072</code></li><li>If <code>algorithm == \"EC\"</code>, then <code>keysize</code> must be <code>256</code></li></ul>",
+
+                "solution": "To resolve this issue, update the <code>algorithm</code> and <code>keysize</code> values so they match the required combinations defined by the CRYSL rule.<br><br><b>Correct Usage Example (RSA):</b><br><pre><code>import java.security.KeyPairGenerator;\n\npublic class KeyGenExample {\n public void generateRSAKeyPair() throws Exception {\n  KeyPairGenerator keyGen = KeyPairGenerator.getInstance(\"RSA\");\n keyGen.initialize(4096);  // Valid key size\n keyGen.generateKeyPair();\n}\n}</code></pre><br><b>Avoid:</b><ul><li>Using unsupported algorithms like <code>MD5</code> or <code>Blowfish</code></li><li>Using <code>RSA</code> with <code>2048</code> or smaller keys</li><li>Using <code>EC</code> with <code>keysize != 256</code></li></ul><br>Complying with these constraints ensures that the generated key pairs meet modern cryptographic security requirements."
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "A new <code>KeyStore</code> is created not through a constructor but by calling one of the following:<pre>KeyStore.getInstance(String type);\nKeyStore.getInstance(String type, Provider provider);\nKeyStore.getInstance(String type, String provider);</pre>",
+                "solution": "The <code>type</code> must be one of:<ul><li>JCEKS</li><li>JKS</li><li>DKS</li><li>PKCS11</li><li>PKCS12</li></ul>"
+            },
+            {
+                "rule": "KeyStoreBuilderParameters",
+                "misuse": "The CrySL rule for <code>KeyStoreBuilderParameters</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "Mac",
+                "misuse": "A new <code>Mac</code> is created not through a constructor but by calling one of the following:<pre>Mac.getInstance(String algorithm);\nMac.getInstance(String algorithm, Provider provider);\nMac.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The <code>algorithm</code> must be one of:<ul><li>HmacSHA256</li><li>HmacSHA384</li><li>HmacSHA512</li><li>HmacPBESHA1</li><li>PBEWithHmacSHA1</li><li>PBEWithHmacSHA224</li><li>PBEWithHmacSHA256</li><li>PBEWithHmacSHA384</li><li>PBEWithHmacSHA512</li></ul><br>While the <code>update</code> method can be called with different sets of parameters, when called  as follows:<pre>mac.update(byte[] preInput, int offset, int len);</pre>these contraints have to be fulfilled:<ul><li>length(preInput) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>Similarly, while there are different ways to call <code>doFinal</code>, when using it as below the length of the <code>output</code> array must be greater than <code>outOffset</code>:<pre>mac.doFinal(byte[] output, int outOffset);</pre>"
+            },
+            {
+                "rule": "MessageDigest",
+                "misuse": "A new <code>MessageDigest</code> is created not through a constructor but by calling one of the following:<pre>digest.getInstance(String algorithm);\ndigest.getInstance(String algorithm, Provider provider);\ndigest.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The <code>algorithm</code> must be one of:<ul><li>SHA-256</li><li>SHA-384</li><li>SHA-512</li></ul><br>While the <code>update</code> method can be called with different sets of parameters, when called  as follows:<pre>digest.update(byte[] preInput, int offset, int len);</pre>these contraints have to be fulfilled:<ul><li>length(preInput) >= offset + len</li><li>offset >= 0</li><li>len > 0</li></ul>Similarly, while there are different ways to call <code>digest</code>, when using it as follows:<pre>digest.digest(byte[] output, int outOffset, int outLen);</pre>the constraints to be fulfilled follow the same line:<ul><li>length(output) >= outOffset + outLen</li><li>outOffset >= 0</li><li>outLen > 0</li></ul>"
+            },
+            {
+                "rule": "MGF1ParameterSpec",
+                "misuse": "The constructor of <code>MGF1ParameterSpec</code> is as follows:<pre>new MGF1ParameterSpec(String mdName);</pre>",
+                "solution": "The value of the parameter <code>mdName</code> must be one of the following:<ul><li>SHA-256</li><li>SHA-384</li><li>SHA-512</li></ul>"
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "The constructor of <code>MGF1ParameterSpec</code> is as follows:<pre>new OAEPParameterSpec(String , String mgfName, AlgorithmParameterSpec mgfSpec, PSource pSrc);</pre>",
+                "solution": "The value of the parameter <code>mdName</code> must be one of the following:<ul><li>SHA-256</li><li>SHA-384</li><li>SHA-512</li></ul>The value of <code>mgfName</code> must be:<ul><li>MGF1</li></ul>"
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "The constarinst section of the CrySL rule for <code>PasswordAuthentication</code> is covered by other error messages.",
+                "solution": ""
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "While there are multiple possible constructors for <code>PBEKeySpec</code>, the following is the one that should be used:<pre>new PBEKeySpec(char[] password, byte[] salt, int iterationCount, int keyLength);</pre>",
+                "solution": "The <code>iterationCount</code> should always be greater or equal to 10000."
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "There are two constructors for <code>PBEParameterSpec</code>:<pre>new PBEParameterSpec(byte[] salt, int iterationCount);\nnew PBEParameterSpec(byte[] salt, int iterationCount, AlgorithmParameterSpec params);</pre>",
+                "solution": "For both the <code>iterationCount</code> should always be greater or equal to 10000."
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "The CrySL rule for <code>PKIXBuilderParameters</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "The CrySL rule for <code>PKIXParameters</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "The CrySL rule for <code>PrivateKey</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "The CrySL rule for <code>PublicKey</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "RSAKeyGenParameterSpec",
+                "misuse": "The <code>RSAKeyGenParameterSpec</code> is being used with insecure parameters. the <b>key size</b> here must be either <code>3072</code> or <code>4096</code> bits, and the <b>public exponent</b> must be <code>65537</code>.",
+
+                "solution": "To resolve this issue, you must initialize <code>RSAKeyGenParameterSpec</code> with values that comply with the CRYSL rule. <br><br><b>Compliant Configuration:</b><br><br><ul><li><b>Key size:</b> <code>3072</code> or <code>4096</code></li><li><b>Public exponent:</b> <code>65537</code></li></ul><br><b>Example Fix:</b><br><pre><code>import java.security.spec.RSAKeyGenParameterSpec;\nimport java.math.BigInteger;\n\npublic class SecureRSAConfig {\n public void setup() throws Exception {\n int keySize = 4096;\n BigInteger publicExponent = BigInteger.valueOf(65537);\n RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(keySize, publicExponent);\n // Use this spec with your KeyPairGenerator\n}\n}</code></pre><br><b>Avoid:</b> Using smaller key sizes like <code>2048</code> or public exponents like <code>3</code>.<br><br>This ensures compliance with modern security recommendations and prevents cryptographic vulnerabilities."
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "The CrySL rule for <code>SecretKey</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "A new <code>SecretKeyFactory</code> is created not through a constructor but by calling one of the following:<pre>SecretKeyFactory.getInstance(String algorithm);\nSecretKeyFactory.getInstance(String algorithm, Provider provider);\nSecretKeyFactory.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The algorithm must be one of:<ul><li>PBKDF2WithHmacSHA512</li><li>PBKDF2WithHmacSHA384</li><li>PBKDF2WithHmacSHA256</li><li>PBKDF2WithHmacSHA224</li><li>PBEWithHmacSHA512AndAES_128</li><li>PBEWithHmacSHA384AndAES_128</li><li>PBEWithHmacSHA384AndAES_128</li><li>PBEWithHmacSHA224AndAES_128</li><li>PBEWithHmacSHA256AndAES_128</li><li>PBEWithHmacSHA224AndAES_256</li><li>PBEWithHmacSHA256AndAES_256</li><li>PBEWithHmacSHA384AndAES_256</li><li>PBEWithHmacSHA512AndAES_256</li></ul>"
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "There are two constructors for <code>SecretKeySpec</code>:<pre>new SecretKeySpec(byte[] keyMaterial, String algorithm);\nnew SecretKeySpec(byte[] keyMaterial, int offset, int len, String algorithm);</pre>",
+                "solution": "The <code>algorithm</code> must be one of:<ul><li>AES</li><li>HmacSHA256</li><li>HmacSHA384</li><li>HmacSHA512</li></ul>Also, the following constraint must be fulfilled:<ul><li>keyMaterial >= offset + len</li></ul>"
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "While there is a constructor available to create a new <code>SecureRandom</code> or the possiblity of using <code>SecureRandom.getInstanceStrong()</code>, you can also call one of the following:<pre>SecureRandom.getInstance(String algorithm);\nSecureRandom.getInstance(String algorithm, Provider provider);\nSecureRandom.getInstance(String algorithm, String provider);</pre>",
+                "solution": "In this case, the <code>algorithm</code> must be one of:<ul><li>SHA1PRNG</li><li>Windows-PRNG</li><li>NativePRNG</li><li>NativePRNGBlocking</li><li>NativePRNGNonBlocking</li><li>PKCS11</li></ul>"
+            },
+            {
+                "rule": "Signature",
+                "misuse": "The <code>Signature</code> API is being used with <b>invalid parameters</b> or in an <b>incorrect order</b>, violating the CRYSL rule for <code>java.security.Signature</code>. <br><br>Common misuses include:<ul><li>Using unsupported or insecure algorithms (e.g., <code>MD5withRSA</code>)</li><li>Calling <code>update()</code> before <code>initSign()</code> or <code>initVerify()</code></li><li>Providing incorrect <code>offset</code> and <code>len</code> values when working with byte arrays, causing out-of-bounds access</li></ul><br>These issues can lead to <i>runtime exceptions</i>, <i>signature failures</i>, or <i>cryptographic vulnerabilities</i>.",
+
+                "solution": "To fix this issue, follow the correct usage order and ensure all parameters comply with the defined constraints. <br><br><b>Allowed Algorithms:</b><br><br><code>SHA256withRSA</code>, <code>SHA256withECDSA</code>, <code>SHA256withDSA</code>, <code>SHA384withRSA</code>, <code>SHA512withRSA</code>, <code>SHA384withECDSA</code>, <code>SHA512withECDSA</code><br><br><b>Correct Order of Operations:</b><ul><li><code>getInstance()</code></li><li><code>initSign()</code> or <code>initVerify()</code></li><li><code>update()</code></li><li><code>sign()</code> or <code>verify()</code></li></ul><br><b>Byte Array Constraints:</b><ul><li><code>offset >= 0</code></li><li><code>len > 0</code></li><li><code>input.length >= offset + len</code></li></ul>These ensure safe array access during signature operations.<br><br><b>Signing Example:</b><br><pre><code>import java.security.*;\n\npublic class SignExample {\n public byte[] signData(byte[] input, PrivateKey privateKey) throws Exception {\n Signature signature = Signature.getInstance(\"SHA256withRSA\");\n        signature.initSign(privateKey);\n signature.update(input, 0, input.length);  // offset = 0, len = input.length\n return signature.sign();\n    }\n}</code></pre><br><b>Verification Example:</b><br><pre><code>import java.security.*;\n\npublic class VerifyExample {\n public boolean verifySignature(byte[] input, byte[] sigBytes, PublicKey publicKey) throws Exception {\n Signature signature = Signature.getInstance(\"SHA256withRSA\");\n  signature.initVerify(publicKey);\n signature.update(input, 0, input.length);\n return signature.verify(sigBytes);\n}\n}</code></pre><br><b>Avoid:</b><ul><li>Using <code>offset</code> or <code>len</code> values that exceed array bounds</li><li>Skipping init methods before calling <code>update()</code></li><li>Using weak or unlisted algorithms</li></ul>"
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "A new <code>SSLContext</code> is created not through a constructor but by calling one of the following:<pre>SSLContext.getInstance(String protocol);\nSSLContext.getInstance(String protocol, Provider provider);\nSSLContext.getInstance(String protocol, String provider);</pre>",
+                "solution": "The <code>protocol</code> must be one of:<ul><li>TLSv1.2</li><li>TLSv1.3</li></ul>"
+            },
+            {
+                "rule": "SSLEngine",
+                "misuse": "For the following two methods of <code>SSLEngine</code> multiple contraints have to be fulfilled:<pre>sslEngine.setEnabledCipherSuites(String[] cipherSuites);\nsslEngine,setEnabledProtocols(String[] protocols);</pre>",
+                "solution": "The elements of <code>protocols</code> must be one of:<ul><li>TLSv1.2</li><li>TLSv1.3</li></ul>If <code>protocols</code> contains <code>TLSv1.2</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_DSS_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384</li></ul>If <code>protocols</code> contains <code>TLSv1.3</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_AES_128_GCM_SHA256<li></li>TLS_AES_256_GCM_SHA384</li></ul>"
+            },
+            {
+                "rule": "SSLParameters",
+                "misuse": "Consider the following use of constructors and setters:<pre>// using the parameters: String[] ciphersuites, String[] protocols;\n\nSSLParameters params = new SSLParameters(ciphersuites, protocols);\n\n// or\nSSLParameters params = new SSLParameters();\nparams.setCipherSuites(cipherSuites);\nparams.setProtocols(protocols);\n\n// or\nSSLParameters params = new SSLParameters(cipherSuites);\nparams.setProtocols(protocols);</pre>",
+                "solution": "The elements of <code>protocols</code> must be one of:<ul><li>TLSv1.2</li><li>TLSv1.3</li></ul>If <code>protocols</code> contains <code>TLSv1.2</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_DSS_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384</li></ul>If <code>protocols</code> contains <code>TLSv1.3</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_AES_128_GCM_SHA256<li></li>TLS_AES_256_GCM_SHA384</li></ul>"
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "The CrySL rule for <code>TrustAnchor</code> does not contain a constraints section.",
+                "solution": ""
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "A new <code>TrustManagerFactory</code> is created not through a constructor but by calling one of the following:<pre>TrustManagerFactory.getInstance(String algorithm);\nTrustManagerFactory.getInstance(String algorithm, Provider provider);\nTrustManagerFactory.getInstance(String algorithm, String provider);</pre>",
+                "solution": "The <code>algorithm</code> must be one of:<ul><li>PKIX</li><li>SunX509</li></ul>"
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "The CrySL rule for <code>X509EncodedKeySpec</code> does not contain a constraints section.",
+                "solution": ""
+            }
+        ]
+    },
+    "ForbiddenMethodError": {
+        "description": "A <b>ForbiddenMethodError</b> occurs when an explicitly restricted method is invoked in cryptographic operations. Some methods are banned due to known security vulnerabilities or deprecated functionality. When this error is reported, it means that the method being used is considered insecure or does not comply with best practices. Ignoring this error may lead to weak encryption, insecure randomness, or potential exploitation of deprecated algorithms.",
+        "examples": [
+            {
+                "rule": "DigestInputStream",
+                "misuse": "The method <code>on(boolean on)</code> should not be used.",
+                "solution": ""
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "The method <code>on(boolean on)</code> should not be used.",
+                "solution": ""
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "The following constructors should not be used:<pre>PBEKeySpec(char[] password)</pre>and<pre>PBEKeySpec(char[] password, byte[] salt, int iterationCount)</pre>",
+                "solution": "Instead use:<pre>PBEKeySpec(char[] password, byte[] salt, int iterationCount, int keyLength)</pre>"
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "The method <code>getDefault()</code> should not be used.",
+                "solution": ""
+            }
+        ]
+    },
+    "HardCodedError": {
+        "description": "A <b>HardCodedError</b> is reported when sensitive cryptographic values, such as encryption keys, passwords, IVs (Initialization Vectors), or salts, are hardcoded into the source code. Hardcoded values expose cryptographic secrets to attackers, making them easy to extract via static analysis, reverse engineering, or memory dumps. This error serves as a warning that sensitive cryptographic parameters should be dynamically generated and stored securely to ensure the confidentiality and integrity of cryptographic operations.",
+        "examples": [
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "The password entered into the <code>init</code> method should not be hardcoded.",
+                "solution": ""
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "The passwords used in the methods <code>load</code>, <code>store</code>, and <code>getKey</code> should not be hardcoded.",
+                "solution": ""
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "The password used in the constructor should never be hardcoded.",
+                "solution": ""
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "The password used in the constructor should never be hardcoded.",
+                "solution": ""
+            }
+        ]
+    },
+    "ImpreciseValueExtractionError": {
+        "description": "An <b>ImpreciseValueExtractionError</b> is triggered when the analysis tool cannot precisely determine the value of a cryptographic parameter at runtime. This typically happens when cryptographic values (such as encryption modes or key sizes) are computed dynamically or retrieved from an external source, making them difficult to validate statically. This error highlights potential security risks where cryptographic operations might unknowingly use insecure or unpredictable values. It suggests that cryptographic parameters should be explicitly defined and verifiable.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "CertificateFactory",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "Cookie",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DHGenParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DHParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DSAGenParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "DSAParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "ECGenParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "ECParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "HMACParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "Key",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "KeyStoreBuilderParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "Mac",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "MessageDigest",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "MGF1ParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "RSAKeyGenParameterSpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "Signature",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SSLEngine",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "SSLParameters",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.",
+                "solution": "In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely."
+            }
+        ]
+    },
+    "IncompleteOperationError": {
+        "description": "An <b>IncompleteOperationError</b> is reported when a cryptographic operation is not fully completed as expected. CrySL rules define a specific order of operations (e.g., an encryption process requires initialization before performing encryption, followed by finalization). If a required step is missing, the cryptographic process may remain incomplete, potentially leading to unencrypted data, insecure partial outputs, or unexpected runtime failures. This error ensures that cryptographic workflows are executed in their entirety to maintain security.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.AlgorithmParameters lgParams;\n\tjava.security.spec.AlgorithmParameterSpec genParamSpec; \n\tjava.security.SecureRandom random;\n\tint size;\nEVENTS \n\tg1: getInstance(algorithm); \n\tg2: getInstance(algorithm, _); \n\tGet := g1 | g2; \n\n\ti1: init(size);\n\ti2: init(size, random); \n\ti3: init(genParamSpec); \n\ti4: init(genParamSpec, random); \n\tInit := i1 | i2 | i3 | i4;\n\n\tgp1: algParams = generateParameters();\n\tGenParam := gp1; \nORDER\n\tGet, Init, GenParam</pre>"
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tbyte[] params; \n\tjava.lang.String format;\n\tbyte[] encParams;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(paramSpec);\n\ti2: init(params);\n\ti3: init(params, _);\n\tInit := i1 | i2 | i3;\n\n\te1: encParams = getEncoded();\n\te2: encParams = getEncoded(format);\n\tGetEncoded := e1 | e2;\nORDER\n\tGet, Init, GetEncoded?</pre>"
+            },
+            {
+                "rule": "CertificateFactory",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inStream;\n\tjava.lang.String encoding;\n\tjava.lang.String type;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\t\n\tgc1: generateCertificate(inStream);\n\tGenCert := gc1;\n\t\n\tgen1: generateCertPath(_);\n\tgen2: generateCertPath(inStream, encoding);\n\tGenCertPath := gen1 | gen2;\n\t\n\tgcrl1: generateCRL(inStream);\n\tGenCRL := gcrl1;\n\t\nORDER\n\tGet, (GenCert | GenCertPath | GenCRL)+</pre>"
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.cert.CertPathParameters params;\nEVENTS\n\tc1: CertPathTrustManagerParameters(params);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String transformation;\n\tint encmode;\n\tjava.security.Key key;\n\tjava.security.cert.Certificate certificate;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tjava.security.AlgorithmParameters params;\n\n\tint prePlainTextOffset;\n\tint preCipherTextOffset;\n\tint plainTextOffset;\n\tint cipherTextOffset;\n\tint aadOffset;\n\n\tint prePlainTextLen;\n\tint plainTextLen;\n\tint aadLen;\n\n\tbyte[] prePlainText;\n\tbyte[] preCipherText;\n\tjava.nio.ByteBuffer prePlainTextByteBuffer;\n\tjava.nio.ByteBuffer preCipherTextByteBuffer;\n\n\tbyte[] plainText;\n\tbyte[] cipherText;\n\tbyte[] wrappedKeyBytes;\n\tjava.nio.ByteBuffer plainTextByteBuffer;\n\tjava.nio.ByteBuffer cipherTextByteBuffer;\n\t\n\tbyte[] aadBytes;\n\tjava.nio.ByteBuffer aadByteBuffer;\n\t\n\tjava.security.SecureRandom random;\n\t\n\tjava.security.Key wrappedKey;\nEVENTS\n\tg1: getInstance(transformation);\n\tg2: getInstance(transformation, _);\n\tGet := g1 | g2;\n\n\ti1: init(encmode, certificate);\n\ti2: init(encmode, certificate, random);\n\ti3: init(encmode, key);\n\ti4: init(encmode, key, paramSpec);\n\ti5: init(encmode, key, params);\n\ti6: init(encmode, key, paramSpec, random);\n\ti7: init(encmode, key, params, random);\n\ti8: init(encmode, key, random);\n\tIWOIV := i1 | i2 | i3 | i8;\n\tIWIV :=  i4 | i5 | i6 | i7;\n\tInit := IWOIV | IWIV;\n\n\tu1: preCipherText = update(prePlainText);\n\tu2: preCipherText = update(prePlainText, prePlainTextOffset, prePlainTextLen);\n\tu3: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText);\n\tu4: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText, preCipherTextOffset);\n\tu5: update(prePlainTextByteBuffer, preCipherTextByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4 | u5;\n\t\n\tua1: updateAAD(aadBytes);\n\tua2: updateAAD(aadBytes, aadOffset, aadLen);\n\tua3: updateAAD(aadByteBuffer);\n\tAADUpdate := ua1 | ua2 | ua3;\n\t\n\tf1: cipherText = doFinal();\n\tf2: cipherText =  doFinal(plainText);\n\tf3: doFinal(cipherText, cipherTextOffset);\n\tf4: cipherText = doFinal(plainText, plainTextOffset, plainTextLen);\n\tf5: doFinal(plainText, plainTextOffset, plainTextLen, cipherText);\n\tf6: doFinal(plainText, plainTextOffset, plainTextLen, cipherText, cipherTextOffset);\n\tf7: doFinal(plainTextByteBuffer, cipherTextByteBuffer);\n\tFINWOU := f2 | f4 | f5 | f6 | f7;\n\tDoFinal := FINWOU | f1 | f3;\n\n\twkb1: wrappedKeyBytes = wrap(wrappedKey);\n\tWKB := wkb1;\n\n\tiv1: getIV();\n\tIV := iv1;\nORDER\n\tGet, Init+, AADUpdate*, WKB+ | (FINWOU | (Update+, DoFinal))+</pre>"
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: CipherInputStream(inputStream, cipher);\n\tCon := c1;\n\t\n\tr1: read();\n\tr2: read(data); \n\tr3: read(data, offset, len);\n\tRead := r1 | r2 | r3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream outputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: CipherOutputStream(outputStream, cipher);\n\tCon := c1;\n\t\n\tw1: write(specifiedByte);\n\tw2: write(data);\n\tw3: write(data, offset, len);\n\tWrite := w1 | w2 | w3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "Cookie",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String name;\n\tjava.lang.String value;\n\tboolean flag;\nEVENTS\n\tc1: Cookie(name, value);\n\tCon := c1;\n\t\n\ts1: setSecure(flag);\n\tSetSecure := s1;\nORDER\n\tCon, SetSecure</pre>"
+            },
+            {
+                "rule": "DHGenParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primeSize;\n\tint exponentSize;\nEVENTS\n\tc1: DHGenParameterSpec(primeSize, exponentSize);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DHParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger g;\n\tint l;\nEVENTS\n\tc1: DHParameterSpec(p, g);\n\tc2: DHParameterSpec(p, g, l);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: DigestInputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: read(); \n\tr2: read(data, offset, len);\n\tRead := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: DigestOutputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: write(specifiedByte); \n\tr2: write(data, offset, len);\n\tWrite := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "DSAGenParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primePLen;\n\tint subPrimeQLen;\n\tint seedLen;\nEVENTS\n\tc1: DSAGenParameterSpec(primePLen, subPrimeQLen);\n\tc2: DSAGenParameterSpec(primePLen, subPrimeQLen, seedLen);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DSAParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger q;\n\tjava.math.BigInteger g;\nEVENTS\n\tc1: DSAParameterSpec(p, q, g);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECGenParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String stdName;\nEVENTS\n\tc1: ECGenParameterSpec(stdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.security.spec.EllipticCurve curve;\n\tjava.security.spec.ECPoint g;\n\tjava.math.BigInteger n;\n\tint h;\nEVENTS\n\tc1: ECParameterSpec(curve, g, n, h);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint tagLen;\n\tbyte[] src;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: GCMParameterSpec(tagLen, src);\n\tc2: GCMParameterSpec(tagLen, src, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "HMACParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint outputLen;\nEVENTS\n\tc1: HMACParameterSpec(outputLen);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] iv;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: IvParameterSpec(iv);\n\tc2: IvParameterSpec(iv, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Key",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.lang.String symmetricKeyAlgorithm;\n\tjava.security.Key pubKey;\n\tjava.security.Key privKey;\n\tjavax.crypto.SecretKey sharedKey;\n\tboolean lastPhase;\n\tbyte[] sharedSecretBuffer;\n\tint offset;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(privKey);\n\ti2: init(privKey, params);\n\ti3: init(privKey, params, random);\n\ti4: init(privKey, random);\n\tInit := i1 | i2 | i3 | i4;\n\n\tdp1: doPhase(pubKey, lastPhase);\n\tDoPhase := dp1;\n\n\tgs1: sharedSecretBuffer = generateSecret();\n\tgs2: generateSecret(sharedSecretBuffer, offset);\n\tGenSecretBuffer := gs1 | g2;\n\t\n\tgs3: sharedKey = generateSecret(symmetricKeyAlgorithm);\n\tGenSecret := gs3 | GenSecretBuffer;\nORDER\n\tGet, Init, DoPhase, GenSecretBuffer</pre>"
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.KeySpec keySpec;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgpr1: privateKey = generatePrivate(keySpec);\n\tGenPriv := gpr1;\n\t\n\tgpu1: publicKey = generatePublic(keySpec);\n\tGenPubl := gpu1;\nORDER\n\tGet, (GenPriv | GenPubl)*</pre>"
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tint keysize;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjavax.crypto.SecretKey key;\n\tjava.lang.String algorithm;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keysize);\n\ti2: init(keysize, random);\n\ti3: init(params);\n\ti4: init(params, random);\n\ti5: init(random);\n\tInit := i1 | i2 | i3 | i4 | i5;\n    \n\tgk1: key = generateKey();\n\tGenKey := gk1;\nORDER\n\tGet, Init?, GenKey</pre>"
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tchar[] password;\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.KeyManager[] keyManager;\nEVENTS \n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keyStore, password);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgkm1: keyManager = getKeyManagers();\n\tGetKeyMng := gkm1;\nORDER\n\tGet, Init, GetKeyMng?</pre>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.PrivateKey retPrivateKey;\n\tjava.security.PublicKey retPublicKey;\nEVENTS\n\tc1: KeyPair(publicKey, privateKey);\n\tCon := c1;\n\t\n\tgpu1: retPublicKey = getPublic();\n\tGetPubl := gpu1;\n\t\n\tgpr1: retPrivateKey = getPrivate();\n\tGetPriv := gpr1;\nORDER\n\tCon, (GetPubl | GetPriv)*</pre>"
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyPair keyPair;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint keysize;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initialize(keysize);\n\ti2: initialize(keysize, _);\n\ti3: initialize(params);\n\ti4: initialize(params, _);\n\tInit := i1 | i2 | i3 | i4;\n\n\tk1: keyPair = generateKeyPair();\n\tk2: keyPair = genKeyPair();\n\tGen := k1 | k2;\nORDER\n\tGet, Init, Gen</pre>"
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream fileInput;\n    \n\tchar[] passwordIn;\n\tchar[] passwordOut;\n\tchar[] passwordKey;\n    \n\tjava.security.KeyStore.Entry entry;\n\tbyte[] byteKey;\n    \n\tjava.security.KeyStore.LoadStoreParameter paramLoad;\n\tjava.security.KeyStore.ProtectionParameter protParamGet;\n\tjava.security.KeyStore.ProtectionParameter protParamSet;\n\tjava.lang.String aliasGet;\n\tjava.lang.String aliasSet;\n\tjava.io.OutputStream fileOutput;\n\tjava.security.KeyStore.LoadStoreParameter paramStore;\n\tjava.lang.String type;\n\tjava.security.cert.Certificate cert;\n    \n\tjava.security.Key key;\n\tjava.lang.String alias;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\n\tl1: load(fileInput, passwordIn);\n\tl2: load(paramLoad);\n\tLoad := l1 | l2;\n\n\ts1: store(paramStore);\n\ts2: store(fileOutput, passwordOut);\n\tStore := s1 | s2;\n\n\tge1: getEntry(aliasGet, protParamGet);\n\tGetEntry := ge1;\n    \n\tse1: setEntry(aliasSet, entry, protParamSet);\n\tSetEntry := se1;\n\n\tgk1: key = getKey(alias, passwordKey);\n\tGetKey := gk1;\nORDER\n\tGet, Load, ((GetEntry?, GetKey) | (SetEntry, Store))*</pre>"
+            },
+            {
+                "rule": "KeyStoreBuilderParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore.Builder builder;\nEVENTS\n\tc1: KeyStoreBuilderParameters(builder);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Mac",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjavax.crypto.Mac mac;\n\tjava.security.Key key;\n\tbyte inputByte;\n\tbyte[] preInput;\n\tbyte[] input;\n\tbyte[] output1;\n\tbyte[] output2;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint offset;\n\tint outOffset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(key);\n\ti2: init(key, params);\n\tInit := i1 | i2;\n\n\tu1: update(inputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, offset, len);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\tf1: output1 = doFinal();\n\tf2: output2 = doFinal(input);\n\tf3: doFinal(output1, outOffset);\n\tFinalWU := f2;\n\tFinalWOU := f1 | f3;\n\tFinal := FinalWU | FinalWOU;\nORDER\n\tGet, Init, (FinalWU | (Update+, Final))+</pre>"
+            },
+            {
+                "rule": "MessageDigest",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tbyte preInputByte;\n\tbyte[] preInput;\n\tint preOffset;\n\tint preLen;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tbyte[] input;\n\tint offset;\n\tint len;\n\tbyte[] output;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tu1: update(preInputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, preOffset, preLen);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\td1: output = digest();\n\td2: output = digest(input);\n\td3: digest(output, offset, len);\n\tDWOU := d2;\n\tDWU := d1 | d3;\n\tDigest := DWU | DWOU;\nORDER\n\tGet, (DWOU | (Update+, Digest))+</pre>"
+            },
+            {
+                "rule": "MGF1ParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\nEVENTS\n\tc1: MGF1ParameterSpec(mdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\n\tjava.lang.String mgfName;\n\tjava.security.spec.AlgorithmParameterSpec mgfSpec;\n\tjavax.crypto.spec.PSource pSrc;\nEVENTS\n\tc1: OAEPParameterSpec(mdName, mgfName, mgfSpec, pSrc);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String userName;\n\tjava.lang.String retUserName;\n\tchar[] password;\nEVENTS\n\tc1: PasswordAuthentication(userName, password);\n\tCon := c1;\n\n\tgp1: getPassword();\n\tGetPassword := gp1;\n\t\n\tgu1: retUserName = getUserName();\n\tGetUserName := gu1;\nORDER\n\tCon, (GetPassword | GetUserName)*</pre>"
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tchar[] password;\n\tbyte[] salt;\n\tint iterationCount;\n\tint keyLength; \nEVENTS\n\tc1: PBEKeySpec(password, salt, iterationCount, keyLength);\n\tCon := c1;\n\t\n\tcp1: clearPassword();\n\tClearPass := cp1;\nORDER\n\tCon, ClearPass</pre>"
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] salt;\n\tint iterationCount;\n\tjava.security.spec.AlgorithmParameterSpec params;\nEVENTS\n\tc1: PBEParameterSpec(salt, iterationCount);\n\tc2: PBEParameterSpec(salt, iterationCount, params);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keystore;\n\tjava.security.cert.CertSelector targetConstraints;\n\tjava.util.Set<java.security.cert.TrustAnchor> trustAnchors;\nEVENTS\n\tc1: PKIXBuilderParameters(keystore, targetConstraints);\n\tc2: PKIXBuilderParameters(trustAnchors, targetConstraints);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keyStore;\nEVENTS\n\tc1: PKIXParameters(keyStore);\n\tc2: PKIXParameters(_);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "RSAKeyGenParameterSpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint keysize;\n\tjava.math.BigInteger publicExponent;\nEVENTS\n\tc1: RSAKeyGenParameterSpec(keysize, publicExponent);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\n\t\n\td1: destroy();\n\tDestroy := d1;\nORDER\n\tGetEnc*, Destroy?</pre>"
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjavax.crypto.SecretKey key;\n\tjavax.crypto.SecretKey otherKey;\n\tjava.security.spec.KeySpec keySpec;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgS: key = generateSecret(keySpec);\n\ttK: key = translateKey(otherKey);\n\tGen := gS | tK;\nORDER\n\tGet, Gen</pre>"
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String keyAlgorithm;\n\tbyte[] keyMaterial;\n\tint len;\n\tint offset;\nEVENTS\n\tc1: SecretKeySpec(keyMaterial, keyAlgorithm);\n\tc2: SecretKeySpec(keyMaterial, offset, len, keyAlgorithm);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] seed;\n\tbyte[] genSeed;\n\tjava.lang.String algorithm;\n\tlong lSeed;\n\tbyte[] bytes;\n\tint randInt;\n\tint randIntInRange;\n\tint range;\nEVENTS\n\tc1: SecureRandom();\n\tc2: SecureRandom(seed);\n\tCon := c1 | c2;\n\t\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tgI: getInstanceStrong();\n\tGet := g1 | g2 | gI;\n\t\n\tIns := Get | Con;\n\n\ts1: setSeed(seed);\n\ts2: setSeed(lSeed);\n\tSeed := s1 | s2;\n\n\tgS: genSeed = generateSeed(_);\n\n\tnB: nextBytes(bytes);\n\tnI: randInt = nextInt();\n\tnIR: randIntInRange = nextInt(range);\n\tNext := nB | nI | nIR;\n\t\n\tEnd := gS | Next;\nORDER\n\tIns, (Seed?, End*)*</pre>"
+            },
+            {
+                "rule": "Signature",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tbyte[] sign;\n\tbyte inputByte;\n\tbyte[] input;\n\tbyte[] output;\n\tjava.nio.ByteBuffer inputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.Certificate cert;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tboolean verified;\n\tint offset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initSign(privateKey);\n\ti2: initSign(privateKey, _);\n\ti3: initVerify(cert);\n\ti4: initVerify(publicKey);\n\tInitSign := i1 | i2;\n\tInitVerify := i3 | i4;\n\n\tu1: update(input);\n\tu2: update(inputByte);\n\tu3: update(input, offset, len);\n\tu4: update(inputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\ts1: output = sign();\n\ts2: sign(output, offset, len);\n\tSign := s1 | s2;\n\n\tv1: verified = verify(sign);\n\tv2: verified = verify(sign, offset, len);\n\tVerify := v1 | v2;\nORDER\n\tGet, ((InitSign+, (Update+, Sign+)+ )+ | (InitVerify+, (Update*, Verify+)+ )+ )</pre>"
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String protocol;\n\tjavax.net.ssl.KeyManager[] km; \n\tjavax.net.ssl.TrustManager[] tm; \n\tjavax.net.ssl.SSLEngine eng;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(protocol);\n\tg2: getInstance(protocol, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(km, tm, random);\n\tInit := i1;\n\t\n\tse1: eng = createSSLEngine();\n\tse2: eng = createSSLEngine(_,_);\n\tEngine := se1 | se2;\nORDER\n\tGet, Init, Engine? </pre>"
+            },
+            {
+                "rule": "SSLEngine",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tec1: setEnabledCipherSuites(cipherSuites);\n\tEnableCipher := ec1;\n\t\n\tep1: setEnabledProtocols(protocols);\n\tEnableProtocol := ep1;\nORDER\n\t(EnableCipher, EnableProtocol) | (EnableProtocol, EnableCipher)</pre>"
+            },
+            {
+                "rule": "SSLParameters",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tCon1: SSLParameters();\n\tCon2: SSLParameters(cipherSuites);\n\tCon3: SSLParameters(cipherSuites, protocols);\n\t\n\tCipherSuite: setCipherSuites(cipherSuites);\n\tSetProtocol: setProtocols(protocols);\nORDER\n\t(Con1, ((CipherSuite , SetProtocol) | (SetProtocol , CipherSuite))) | (Con2, SetProtocol) | Con3</pre>"
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.X509Certificate trustedCert;\n\tjavax.security.auth.x500.X500Principal caPrincipal;\nEVENTS\n\tc1: TrustAnchor(_, publicKey, _);\n\tc2: TrustAnchor(trustedCert, _);\n\tc3: TrustAnchor(caPrincipal, publicKey, _);\n\tCon := c1 | c2 | c3;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.TrustManager[] trustManager; \nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(keyStore);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgtm1: trustManager = getTrustManagers();\n\tGetTrustMng := gtm1;\nORDER\n\tGet, Init, GetTrustMng?</pre>"
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "At least one required step was left out.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] encodedKey;\nEVENTS\n\tc1: X509EncodedKeySpec(encodedKey);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            }
+        ]
+    },
+    "InstanceOfError": {
+        "description": "An <b>InstanceOfError</b> occurs when an object used in a cryptographic operation does not match the expected type. CrySL rules enforce type constraints on cryptographic objects (e.g., a Cipher object might require a SecretKey, but a PublicKey is provided instead). This error prevents incorrect type usage that could lead to runtime failures, security vulnerabilities, or unintentional misconfiguration of cryptographic components.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "Depending on the parameters used during the initialization of the Cipher object (call to <code>init</code>) a specific algorithm has to be used in <code>getInstance</code>.",
+                "solution": "For the method calls<pre>init(opmode, key);\ninit(opmode, key, paramSpec);\ninit(opmode, key, params);\ninit(opmode, key, paramSpec, secureRandom);\ninit(opmode, key, params, secureRandom);\ninit(opmode, key, secureRandom);</pre>use different algorithms if <details><summary>key is a <code>javax.crypto.SecretKey</code></summary>The algorithm has to be one of the following:<ul><li>AES</li> <li>PBEWithHmacSHA224AndAES_128</li> <li>PBEWithHmacSHA256AndAES_128</li> <li>PBEWithHmacSHA384AndAES_128</li> <li>PBEWithHmacSHA512AndAES_128</li> <li>PBEWithHmacSHA224AndAES_256</li> <li>PBEWithHmacSHA256AndAES_256</li> <li>PBEWithHmacSHA384AndAES_256</li> <li>PBEWithHmacSHA512AndAES_256</li></ul></details>or<details><summary>key is a <code>java.security.PublicKey</code> or <code>java.security.PrivateKey</code></summary>The algorithm has to be <i>RSA</i>.</details><br>For the following method calls<pre>init(opmode, certificate);\ninit(opmode, certificate, secureRandom);</pre>if a <code>java.security.Certificate</code> is used the algorithm has to be <i>RSA</i>.<br><br>For all mentioned method calls, if opmode is one of <code>WRAP_MODE</code> or <code>UNWRAP_MODE</code> the algorithm also has to be <i>RSA</i>.</details>"
+            }
+        ]
+    },
+    "NeverTypeOfError": {
+        "description": "A <b>NeverTypeOfError</b> occurs when a parameter is of a type that is explicitly disallowed.",
+        "examples": [
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "The password entered into the <code>init</code> method should never be of the type String.",
+                "solution": "Instead, it should be of the type char[]."
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "The passwords used in the methods <code>load</code>, <code>store</code>, and <code>getKey</code> should never be of the type String.",
+                "solution": "Instead, it should be of the type char[]."
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "The password used in the constructor should never be of the type String.",
+                "solution": "Instead, it should be of the type char[]."
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "The password used in the constructor should never be of the type String.",
+                "solution": "Instead, it should be of the type char[]."
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "The keyMaterial used in the constructor should never be of the type String.",
+                "solution": "Instead, it should be of the type byte[]."
+            }
+        ]
+    },
+    "NoCallToError": {
+        "description": "A <b>NoCallToError</b> is triggered when a method is explicitly prohibited in a cryptographic usage pattern, yet it has been invoked. CrySL rules may specify that certain method calls should not occur under specific conditions, such as restricting init() for certain algorithms that do not require explicit initialization. This error signals that the cryptographic implementation does not follow secure guidelines and may introduce security weaknesses.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "In order to get a new <code>Cipher</code> object one of the following <code>getInstance</code> methods must be called:<pre>Cipher.getInstance(String transformation);\nCipher.getInstance(String transformation, String provider);\nCipher.getInstance(String transformation, Provider provider);</pre>The <code>String transformation</code> can be formed as either of the following: <ul><li>\"algorithm/mode/padding\"</li><li>\"algorithm\"</li></ul>Calling the <code>init</code> method could be any of the following calls:<pre>c.init(int encmode, Certificate certificate);\nc.init(int encmode, Certificate certificate, random);\nc.init(int encmode, Key key);\nc.init(int encmode, Key key, AlgorithmParameterSpec paramSpec);\nc.init(int encmode, Key key, AlgorithmParameters params);\nc.init(int encmode, Key key, AlgorithmParameterSpec paramSpec, SecureRandom random);\nc.init(int encmode, Key key, AlgorithmParameters params, SecureRandom random);\nc.init(int encmode, Key key, SecureRandom random);</pre>",
+                "solution": "The method <code>init</code> should <b>not</b> be called if the algorithm used for <code>getInstance</code> is one of the following:<ul><li>AES</li><li>PBEWithHmacSHA224AndAES_128</li> <li>PBEWithHmacSHA256AndAES_128</li> <li>PBEWithHmacSHA384AndAES_128</li> <li>PBEWithHmacSHA512AndAES_128</li> <li>PBEWithHmacSHA224AndAES_256</li> <li>PBEWithHmacSHA256AndAES_256</li> <li>PBEWithHmacSHA384AndAES_256</li> <li>PBEWithHmacSHA512AndAES_256</li></ul><br>If the value of <code>encmode</code> is <b>not</b> <code>1</code> or <code>ENCRYPT_MODE</code> <b>and</b> the <code>mode</code> is one of the following:<ul><li>CTR</li><li>CTS</li><li>CFB</li><li>OFB</li></ul>then the following method configurations should <b>not</b> be called:<pre>c.init(encmode, certificate);\nc.init(encmode, certificate, random);\nc.init(encmode, key);\nc.init(encmode, key, random);</pre><br>Also, if the <code>mode</code> is one of the following:<ul><li>CTR</li><li>CTS</li><li>CFB</li><li>ECB</li><li>OFB</li></ul>then the following methods should <b>not</b> be called:<pre>c.updateAAD(byte[] aadBytes);\nc.updateAAD(byte[] aadBytes, int aadOffset, int aadLen);\nc.updateAAD(ByteBuffer aadByteBuffer);</pre>"
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "The following call should never be made:<pre>SecretKey sharedKey = keAgreement.generateSecret(symmetricKeyAlgorithm);</pre>",
+                "solution": "Instead use <pre>byte[] sharedSecretBuffer = keyAgreement.generateSecret();</pre> or <pre>byte[] sharedSecretBuffer = new byte[1024];\ngenerateSecret(sharedSecretBuffer, offset);</pre>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "The following constructor must be called before the <code>privateKey</code> and <code>publicKey</code> can be returned:<pre>KeyPair kp = new KeyPair(PrublicKey publicKey, PrivateKey, privateKey);</pre>",
+                "solution": ""
+            }
+        ]
+    },
+    "RequiredPredicateError": {
+        "description": "A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy a required security condition. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "<p>The follow-up error in the CrySL rule <strong>AlgorithmParameterGenerator</strong> occurs because the <code>REQUIRES</code> section, specifically <code>randomized[random]</code>, is not fulfilled. This indicates that the required randomness is not properly ensured, which can lead to security vulnerabilities.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <p>Related Java security object(s):</p> <ul> <li>java.security.SecureRandom (<code>SecureRandom</code>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "This follow-up error occurs in the CrySL rule for AlgorithmParameters because the REQUIRES section conditions are not fully met for the given algorithm and parameter specification. This likely means that the expected preparation step for the provided algorithm is missing or incorrectly specified. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li>javax.crypto.spec.DHGenParameterSpec (DHGenParameterSpec)</li><li>javax.crypto.spec.DHParameterSpec (DHParameterSpec)</li><li>javax.crypto.spec.IvParameterSpec (IvParameterSpec)</li><li>javax.crypto.spec.OAEPParameterSpec (OAEPParameterSpec)</li><li>javax.crypto.spec.PBEParameterSpec (PBEParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "This follow-up error occurs in the CrySL rule CertPathTrustManagerParameters when the section REQUIRES generatedCertPathParameters[params]; is not fulfilled regarding java.security.cert.CertPathParameters. This happens because the required certificate path parameters were not correctly generated or provided, leading to a rule violation. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li>java.security.cert.CertPathParameters (CertPathParameters)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>Cipher</code> because the <code>REQUIRES</code> section is not fully satisfied. Specifically, one or more required conditions related to key generation, algorithm preparation, or initialization parameters are missing or incorrect. This can lead to improper cryptographic usage and potential security vulnerabilities.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul>  <li><code>java.security.Key</code> (<em>Key</em>)</li>  <li><code>java.security.cert.Certificate</code> (<em>Certificate</em>)</li>  <li><code>java.security.spec.AlgorithmParameterSpec</code> (<em>AlgorithmParameterSpec</em>)</li>  <li><code>java.security.AlgorithmParameters</code> (<em>AlgorithmParameters</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>CipherInputStream</code> when the <code>REQUIRES</code> section is not fulfilled, specifically the requirement <code>generatedCipher[cipher]</code>. This means that an instance of <code>javax.crypto.Cipher</code> was expected to be properly generated before use but was not.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li>javax.crypto.Cipher (Cipher)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>CipherOutputStream</code> because the requirement <code>generatedCipher[cipher]</code> is not fulfilled for <code>javax.crypto.Cipher</code>. This means that the cipher instance used in <code>CipherOutputStream</code> has not been properly generated or initialized according to the CrySL specification, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p><ul><li>javax.crypto.Cipher (<code>Cipher</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "This follow-up error occurs in the CrySL rule DigestInputStream when the section <strong>REQUIRES generatedMessageDigest[digest];</strong> is not fulfilled regarding <code>java.security.MessageDigest</code>. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li><code>java.security.MessageDigest</code> (<em>MessageDigest</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <code>DigestOutputStream</code> because the requirement <code>generatedMessageDigest[digest]</code> is not fulfilled for <code>java.security.MessageDigest</code>. This indicates that a message digest was expected to be generated but was not properly assigned or used in compliance with the rule constraints.</p><p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.MessageDigest</code> (MessageDigest)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "This follow-up error occurs in the CrySL rule for GCMParameterSpec when the section <code>REQUIRES randomized[src];</code> is not fulfilled regarding <code>byte[]</code>. This requirement ensures that the source data is properly randomized to maintain cryptographic security. Failure to comply with this rule may lead to vulnerabilities or incorrect cryptographic operations. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.<br><ul></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule for <code>IvParameterSpec</code> when the <code>REQUIRES randomized[iv];</code> section is not fulfilled. The violation indicates that the initialization vector (IV) must be randomized to ensure cryptographic security.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Key",
+                "misuse": "This follow-up error occurs in the CrySL rule 'Key' because the requirement in the REQUIRES section is not fulfilled. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.<br><ul><li>[]</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "<p>This follow-up error occurs because the <strong>REQUIRES</strong> section is not fully satisfied. Specifically, the required conditions for key generation, algorithm preparation, or randomness are not met. As a result, the CrySL rule for <strong>KeyAgreement</strong> fails to validate the expected cryptographic workflow.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li><code>java.security.Key</code> (<em>Key</em>)</li> <li><code>javax.crypto.SecretKey</code> (<em>SecretKey</em>)</li> <li><code>java.security.spec.AlgorithmParameterSpec</code> (<em>AlgorithmParameterSpec</em>)</li> <li><code>java.security.SecureRandom</code> (<em>SecureRandom</em>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyFactory</code> when the <code>REQUIRES</code> section is not fulfilled regarding the specified security objects. This means that the required key specification has not been properly defined or used, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.PrivateKey</code> (PrivateKey)</li><li><code>java.security.PublicKey</code> (PublicKey)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>KeyGenerator</strong> when the <code>REQUIRES</code> section is not fulfilled regarding the requirement <code>randomized[random]</code>. This means that a necessary randomness source was not provided correctly, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li><li><code>javax.crypto.SecretKey</code> (SecretKey)</li><li><code>java.security.SecureRandom</code> (SecureRandom)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyManagerFactory</code> when the <code>REQUIRES</code> section is not fulfilled regarding <code>java.security.KeyStore</code>. The error indicates that a required object has not been properly generated or provided before its use.</p><p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p><ul><li>java.security.KeyStore (<code>KeyStore</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>KeyPair</strong> when the <code>REQUIRES</code> section is not fulfilled. Specifically, the required conditions for generated private and public keys are not met, which leads to inconsistencies in the key generation process. As a result, the rule cannot verify the correct usage of key pairs.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.PrivateKey</code> (<em>PrivateKey</em>)</li> <li><code>java.security.PublicKey</code> (<em>PublicKey</em>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>KeyPairGenerator</code> when the <code>REQUIRES</code> section is not fulfilled regarding the specified Java security objects. The error arises because the required preparation steps for the given algorithm are missing, leading to an inconsistency in rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyPair</code> (KeyPair)</li><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Mac",
+                "misuse": "<p>This follow-up error occurs because the conditions in the <strong>REQUIRES</strong> section are not fulfilled. Specifically, the rule expects that no encryption has been performed on <code>output1</code> and <code>output2</code>, that an HMAC has been prepared with the given parameters, and that a cryptographic key has been generated. If any of these conditions are not met, the CrySL rule detects a violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>javax.crypto.Mac</code> (Mac)</li><li><code>java.security.Key</code> (Key)</li><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>OAEPParameterSpec</code> when the requirement</p><pre>REQUIRES preparedMGF1[mgfSpec, mdName];</pre><p>is not fulfilled regarding <code>java.security.spec.AlgorithmParameterSpec</code>. This happens because the mandatory preparation of the mask generation function (MGF1) with the specified message digest (mdName) was not completed before its usage.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "<p>The follow-up error in the CrySL rule <code>PBEKeySpec</code> occurs because the requirement <code>randomized[salt]</code> is not fulfilled. This means that the expected salt value, which should be randomized, is either missing or improperly set, leading to a security violation in the rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.ObjectName</code> (<code>ClassName</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>PBEParameterSpec</code> when the <code>REQUIRES randomized[salt];</code> section is not fulfilled regarding <code>java.security.spec.AlgorithmParameterSpec</code>. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "<p>This follow-up error in the CrySL rule <code>PKIXBuilderParameters</code> occurs because the <code>REQUIRES</code> section is not fulfilled regarding <code>java.security.KeyStore</code>. This means that the necessary security object has not been properly generated or provided, leading to a constraint violation in the rule enforcement.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>PKIXParameters</code> when the <code>REQUIRES</code> section specifying <code>generatedKeyStore[keyStore]</code> is not fulfilled. The issue arises due to a missing or improperly initialized instance of the required <code>java.security.KeyStore</code> object.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "<p>This follow-up error occurs because the <code>REQUIRES generatedPrivkey[this];</code> condition is not fulfilled in the CrySL rule for <code>PrivateKey</code>. This means that a private key must be properly generated before it can be used, and the absence of this step leads to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>PrivateKey</code> (<code>java.security.PrivateKey</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <strong>PublicKey</strong> because the <code>REQUIRES</code> condition <code>generatedPubkey[this]</code> is not fulfilled. This means that a required public key was not properly generated or assigned before its usage.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li>java.security.PublicKey (<code>PublicKey</code>)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecretKey</strong> because the required condition <code>generatedKey[this, _];</code> is not fulfilled. As a result, the expected security properties or guarantees are not met, leading to a rule violation.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p> <ul> <li><code>java.security.Key</code> (Key)</li> <li><code>java.security.KeyPair</code> (KeyPair)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecretKeyFactory</strong> when the <code>REQUIRES</code> section is not fulfilled regarding <code>speccedKey[keySpec, _]</code>. This means that a required precondition involving <code>javax.crypto.SecretKey</code> and <code>java.security.spec.KeySpec</code> has not been satisfied, potentially leading to an invalid or incomplete specification.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li>javax.crypto.SecretKey (<code>SecretKey</code>)</li><li>java.security.spec.KeySpec (<code>KeySpec</code>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "<p>The follow-up error occurs in the CrySL rule <strong>SecretKeySpec</strong> when the requirement <code>preparedKeyMaterial[keyMaterial]</code> is not fulfilled. This means that the necessary key material has not been properly prepared before use.</p> <p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.Key</code> (Key)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SecureRandom</strong> when the required conditions <code>randomized[seed]</code> and <code>randomized[lSeed]</code> are not fulfilled. This indicates that the necessary randomization steps were not properly executed, leading to a violation of the security rule.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error:</p><ul><li><code>[]</code></li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "Signature",
+                "misuse": "This follow-up error occurs in the CrySL rule Signature when the REQUIRES section is not fulfilled regarding the specified java security objects. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><ul><li>java.security.PrivateKey (PrivateKey)</li><li>java.security.PublicKey (PublicKey)</li><li>java.security.spec.AlgorithmParameterSpec (AlgorithmParameterSpec)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>SSLContext</strong> because the <em>REQUIRES</em> section is not fulfilled. Specifically, the required object <code>java.security.SecureRandom</code> is missing or incorrectly initialized. As a result, the rule's constraints cannot be satisfied, leading to an error.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.SecureRandom</code> (<em>SecureRandom</em>)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>TrustAnchor</strong> because the section <code>REQUIRES generatedPubkey[publicKey];</code> is not fulfilled regarding <code>java.security.PublicKey</code>. This means that the required public key was not properly generated or assigned before being used.</p> <p>Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.</p> <ul> <li><code>java.security.PublicKey</code> (PublicKey)</li> </ul>",
+                "solution": ""
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <code>TrustManagerFactory</code> because the <code>REQUIRES</code> section is not fulfilled regarding the specified <code>java.security.KeyStore</code>. The rule expects the required objects to be properly generated before use. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyStore</code> (KeyStore)</li></ul>",
+                "solution": ""
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "<p>This follow-up error occurs in the CrySL rule <strong>X509EncodedKeySpec</strong> when the section <code>REQUIRES preparedKeyMaterial[encodedKey];</code> is not fulfilled regarding the specified security objects. Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.KeyFactory</code> (KeyFactory)</li><li><code>java.security.spec.X509EncodedKeySpec</code> (X509EncodedKeySpec)</li></ul>",
+                "solution": ""
+            }
+        ]
+    },
+    "TypestateError": {
+        "description": "A <b>TypestateError</b> is reported when cryptographic operations occur in an incorrect sequence. CrySL rules define a strict ordering of method calls (e.g., an object must be initialized before use). If the operations are performed in an unexpected order, the cryptographic process may become unreliable or insecure. This error ensures that cryptographic APIs are used in their intended sequence, preventing unintended behavior or security gaps in encryption, decryption, and key management.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.AlgorithmParameters lgParams;\n\tjava.security.spec.AlgorithmParameterSpec genParamSpec; \n\tjava.security.SecureRandom random;\n\tint size;\nEVENTS \n\tg1: getInstance(algorithm); \n\tg2: getInstance(algorithm, _); \n\tGet := g1 | g2; \n\n\ti1: init(size);\n\ti2: init(size, random); \n\ti3: init(genParamSpec); \n\ti4: init(genParamSpec, random); \n\tInit := i1 | i2 | i3 | i4;\n\n\tgp1: algParams = generateParameters();\n\tGenParam := gp1; \nORDER\n\tGet, Init, GenParam</pre>"
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tbyte[] params; \n\tjava.lang.String format;\n\tbyte[] encParams;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(paramSpec);\n\ti2: init(params);\n\ti3: init(params, _);\n\tInit := i1 | i2 | i3;\n\n\te1: encParams = getEncoded();\n\te2: encParams = getEncoded(format);\n\tGetEncoded := e1 | e2;\nORDER\n\tGet, Init, GetEncoded?</pre>"
+            },
+            {
+                "rule": "CertificateFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inStream;\n\tjava.lang.String encoding;\n\tjava.lang.String type;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\t\n\tgc1: generateCertificate(inStream);\n\tGenCert := gc1;\n\t\n\tgen1: generateCertPath(_);\n\tgen2: generateCertPath(inStream, encoding);\n\tGenCertPath := gen1 | gen2;\n\t\n\tgcrl1: generateCRL(inStream);\n\tGenCRL := gcrl1;\n\t\nORDER\n\tGet, (GenCert | GenCertPath | GenCRL)+</pre>"
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.cert.CertPathParameters params;\nEVENTS\n\tc1: CertPathTrustManagerParameters(params);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String transformation;\n\tint encmode;\n\tjava.security.Key key;\n\tjava.security.cert.Certificate certificate;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tjava.security.AlgorithmParameters params;\n\n\tint prePlainTextOffset;\n\tint preCipherTextOffset;\n\tint plainTextOffset;\n\tint cipherTextOffset;\n\tint aadOffset;\n\n\tint prePlainTextLen;\n\tint plainTextLen;\n\tint aadLen;\n\n\tbyte[] prePlainText;\n\tbyte[] preCipherText;\n\tjava.nio.ByteBuffer prePlainTextByteBuffer;\n\tjava.nio.ByteBuffer preCipherTextByteBuffer;\n\n\tbyte[] plainText;\n\tbyte[] cipherText;\n\tbyte[] wrappedKeyBytes;\n\tjava.nio.ByteBuffer plainTextByteBuffer;\n\tjava.nio.ByteBuffer cipherTextByteBuffer;\n\t\n\tbyte[] aadBytes;\n\tjava.nio.ByteBuffer aadByteBuffer;\n\t\n\tjava.security.SecureRandom random;\n\t\n\tjava.security.Key wrappedKey;\nEVENTS\n\tg1: getInstance(transformation);\n\tg2: getInstance(transformation, _);\n\tGet := g1 | g2;\n\n\ti1: init(encmode, certificate);\n\ti2: init(encmode, certificate, random);\n\ti3: init(encmode, key);\n\ti4: init(encmode, key, paramSpec);\n\ti5: init(encmode, key, params);\n\ti6: init(encmode, key, paramSpec, random);\n\ti7: init(encmode, key, params, random);\n\ti8: init(encmode, key, random);\n\tIWOIV := i1 | i2 | i3 | i8;\n\tIWIV :=  i4 | i5 | i6 | i7;\n\tInit := IWOIV | IWIV;\n\n\tu1: preCipherText = update(prePlainText);\n\tu2: preCipherText = update(prePlainText, prePlainTextOffset, prePlainTextLen);\n\tu3: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText);\n\tu4: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText, preCipherTextOffset);\n\tu5: update(prePlainTextByteBuffer, preCipherTextByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4 | u5;\n\t\n\tua1: updateAAD(aadBytes);\n\tua2: updateAAD(aadBytes, aadOffset, aadLen);\n\tua3: updateAAD(aadByteBuffer);\n\tAADUpdate := ua1 | ua2 | ua3;\n\t\n\tf1: cipherText = doFinal();\n\tf2: cipherText =  doFinal(plainText);\n\tf3: doFinal(cipherText, cipherTextOffset);\n\tf4: cipherText = doFinal(plainText, plainTextOffset, plainTextLen);\n\tf5: doFinal(plainText, plainTextOffset, plainTextLen, cipherText);\n\tf6: doFinal(plainText, plainTextOffset, plainTextLen, cipherText, cipherTextOffset);\n\tf7: doFinal(plainTextByteBuffer, cipherTextByteBuffer);\n\tFINWOU := f2 | f4 | f5 | f6 | f7;\n\tDoFinal := FINWOU | f1 | f3;\n\n\twkb1: wrappedKeyBytes = wrap(wrappedKey);\n\tWKB := wkb1;\n\n\tiv1: getIV();\n\tIV := iv1;\nORDER\n\tGet, Init+, AADUpdate*, WKB+ | (FINWOU | (Update+, DoFinal))+</pre>"
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: CipherInputStream(inputStream, cipher);\n\tCon := c1;\n\t\n\tr1: read();\n\tr2: read(data); \n\tr3: read(data, offset, len);\n\tRead := r1 | r2 | r3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream outputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: CipherOutputStream(outputStream, cipher);\n\tCon := c1;\n\t\n\tw1: write(specifiedByte);\n\tw2: write(data);\n\tw3: write(data, offset, len);\n\tWrite := w1 | w2 | w3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "Cookie",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String name;\n\tjava.lang.String value;\n\tboolean flag;\nEVENTS\n\tc1: Cookie(name, value);\n\tCon := c1;\n\t\n\ts1: setSecure(flag);\n\tSetSecure := s1;\nORDER\n\tCon, SetSecure</pre>"
+            },
+            {
+                "rule": "DHGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primeSize;\n\tint exponentSize;\nEVENTS\n\tc1: DHGenParameterSpec(primeSize, exponentSize);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DHParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger g;\n\tint l;\nEVENTS\n\tc1: DHParameterSpec(p, g);\n\tc2: DHParameterSpec(p, g, l);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: DigestInputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: read(); \n\tr2: read(data, offset, len);\n\tRead := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: DigestOutputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: write(specifiedByte); \n\tr2: write(data, offset, len);\n\tWrite := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "DSAGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primePLen;\n\tint subPrimeQLen;\n\tint seedLen;\nEVENTS\n\tc1: DSAGenParameterSpec(primePLen, subPrimeQLen);\n\tc2: DSAGenParameterSpec(primePLen, subPrimeQLen, seedLen);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DSAParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger q;\n\tjava.math.BigInteger g;\nEVENTS\n\tc1: DSAParameterSpec(p, q, g);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String stdName;\nEVENTS\n\tc1: ECGenParameterSpec(stdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.security.spec.EllipticCurve curve;\n\tjava.security.spec.ECPoint g;\n\tjava.math.BigInteger n;\n\tint h;\nEVENTS\n\tc1: ECParameterSpec(curve, g, n, h);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint tagLen;\n\tbyte[] src;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: GCMParameterSpec(tagLen, src);\n\tc2: GCMParameterSpec(tagLen, src, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "HMACParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint outputLen;\nEVENTS\n\tc1: HMACParameterSpec(outputLen);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] iv;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: IvParameterSpec(iv);\n\tc2: IvParameterSpec(iv, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Key",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.lang.String symmetricKeyAlgorithm;\n\tjava.security.Key pubKey;\n\tjava.security.Key privKey;\n\tjavax.crypto.SecretKey sharedKey;\n\tboolean lastPhase;\n\tbyte[] sharedSecretBuffer;\n\tint offset;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(privKey);\n\ti2: init(privKey, params);\n\ti3: init(privKey, params, random);\n\ti4: init(privKey, random);\n\tInit := i1 | i2 | i3 | i4;\n\n\tdp1: doPhase(pubKey, lastPhase);\n\tDoPhase := dp1;\n\n\tgs1: sharedSecretBuffer = generateSecret();\n\tgs2: generateSecret(sharedSecretBuffer, offset);\n\tGenSecretBuffer := gs1 | g2;\n\t\n\tgs3: sharedKey = generateSecret(symmetricKeyAlgorithm);\n\tGenSecret := gs3 | GenSecretBuffer;\nORDER\n\tGet, Init, DoPhase, GenSecretBuffer</pre>"
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.KeySpec keySpec;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgpr1: privateKey = generatePrivate(keySpec);\n\tGenPriv := gpr1;\n\t\n\tgpu1: publicKey = generatePublic(keySpec);\n\tGenPubl := gpu1;\nORDER\n\tGet, (GenPriv | GenPubl)*</pre>"
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tint keysize;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjavax.crypto.SecretKey key;\n\tjava.lang.String algorithm;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keysize);\n\ti2: init(keysize, random);\n\ti3: init(params);\n\ti4: init(params, random);\n\ti5: init(random);\n\tInit := i1 | i2 | i3 | i4 | i5;\n    \n\tgk1: key = generateKey();\n\tGenKey := gk1;\nORDER\n\tGet, Init?, GenKey</pre>"
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tchar[] password;\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.KeyManager[] keyManager;\nEVENTS \n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keyStore, password);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgkm1: keyManager = getKeyManagers();\n\tGetKeyMng := gkm1;\nORDER\n\tGet, Init, GetKeyMng?</pre>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.PrivateKey retPrivateKey;\n\tjava.security.PublicKey retPublicKey;\nEVENTS\n\tc1: KeyPair(publicKey, privateKey);\n\tCon := c1;\n\t\n\tgpu1: retPublicKey = getPublic();\n\tGetPubl := gpu1;\n\t\n\tgpr1: retPrivateKey = getPrivate();\n\tGetPriv := gpr1;\nORDER\n\tCon, (GetPubl | GetPriv)*</pre>"
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyPair keyPair;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint keysize;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initialize(keysize);\n\ti2: initialize(keysize, _);\n\ti3: initialize(params);\n\ti4: initialize(params, _);\n\tInit := i1 | i2 | i3 | i4;\n\n\tk1: keyPair = generateKeyPair();\n\tk2: keyPair = genKeyPair();\n\tGen := k1 | k2;\nORDER\n\tGet, Init, Gen</pre>"
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream fileInput;\n    \n\tchar[] passwordIn;\n\tchar[] passwordOut;\n\tchar[] passwordKey;\n    \n\tjava.security.KeyStore.Entry entry;\n\tbyte[] byteKey;\n    \n\tjava.security.KeyStore.LoadStoreParameter paramLoad;\n\tjava.security.KeyStore.ProtectionParameter protParamGet;\n\tjava.security.KeyStore.ProtectionParameter protParamSet;\n\tjava.lang.String aliasGet;\n\tjava.lang.String aliasSet;\n\tjava.io.OutputStream fileOutput;\n\tjava.security.KeyStore.LoadStoreParameter paramStore;\n\tjava.lang.String type;\n\tjava.security.cert.Certificate cert;\n    \n\tjava.security.Key key;\n\tjava.lang.String alias;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\n\tl1: load(fileInput, passwordIn);\n\tl2: load(paramLoad);\n\tLoad := l1 | l2;\n\n\ts1: store(paramStore);\n\ts2: store(fileOutput, passwordOut);\n\tStore := s1 | s2;\n\n\tge1: getEntry(aliasGet, protParamGet);\n\tGetEntry := ge1;\n    \n\tse1: setEntry(aliasSet, entry, protParamSet);\n\tSetEntry := se1;\n\n\tgk1: key = getKey(alias, passwordKey);\n\tGetKey := gk1;\nORDER\n\tGet, Load, ((GetEntry?, GetKey) | (SetEntry, Store))*</pre>"
+            },
+            {
+                "rule": "KeyStoreBuilderParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore.Builder builder;\nEVENTS\n\tc1: KeyStoreBuilderParameters(builder);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Mac",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjavax.crypto.Mac mac;\n\tjava.security.Key key;\n\tbyte inputByte;\n\tbyte[] preInput;\n\tbyte[] input;\n\tbyte[] output1;\n\tbyte[] output2;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint offset;\n\tint outOffset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(key);\n\ti2: init(key, params);\n\tInit := i1 | i2;\n\n\tu1: update(inputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, offset, len);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\tf1: output1 = doFinal();\n\tf2: output2 = doFinal(input);\n\tf3: doFinal(output1, outOffset);\n\tFinalWU := f2;\n\tFinalWOU := f1 | f3;\n\tFinal := FinalWU | FinalWOU;\nORDER\n\tGet, Init, (FinalWU | (Update+, Final))+</pre>"
+            },
+            {
+                "rule": "MessageDigest",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tbyte preInputByte;\n\tbyte[] preInput;\n\tint preOffset;\n\tint preLen;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tbyte[] input;\n\tint offset;\n\tint len;\n\tbyte[] output;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tu1: update(preInputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, preOffset, preLen);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\td1: output = digest();\n\td2: output = digest(input);\n\td3: digest(output, offset, len);\n\tDWOU := d2;\n\tDWU := d1 | d3;\n\tDigest := DWU | DWOU;\nORDER\n\tGet, (DWOU | (Update+, Digest))+</pre>"
+            },
+            {
+                "rule": "MGF1ParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\nEVENTS\n\tc1: MGF1ParameterSpec(mdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\n\tjava.lang.String mgfName;\n\tjava.security.spec.AlgorithmParameterSpec mgfSpec;\n\tjavax.crypto.spec.PSource pSrc;\nEVENTS\n\tc1: OAEPParameterSpec(mdName, mgfName, mgfSpec, pSrc);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String userName;\n\tjava.lang.String retUserName;\n\tchar[] password;\nEVENTS\n\tc1: PasswordAuthentication(userName, password);\n\tCon := c1;\n\n\tgp1: getPassword();\n\tGetPassword := gp1;\n\t\n\tgu1: retUserName = getUserName();\n\tGetUserName := gu1;\nORDER\n\tCon, (GetPassword | GetUserName)*</pre>"
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tchar[] password;\n\tbyte[] salt;\n\tint iterationCount;\n\tint keyLength; \nEVENTS\n\tc1: PBEKeySpec(password, salt, iterationCount, keyLength);\n\tCon := c1;\n\t\n\tcp1: clearPassword();\n\tClearPass := cp1;\nORDER\n\tCon, ClearPass</pre>"
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] salt;\n\tint iterationCount;\n\tjava.security.spec.AlgorithmParameterSpec params;\nEVENTS\n\tc1: PBEParameterSpec(salt, iterationCount);\n\tc2: PBEParameterSpec(salt, iterationCount, params);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keystore;\n\tjava.security.cert.CertSelector targetConstraints;\n\tjava.util.Set<java.security.cert.TrustAnchor> trustAnchors;\nEVENTS\n\tc1: PKIXBuilderParameters(keystore, targetConstraints);\n\tc2: PKIXBuilderParameters(trustAnchors, targetConstraints);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keyStore;\nEVENTS\n\tc1: PKIXParameters(keyStore);\n\tc2: PKIXParameters(_);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "RSAKeyGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint keysize;\n\tjava.math.BigInteger publicExponent;\nEVENTS\n\tc1: RSAKeyGenParameterSpec(keysize, publicExponent);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\n\t\n\td1: destroy();\n\tDestroy := d1;\nORDER\n\tGetEnc*, Destroy?</pre>"
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjavax.crypto.SecretKey key;\n\tjavax.crypto.SecretKey otherKey;\n\tjava.security.spec.KeySpec keySpec;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgS: key = generateSecret(keySpec);\n\ttK: key = translateKey(otherKey);\n\tGen := gS | tK;\nORDER\n\tGet, Gen</pre>"
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String keyAlgorithm;\n\tbyte[] keyMaterial;\n\tint len;\n\tint offset;\nEVENTS\n\tc1: SecretKeySpec(keyMaterial, keyAlgorithm);\n\tc2: SecretKeySpec(keyMaterial, offset, len, keyAlgorithm);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] seed;\n\tbyte[] genSeed;\n\tjava.lang.String algorithm;\n\tlong lSeed;\n\tbyte[] bytes;\n\tint randInt;\n\tint randIntInRange;\n\tint range;\nEVENTS\n\tc1: SecureRandom();\n\tc2: SecureRandom(seed);\n\tCon := c1 | c2;\n\t\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tgI: getInstanceStrong();\n\tGet := g1 | g2 | gI;\n\t\n\tIns := Get | Con;\n\n\ts1: setSeed(seed);\n\ts2: setSeed(lSeed);\n\tSeed := s1 | s2;\n\n\tgS: genSeed = generateSeed(_);\n\n\tnB: nextBytes(bytes);\n\tnI: randInt = nextInt();\n\tnIR: randIntInRange = nextInt(range);\n\tNext := nB | nI | nIR;\n\t\n\tEnd := gS | Next;\nORDER\n\tIns, (Seed?, End*)*</pre>"
+            },
+            {
+                "rule": "Signature",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tbyte[] sign;\n\tbyte inputByte;\n\tbyte[] input;\n\tbyte[] output;\n\tjava.nio.ByteBuffer inputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.Certificate cert;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tboolean verified;\n\tint offset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initSign(privateKey);\n\ti2: initSign(privateKey, _);\n\ti3: initVerify(cert);\n\ti4: initVerify(publicKey);\n\tInitSign := i1 | i2;\n\tInitVerify := i3 | i4;\n\n\tu1: update(input);\n\tu2: update(inputByte);\n\tu3: update(input, offset, len);\n\tu4: update(inputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\ts1: output = sign();\n\ts2: sign(output, offset, len);\n\tSign := s1 | s2;\n\n\tv1: verified = verify(sign);\n\tv2: verified = verify(sign, offset, len);\n\tVerify := v1 | v2;\nORDER\n\tGet, ((InitSign+, (Update+, Sign+)+ )+ | (InitVerify+, (Update*, Verify+)+ )+ )</pre>"
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String protocol;\n\tjavax.net.ssl.KeyManager[] km; \n\tjavax.net.ssl.TrustManager[] tm; \n\tjavax.net.ssl.SSLEngine eng;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(protocol);\n\tg2: getInstance(protocol, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(km, tm, random);\n\tInit := i1;\n\t\n\tse1: eng = createSSLEngine();\n\tse2: eng = createSSLEngine(_,_);\n\tEngine := se1 | se2;\nORDER\n\tGet, Init, Engine? </pre>"
+            },
+            {
+                "rule": "SSLEngine",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tec1: setEnabledCipherSuites(cipherSuites);\n\tEnableCipher := ec1;\n\t\n\tep1: setEnabledProtocols(protocols);\n\tEnableProtocol := ep1;\nORDER\n\t(EnableCipher, EnableProtocol) | (EnableProtocol, EnableCipher)</pre>"
+            },
+            {
+                "rule": "SSLParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tCon1: SSLParameters();\n\tCon2: SSLParameters(cipherSuites);\n\tCon3: SSLParameters(cipherSuites, protocols);\n\t\n\tCipherSuite: setCipherSuites(cipherSuites);\n\tSetProtocol: setProtocols(protocols);\nORDER\n\t(Con1, ((CipherSuite , SetProtocol) | (SetProtocol , CipherSuite))) | (Con2, SetProtocol) | Con3</pre>"
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.X509Certificate trustedCert;\n\tjavax.security.auth.x500.X500Principal caPrincipal;\nEVENTS\n\tc1: TrustAnchor(_, publicKey, _);\n\tc2: TrustAnchor(trustedCert, _);\n\tc3: TrustAnchor(caPrincipal, publicKey, _);\n\tCon := c1 | c2 | c3;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.TrustManager[] trustManager; \nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(keyStore);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgtm1: trustManager = getTrustManagers();\n\tGetTrustMng := gtm1;\nORDER\n\tGet, Init, GetTrustMng?</pre>"
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] encodedKey;\nEVENTS\n\tc1: X509EncodedKeySpec(encodedKey);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            }
+        ]
+    }
+}

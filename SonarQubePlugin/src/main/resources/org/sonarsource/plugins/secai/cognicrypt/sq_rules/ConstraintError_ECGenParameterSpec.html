@@ -1,0 +1,18 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>The constructor is as follows:<pre>new ECGenParameterSpec(String stdName);</pre</p>
+<p>The parameter <code>stdName</code> has to take one of the following values:<ul><li>brainpoolP224r1</li><li>1.3.36.3.3.2.8.1.1.5</li><li>brainpoolP256r1</li><li>1.3.36.3.3.2.8.1.1.7</li><li>brainpoolP320r1</li><li>1.3.36.3.3.2.8.1.1.9</li><li>brainpoolP384r1</li><li>1.3.36.3.3.2.8.1.1.11</li><li>brainpoolP512r1</li><li>1.3.36.3.3.2.8.1.1.13</li><li>secp224r1</li><li>NIST P-224</li><li>1.3.132.0.33</li><li>secp256r1</li><li>NIST P-256</li><li>X9.62 prime256v1</li><li>1.2.840.10045.3.1.7</li><li>secp384r1</li><li>NIST P-384</li><li>1.3.132.0.34</li><li>secp521r1</li><li>NIST P-521</li><li>1.3.132.0.35</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/ECGenParameterSpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/ECGenParameterSpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/ECGenParameterSpec.crysl">ECGenParameterSpec</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+</ul>

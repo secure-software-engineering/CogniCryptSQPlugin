@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.sonarsource.plugins.secai</groupId>
+  <artifactId>sonar-secai-plugin</artifactId>
+  <packaging>sonar-plugin</packaging>
+  <version>1.0.0</version>
+
+  <name>Secai Plugin for SonarQube Server 10.x</name>
+  <description>SecAI of Plugin for SonarQube Server: Cryptographic API misuse using cognicrypt</description>
+
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+  </properties>
+
+  <!--   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonar.apiVersion>10.11.0.2468</sonar.apiVersion>
+    <sonar.testingHarnessVersion>10.7.0.96327</sonar.testingHarnessVersion>
+    <jdk.min.version>17</jdk.min.version>
+    <sonar.sources>src/main/java,src/main/js</sonar.sources>
+  </properties> -->
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+          <groupId>dev.langchain4j</groupId>
+          <artifactId>langchain4j-bom</artifactId>
+          <version>1.2.0</version>
+          <type>pom</type>
+          <scope>import</scope>
+          </dependency>
+      </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>10.11.0.2468</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.sonarsource.api.plugin</groupId>
+        <artifactId>sonar-plugin-api-test-fixtures</artifactId>
+        <version>13.2.0.3137</version>
+        <scope>test</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>10.7.0.96327</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <!-- packaged with the plugin -->
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.17.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.1</version> <!-- or any version matching the one used by CryptoAnalysis -->
+      <scope>provided</scope>
+    </dependency>
+
+
+
+
+
+
+
+
+    <!-- For testing Sonarqube  -->
+    <dependency>
+        <groupId>org.sonarsource.api.plugin</groupId>
+        <artifactId>sonar-plugin-api-test-fixtures</artifactId>
+        <version>10.11.0.2468</version>
+        <scope>test</scope>
+    </dependency>
+
+    
+
+    <!-- unit tests -->
+    <!-- <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.testingHarnessVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency> -->
+
+
+    <!-- JSON pretty printer using JACKSON -->
+    <!--    <dependency>-->
+    <!--      <groupId>com.fasterxml.jackson.core</groupId>-->
+    <!--      <artifactId>jackson-databind</artifactId>-->
+    <!--      <version>2.17.2</version>-->
+    <!--    </dependency>-->
+
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.httpcomponents</groupId>-->
+    <!--      <artifactId>httpclient</artifactId>-->
+    <!--      <version>4.5.9</version>-->
+    <!--    </dependency>-->
+
+    <!--    <dependency>-->
+    <!--      <groupId>com.fasterxml.jackson.core</groupId>-->
+    <!--      <artifactId>jackson-databind</artifactId>-->
+    <!--      <version>2.10.0.pr1</version>-->
+    <!--    </dependency>-->
+
+    <!-- Based on: https://stackoverflow.com/questions/5141788/how-to-run-maven-from-java -->
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-invoker</artifactId>
+      <version>3.3.0</version>
+    </dependency>
+    <!-- For Maven logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+    </dependency>
+    <!--
+        Required to let Maven download artifacts.
+        Otherwise, you get errors of the shape:
+        Plugin ... or one of its dependencies could not be resolved:
+        Failed to read artifact descriptor for ...:
+        Could not transfer artifact ... from/to central (https://repo.maven.apache.org/maven2):
+        No connector factories available.
+    -->
+    <dependency>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-connector-basic</artifactId>
+      <version>1.9.18</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-transport-http</artifactId>
+      <version>1.9.18</version>
+    </dependency>
+
+
+
+    <!-- for Gradle building -->
+    <dependency>
+      <groupId>org.gradle</groupId>
+      <artifactId>gradle-tooling-api</artifactId>
+      <version>7.3-20210825160000+0000</version>
+    </dependency>
+
+    <!-- for SonarQube WebService -->
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-ws</artifactId>
+      <version>10.7.0.96327</version>
+    </dependency>
+
+
+<!--    Crysl Dependency-->
+    <dependency>
+      <groupId>de.darmstadt.tu.crossing.CrySL</groupId>
+      <artifactId>de.darmstadt.tu.crossing.CrySL</artifactId>
+      <version>4.0.5</version>
+    </dependency>
+
+    <!-- SootUp -->
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.core</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.java.core</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.java.sourcecode.frontend</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.java.bytecode.frontend</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.jimple.frontend</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.apk.frontend</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.callgraph</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.analysis.intraprocedural</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.analysis.interprocedural</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.qilin</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.soot-oss</groupId>
+      <artifactId>sootup.codepropertygraph</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+
+
+
+    <!-- Testinggg -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>5.2.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
+      <version>2.13.0.3004</version>
+    </dependency>
+
+    <!-- CogniCrypt -->
+
+    <dependency>
+      <groupId>de.fraunhofer.iem</groupId>
+      <artifactId>HeadlessJavaScanner</artifactId>
+      <version>5.0.1</version>
+    </dependency>
+
+    <!-- Dependency for system stubbing tests -->
+    <dependency>
+      <groupId>uk.org.webcompere</groupId>
+      <artifactId>system-stubs-jupiter</artifactId>
+      <version>2.1.6</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Dependencies for code generation -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-open-ai</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-google-ai-gemini</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-core</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-ollama</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>io.github.cdimascio</groupId>
+        <artifactId>dotenv-java</artifactId>
+        <version>3.2.0</version>
+    </dependency>
+
+    <!-- Graph library for CPG manipulation -->
+    <dependency>
+      <groupId>guru.nidi</groupId>
+      <artifactId>graphviz-java</artifactId>
+      <version>0.18.1</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.23.0.740</version>
+        <extensions>true</extensions>
+        <configuration>
+          <pluginKey>secai</pluginKey>
+          <pluginClass>org.sonarsource.plugins.secai.SecAIPlugin</pluginClass>
+          <!-- Optional, only if you are sure to support older versions of the plugin API than the
+          one you are compiling against -->
+          <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
+          <!-- Needed for IDE support -->
+          <sonarLintSupported>true</sonarLintSupported>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+          <requiredForLanguages>java</requiredForLanguages>
+        </configuration>
+      </plugin>
+      <plugin> <!-- Because we skip packaging dependencies -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <minimizeJar>true</minimizeJar>
+              <transformers>
+                <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>plugin.properties</resource>
+                </transformer>
+              </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <fork>true</fork>
+          <!-- This fails for me
+          <executable>/usr/lib/jvm/java-17-openjdk-amd64/bin/javac</executable>
+          -->
+          <release>17</release>
+        </configuration>
+    </plugin>
+
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.12.1</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>install node and yarn</id>
+            <goals>
+              <goal>install-node-and-yarn</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v20.18.0</nodeVersion>
+              <!-- yarn 1.x is needed as a bootstrap, then it will use the version in the
+              .yarnrc.yml -->
+              <yarnVersion>v1.22.5</yarnVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>yarn install</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>yarn run script</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+  </build>
+
+</project>

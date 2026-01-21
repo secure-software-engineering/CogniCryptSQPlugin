@@ -1,0 +1,13 @@
+# First setup virtual environment:
+# python -m venv .venv
+# source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
+# pip install -r requirements.txt   
+
+mkdocs==1.6.1
+mkdocs-material==9.6.18
+mkdocs-material-extensions
+mkdocs-git-revision-date-localized-plugin
+pymdown-extensions
+mkdocs-tooltips
+mkdocs-include
+mike==2.1.3

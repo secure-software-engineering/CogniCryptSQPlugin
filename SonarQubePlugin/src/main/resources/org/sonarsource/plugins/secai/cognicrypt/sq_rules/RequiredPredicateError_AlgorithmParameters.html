@@ -1,0 +1,25 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy one or more required security pre-conditions. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage</p>
+<h2>How to fix it</h2>
+<p>This follow-up error occurs in the CrySL rule for AlgorithmParameters because the REQUIRES section conditions are not fully met for the given algorithm and parameter specification. This likely means that the expected preparation step for the provided algorithm is missing or incorrectly specified. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li>javax.crypto.spec.DHGenParameterSpec (DHGenParameterSpec)</li><li>javax.crypto.spec.DHParameterSpec (DHParameterSpec)</li><li>javax.crypto.spec.IvParameterSpec (IvParameterSpec)</li><li>javax.crypto.spec.OAEPParameterSpec (OAEPParameterSpec)</li><li>javax.crypto.spec.PBEParameterSpec (PBEParameterSpec)</li></ul></p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/AlgorithmParameters">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/AlgorithmParameters</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/AlgorithmParameters.crysl">AlgorithmParameters</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DHGenParameterSpec.crysl">DHGenParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DHParameterSpec.crysl">DHParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/IvParameterSpec.crysl">IvParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/OAEPParameterSpec.crysl">OAEPParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PBEParameterSpec.crysl">PBEParameterSpec</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/325.html">CWE-325: Missing Cryptographic Step</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/326.html">CWE-326: Inadequate Encryption Strength</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/330.html">CWE-330: Use of Insufficiently Random Values</a></li>
+</ul>

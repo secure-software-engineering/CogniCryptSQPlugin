@@ -1,0 +1,30 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p><p><strong>Misuse:</strong> Using insecure DSA parameters that violate minimum bit-length constraints.</p>
+<pre><code>BigInteger p = new BigInteger("123456789"); // Too short
+BigInteger q = new BigInteger("12345");
+BigInteger g = new BigInteger("67890"); // Too short
+DSAParameterSpec spec = new DSAParameterSpec(p, q, g);</code></pre>
+<p>This creates a <code>DSAParameterSpec</code> with parameters that do not meet security requirements (e.g., p &lt; 2048 bits).</p></p>
+<p><p><strong>Solution:</strong> Use strong DSA parameters that meet the minimum 2048-bit requirement.</p>
+<pre><code>// Example of generating secure parameters using KeyPairGenerator
+KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+keyGen.initialize(2048);
+KeyPair pair = keyGen.generateKeyPair();
+DSAParams dsaParams = ((DSAPublicKey) pair.getPublic()).getParams();
+DSAParameterSpec spec = new DSAParameterSpec(dsaParams.getP(), dsaParams.getQ(), dsaParams.getG());</code></pre>
+<p>This ensures that the parameters used in <code>DSAParameterSpec</code> are secure and conform to modern cryptographic standards.</p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/DSAParameterSpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/spec/DSAParameterSpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DSAParameterSpec.crysl">DSAParameterSpec</a></li>
+</ul>
+ 
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/326.html">CWE-326: Inadequate Encryption Strength</a></li>
+</ul>

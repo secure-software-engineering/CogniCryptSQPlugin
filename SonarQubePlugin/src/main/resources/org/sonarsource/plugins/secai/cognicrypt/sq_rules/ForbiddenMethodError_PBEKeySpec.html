@@ -1,0 +1,21 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ForbiddenMethodError</b> occurs when an explicitly restricted method is invoked in cryptographic operations. Some methods are banned due to known security vulnerabilities or deprecated functionality. When this error is reported, it means that the method being used is considered insecure or does not comply with best practices. Ignoring this error may lead to weak encryption, insecure randomness, or potential exploitation of deprecated algorithms.</p>
+<h2>How to fix it</h2>
+<p>The following constructors should not be used:<pre>PBEKeySpec(char[] password)</pre>and<pre>PBEKeySpec(char[] password, byte[] salt, int iterationCount)</pre></p>
+<p>Instead use:<pre>PBEKeySpec(char[] password, byte[] salt, int iterationCount, int keyLength)</pre></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEKeySpec">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/spec/PBEKeySpec</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PBEKeySpec.crysl">PBEKeySpec</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/259.html">CWE-259: Use of Hard-coded Password</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/295.html">CWE-295: Improper Certificate Validation</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/307.html">CWE-307: Improper Restriction of Excessive Authentication Attempts</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/760.html">CWE-760: Use of a One-Way Hash with a Predictable Salt</a></li>
+</ul>

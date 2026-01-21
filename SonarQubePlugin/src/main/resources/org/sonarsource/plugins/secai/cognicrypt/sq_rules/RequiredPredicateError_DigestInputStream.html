@@ -1,0 +1,14 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy one or more required security pre-conditions. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage</p>
+<h2>How to fix it</h2>
+<p>This follow-up error occurs in the CrySL rule DigestInputStream when the section <strong>REQUIRES generatedMessageDigest[digest];</strong> is not fulfilled regarding <code>java.security.MessageDigest</code>. Consider checking the issue tags behind the java security object(s) to identify the specific source of the error.<br><br><ul><li><code>java.security.MessageDigest</code> (<em>MessageDigest</em>)</li></ul></p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestInputStream">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/DigestInputStream</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DigestInputStream.crysl">DigestInputStream</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/MessageDigest.crysl">MessageDigest</a></li>
+</ul>

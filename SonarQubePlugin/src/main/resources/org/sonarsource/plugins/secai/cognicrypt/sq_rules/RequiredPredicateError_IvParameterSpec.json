@@ -1,0 +1,17 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "IvParameterSpec: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            329
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "ivparameterspec",
+        "requiredpredicateerror"
+    ]
+}

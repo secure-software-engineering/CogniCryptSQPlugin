@@ -1,0 +1,39 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>The <code>Signature</code> API is being used with <b>invalid parameters</b> or in an <b>incorrect order</b>, violating the CRYSL rule for <code>java.security.Signature</code>. <br><br>Common misuses include:<ul><li>Using unsupported or insecure algorithms (e.g., <code>MD5withRSA</code>)</li><li>Calling <code>update()</code> before <code>initSign()</code> or <code>initVerify()</code></li><li>Providing incorrect <code>offset</code> and <code>len</code> values when working with byte arrays, causing out-of-bounds access</li></ul><br>These issues can lead to <i>runtime exceptions</i>, <i>signature failures</i>, or <i>cryptographic vulnerabilities</i>.</p>
+<p>To fix this issue, follow the correct usage order and ensure all parameters comply with the defined constraints. <br><br><b>Allowed Algorithms:</b><br><br><code>SHA256withRSA</code>, <code>SHA256withECDSA</code>, <code>SHA256withDSA</code>, <code>SHA384withRSA</code>, <code>SHA512withRSA</code>, <code>SHA384withECDSA</code>, <code>SHA512withECDSA</code><br><br><b>Correct Order of Operations:</b><ul><li><code>getInstance()</code></li><li><code>initSign()</code> or <code>initVerify()</code></li><li><code>update()</code></li><li><code>sign()</code> or <code>verify()</code></li></ul><br><b>Byte Array Constraints:</b><ul><li><code>offset >= 0</code></li><li><code>len > 0</code></li><li><code>input.length >= offset + len</code></li></ul>These ensure safe array access during signature operations.<br><br><b>Signing Example:</b><br><pre><code>import java.security.*;
+
+public class SignExample {
+ public byte[] signData(byte[] input, PrivateKey privateKey) throws Exception {
+ Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
+ signature.update(input, 0, input.length);  // offset = 0, len = input.length
+ return signature.sign();
+    }
+}</code></pre><br><b>Verification Example:</b><br><pre><code>import java.security.*;
+
+public class VerifyExample {
+ public boolean verifySignature(byte[] input, byte[] sigBytes, PublicKey publicKey) throws Exception {
+ Signature signature = Signature.getInstance("SHA256withRSA");
+  signature.initVerify(publicKey);
+ signature.update(input, 0, input.length);
+ return signature.verify(sigBytes);
+}
+}</code></pre><br><b>Avoid:</b><ul><li>Using <code>offset</code> or <code>len</code> values that exceed array bounds</li><li>Skipping init methods before calling <code>update()</code></li><li>Using weak or unlisted algorithms</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Signature">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Signature</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/Signature.crysl">Signature</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/295.html">CWE-295: Improper Certificate Validation</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/325.html">CWE-325: Missing Cryptographic Step</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/780.html">CWE-780: Use of RSA Algorithm without OAEP</a></li>
+</ul>

@@ -1,0 +1,1 @@
+export const SERVER_IP = "131.234.29.71"; // Change this to your server's IP address

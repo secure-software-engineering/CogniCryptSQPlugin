@@ -1,0 +1,34 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>RequiredPredicateError</b> occurs when a cryptographic object does not satisfy one or more required security pre-conditions. CrySL rules may specify that a cryptographic object must fulfill a security property (e.g., a key must be generated securely before use). If this property is missing or unverified, this error is reported. Such errors indicate that the cryptographic operation might not meet the required security guarantees, leading to potential vulnerabilities such as weak key material or improper algorithm usage</p>
+<h2>How to fix it</h2>
+<p><p>This follow-up error occurs in the CrySL rule <strong>KeyGenerator</strong> when the <code>REQUIRES</code> section is not fulfilled regarding the requirement <code>randomized[random]</code>. This means that a necessary randomness source was not provided correctly, leading to a rule violation.</p><p>Consider checking the issue tags behind the Java security object(s) to identify the specific source of the error.</p><ul><li><code>java.security.spec.AlgorithmParameterSpec</code> (AlgorithmParameterSpec)</li><li><code>javax.crypto.SecretKey</code> (SecretKey)</li><li><code>java.security.SecureRandom</code> (SecureRandom)</li></ul></p>
+<p></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/KeyGenerator">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/crypto/KeyGenerator</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DHGenParameterSpec.crysl">DHGenParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DHParameterSpec.crysl">DHParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DSAGenParameterSpec.crysl">DSAGenParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/DSAParameterSpec.crysl">DSAParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/ECGenParameterSpec.crysl">ECGenParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/ECParameterSpec.crysl">ECParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/GCMParameterSpec.crysl">GCMParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/HMACParameterSpec.crysl">HMACParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/IvParameterSpec.crysl">IvParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/KeyGenerator.crysl">KeyGenerator</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/MGF1ParameterSpec.crysl">MGF1ParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/OAEPParameterSpec.crysl">OAEPParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/PBEParameterSpec.crysl">PBEParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/RSAKeyGenParameterSpec.crysl">RSAKeyGenParameterSpec</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/SecretKey.crysl">SecretKey</a></li>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/SecureRandom.crysl">SecureRandom</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/325.html">CWE-325: Missing Cryptographic Step</a></li>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+</ul>

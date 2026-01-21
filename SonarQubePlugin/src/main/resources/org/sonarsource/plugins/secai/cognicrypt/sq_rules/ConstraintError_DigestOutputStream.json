@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "DigestOutputStream: Parameters should follow constraints",
+    "type": "Vulnerability",
+    "quickfix": "partial",
+    "tags": [
+        "cognicrypt",
+        "digestoutputstream",
+        "constrainterror"
+    ]
+}

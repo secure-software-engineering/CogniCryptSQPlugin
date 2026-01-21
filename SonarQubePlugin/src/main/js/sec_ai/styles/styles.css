@@ -1,0 +1,157 @@
+.react-flow {
+    /* Custom Variables */
+    --xy-theme-edge-hover: black;
+}
+
+main {
+    font-family: 'inter', sans-serif;
+    margin: 2rem 0;
+    padding: 0.5rem;
+    /* background-color: rgb(0, 0, 0); */
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
+        align-items: center;
+        background-color: #eef0f3;
+        padding: 2% 10%;
+        margin-inline: 5%;
+        border-radius: 20px;
+
+        .heading {
+            color: #2B579A;
+            font-size: 3rem;
+            /* margin-bottom: 2%; */
+            font-weight: 700;
+        }
+
+        .row {
+            color: #5D6CD0;
+            font-style: italic;
+            /* margin-bottom: 2%; */
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .message {
+            font-style: italic;
+            /* margin-top: 1%; */
+            text-align: center;
+            font-size: larger;
+        }
+
+        .button {
+            button {
+                padding: 0.5rem 5rem;
+                background-color: #D5F7A4;
+                border-radius: 20px;
+                border-color: #96F512;
+                text-decoration: none;
+                font-size: x-large;
+                font-weight: 700;
+                cursor: pointer;
+            }
+        }
+
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+            align-items: center;
+            width: 100%;
+
+            h2 {
+                color: #00000078;
+                font-size: 2rem;
+                font-weight: 700;
+                font-family: 'inter', sans-serif;
+                font-style: italic;
+            }
+
+            .output {
+                overflow: hidden;
+            }
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            width: 100%;
+
+            .info_heading {
+                color: #B1B1B1;
+                font-size: xx-large;
+                font-weight: 600;
+
+            }
+
+            .cards {
+                display: flex;
+                justify-content: space-around;
+                gap: 2rem;
+                align-items: center;
+                width: inherit;
+            }
+        }
+    }
+}
+
+.react-flow__edge {
+    z-index: 2 !important;
+    pointer-events: stroke;
+    /* so they stay clickable */
+}
+
+.react-flow__node-group {
+    z-index: 1 !important;
+    /* keep group underneath */
+    overflow: visible !important;
+}
+
+.react-flow__edge:hover .react-flow__edge-path,
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: var(--xy-theme-edge-hover);
+}
+
+@keyframes scaleFade {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Add this in global CSS */
+.legend-open {
+    max-height: 400px;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.legend-closed {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.list-items {
+    ul{
+        list-style: circle !important;
+        list-style-position: inside !important;
+    }
+}

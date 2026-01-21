@@ -1,0 +1,30 @@
+{
+  "_comment": "multiple violations with same file/line",
+  "sarifVersion": "2.0.0",
+  "runs": [{
+    "results": [
+      {
+        "violatedRule": "R1",
+        "errorType": "ConstraintError",
+        "locations": [[{
+          "physicalLocation": {
+            "fileLocation": { "uri": "org/example/Same.java" },
+            "region": { "startLine": "10" }
+          }
+        }]],
+        "message": { "text": "First" }
+      },
+      {
+        "violatedRule": "R2",
+        "errorType": "RequiredPredicateError",
+        "locations": [[{
+          "physicalLocation": {
+            "fileLocation": { "uri": "org/example/Same.java" },
+            "region": { "startLine": "10" }
+          }
+        }]],
+        "message": { "text": "Second" }
+      }
+    ]
+  }]
+}

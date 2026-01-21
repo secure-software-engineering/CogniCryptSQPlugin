@@ -1,0 +1,72 @@
+{
+  "sarifVersion": "2.0.0",
+  "runs": [{
+    "summary": {
+      "errorCounts": {
+        "ConstraintError": 1,
+        "RequiredPredicateError": 1
+      },
+      "statistics": {
+        "entryPoints": 2,
+        "analysisTime": "12.3 ms",
+        "edgesInCallGraph": 25,
+        "callGraphConstructionTime": "30.0 ms",
+        "typestateAnalysisTime": "9.11 ms",
+        "reachableMethods": 32
+      }
+    },
+    "files": {
+      "org/example/Msg.java": { "mimeType": "text/java" }
+    },
+    "resources": {
+      "rules": [
+        "java.security.KeyPairGenerator",
+        "javax.crypto.Cipher"
+      ]
+    },
+    "results": [
+      {
+        "violatedRule": "java.security.KeyPairGenerator",
+        "errorType": "ConstraintError",
+        "locations": [[{
+          "physicalLocation": {
+            "fileLocation": { "uri": "org/example/Msg.java" },
+            "region": {
+              "method": "<org.example.Msg: java.security.PrivateKey getPrivateKey()>",
+              "startLine": "18",
+              "statement": "r0 = getInstance(varReplacer8)"
+            }
+          },
+          "fullyQualifiedLogicalName": "org::example::Msg::<org.example.Msg: java.security.PrivateKey getPrivateKey()>"
+        }]],
+        "message": {
+          "text": "Constraint violation on KeyPairGenerator.",
+          "richText": "ConstraintError violating CrySL rule for java.security.KeyPairGenerator"
+        }
+      },
+      {
+        "violatedRule": "javax.crypto.Cipher",
+        "errorType": "RequiredPredicateError",
+        "locations": [[{
+          "physicalLocation": {
+            "fileLocation": { "uri": "org/example/Msg.java" },
+            "region": {
+              "method": "<org.example.Msg: void encrypt()>",
+              "startLine": "30",
+              "statement": "r0 = getInstance(varReplacer10)"
+            }
+          },
+          "fullyQualifiedLogicalName": "org::example::Msg::<org.example.Msg: void encrypt()>"
+        }]],
+        "message": {
+          "text": "Predicate missing for Cipher.",
+          "richText": "RequiredPredicateError violating CrySL rule for javax.crypto.Cipher"
+        }
+      }
+    ],
+    "tool": {
+      "name": "CryptoAnalysis",
+      "language": "en-US"
+    }
+  }]
+}

@@ -1,0 +1,26 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>A <b>ConstraintError</b> has occurred due to the use of invalid parameter values with <code>KeyPairGenerator</code>. <br><br>This error typically happens when the <b>key size</b> does not match the required value for the selected algorithm, or when an <b>unsupported algorithm</b> is used. <br><br>To solve the issue, following constraints must be satisfied:<ul><li><code>algorithm</code> must be one of: <code>{"RSA", "EC", "DSA", "DiffieHellman", "DH"}</code></li><li>If <code>algorithm == "RSA"</code>, then <code>keysize</code> must be <code>3072</code> or <code>4096</code></li><li>If <code>algorithm == "DSA"</code>, then <code>keysize</code> must be <code>3072</code></li><li>If <code>algorithm == "DiffieHellman"</code> or <code>"DH"</code>, then <code>keysize</code> must be <code>3072</code></li><li>If <code>algorithm == "EC"</code>, then <code>keysize</code> must be <code>256</code></li></ul></p>
+<p>To resolve this issue, update the <code>algorithm</code> and <code>keysize</code> values so they match the required combinations defined by the CRYSL rule.<br><br><b>Correct Usage Example (RSA):</b><br><pre><code>import java.security.KeyPairGenerator;
+
+public class KeyGenExample {
+ public void generateRSAKeyPair() throws Exception {
+  KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+ keyGen.initialize(4096);  // Valid key size
+ keyGen.generateKeyPair();
+}
+}</code></pre><br><b>Avoid:</b><ul><li>Using unsupported algorithms like <code>MD5</code> or <code>Blowfish</code></li><li>Using <code>RSA</code> with <code>2048</code> or smaller keys</li><li>Using <code>EC</code> with <code>keysize != 256</code></li></ul><br>Complying with these constraints ensures that the generated key pairs meet modern cryptographic security requirements.</p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/KeyPairGenerator">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/KeyPairGenerator</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/KeyPairGenerator.crysl">KeyPairGenerator</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/326.html">CWE-326: Inadequate Encryption Strength</a></li>
+</ul>

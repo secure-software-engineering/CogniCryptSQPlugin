@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "PBEKeySpec: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            259,
+            295,
+            307,
+            760
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "pbekeyspec",
+        "ordererror"
+    ]
+}

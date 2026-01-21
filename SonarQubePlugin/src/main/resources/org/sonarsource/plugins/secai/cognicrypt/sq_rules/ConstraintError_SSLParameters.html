@@ -1,0 +1,29 @@
+<h2>Why is this an issue?</h2>
+<p>A <b>ConstraintError</b> is triggered when a cryptographic API is used with parameters that do not comply with security constraints defined in the CrySL rule. These constraints can apply to algorithm selection, key sizes, padding schemes, or cryptographic modes. Such an error indicates that the provided argument violates predefined security policies, which could result in weak encryption, predictable cryptographic outputs, or even insecure configurations that attackers can exploit.</p>
+<h2>How to fix it</h2>
+<p>Consider the following use of constructors and setters:<pre>// using the parameters: String[] ciphersuites, String[] protocols;
+
+SSLParameters params = new SSLParameters(ciphersuites, protocols);
+
+// or
+SSLParameters params = new SSLParameters();
+params.setCipherSuites(cipherSuites);
+params.setProtocols(protocols);
+
+// or
+SSLParameters params = new SSLParameters(cipherSuites);
+params.setProtocols(protocols);</pre></p>
+<p>The elements of <code>protocols</code> must be one of:<ul><li>TLSv1.2</li><li>TLSv1.3</li></ul>If <code>protocols</code> contains <code>TLSv1.2</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_DSS_WITH_AES_256_GCM_SHA384</li><li>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_DHE_RSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384</li><li>TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256</li><li>TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384</li></ul>If <code>protocols</code> contains <code>TLSv1.3</code>, then all elements of <code>ciphersuites</code> must be among the following:<ul><li>TLS_AES_128_GCM_SHA256<li></li>TLS_AES_256_GCM_SHA384</li></ul></p>
+<h2>Resources</h2>
+<h3>Java Documentation</h3>
+<ul><li> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/net/ssl/SSLParameters">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/net/ssl/SSLParameters</a> </li></ul>
+
+<h3>CrySL Rule(s)</h3>
+<ul>
+    <li> <a href="https://github.com/CROSSINGTUD/Crypto-API-Rules/blob/master/JavaCryptographicArchitecture/src/SSLParameters.crysl">SSLParameters</a></li>
+</ul>
+
+<h3>Common Weakness Enumeration (CWE)</h3>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/327.html">CWE-327: Use of a Broken or Risky Cryptographic Algorithm</a></li>
+</ul>

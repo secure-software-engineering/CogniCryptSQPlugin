@@ -1,0 +1,5 @@
+<h2>Why is this an issue?</h2>
+<p>An <b>ImpreciseValueExtractionError</b> is triggered when the analysis tool cannot precisely determine the value of a cryptographic parameter at runtime. This typically happens when cryptographic values (such as encryption modes or key sizes) are computed dynamically or retrieved from an external source, making them difficult to validate statically. This error highlights potential security risks where cryptographic operations might unknowingly use insecure or unpredictable values. It suggests that cryptographic parameters should be explicitly defined and verifiable.</p>
+<h2>How to fix it</h2>
+<p>This error message simply serves as a warning that there is a potential for security risks. However, the actual presence of a vulnerability could not be determined. Therefore, no immediate fix is available.</p>
+<p>In order to get a more definitive analysis of this issue, try defining the parameters in question more precisely.</p>

@@ -1,0 +1,61 @@
+name: Documentation Preview
+
+on:
+  pull_request:
+    branches:
+      - testing
+    types: [opened, closed, synchronize, reopened]
+    paths:
+      - mkdocs.yml
+      - docs/**
+      - .github/workflows/doc_preview.yml
+
+concurrency:
+  group: gh-pages
+
+jobs:
+  deploy-preview:
+    name: Preview documentation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install MkDocs Requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 
+          
+
+      - name: Configure git user
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Deploy the Preview
+        if: github.event.action != 'closed'
+        run: mike deploy --branch gh-pages --push --update-aliases -t "Preview for PR-${{ github.event.pull_request.number }}" pr-${{ github.event.pull_request.number }}
+
+      - name: Comment Link to Preview
+        if: github.event.action != 'closed'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          message: |
+            Documentation Preview: [View Changes](https://secure-software-engineering.github.io/SonarQubePlugin/pr-${{ github.event.pull_request.number }}/)
+
+      - name: Delete the Preview
+        if: github.event.action == 'closed'
+        run: mike delete --push pr-${{ github.event.pull_request.number }}
+

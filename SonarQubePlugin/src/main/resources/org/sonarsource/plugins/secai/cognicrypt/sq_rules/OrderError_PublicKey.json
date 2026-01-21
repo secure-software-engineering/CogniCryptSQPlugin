@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "PublicKey: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            295,
+            347
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "publickey",
+        "ordererror"
+    ]
+}

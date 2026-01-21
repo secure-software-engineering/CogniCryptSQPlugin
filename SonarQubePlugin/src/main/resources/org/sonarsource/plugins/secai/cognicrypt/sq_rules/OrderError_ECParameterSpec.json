@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "ECParameterSpec: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            326,
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "ecparameterspec",
+        "ordererror"
+    ]
+}

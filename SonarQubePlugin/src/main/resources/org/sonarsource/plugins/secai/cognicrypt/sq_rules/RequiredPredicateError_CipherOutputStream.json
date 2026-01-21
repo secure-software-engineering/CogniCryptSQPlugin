@@ -1,0 +1,12 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "CipherOutputStream: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "tags": [
+        "cognicrypt",
+        "cipheroutputstream",
+        "requiredpredicateerror"
+    ]
+}

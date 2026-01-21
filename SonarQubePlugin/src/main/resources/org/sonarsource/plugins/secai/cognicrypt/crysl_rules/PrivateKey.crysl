@@ -1,0 +1,20 @@
+SPEC java.security.PrivateKey
+
+OBJECTS 
+	byte[] keyMaterial;
+
+EVENTS
+	ge1: keyMaterial = getEncoded();
+	GetEnc := ge1;
+
+ORDER
+	GetEnc*
+
+REQUIRES
+	generatedPrivkey[this];
+	
+ENSURES
+	preparedKeyMaterial[keyMaterial] after GetEnc;
+
+WEAKNESSES
+    CWE-312;

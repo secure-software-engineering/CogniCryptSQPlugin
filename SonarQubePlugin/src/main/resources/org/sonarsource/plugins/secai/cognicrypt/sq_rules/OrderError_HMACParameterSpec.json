@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "HMACParameterSpec: All required operations should be executed in the correct order",
+    "type": "Vulnerability",
+    "quickfix": "targeted",
+    "securityStandards": {
+        "CWE": [
+            325,
+            326,
+            327,
+            328
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "hmacparameterspec",
+        "ordererror"
+    ]
+}

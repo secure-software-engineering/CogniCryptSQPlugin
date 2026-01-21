@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "CertPathTrustManagerParameters: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            295,
+            330
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "certpathtrustmanagerparameters",
+        "requiredpredicateerror"
+    ]
+}

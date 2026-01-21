@@ -1,0 +1,18 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "KeyGenerator: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            325,
+            327
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "keygenerator",
+        "requiredpredicateerror"
+    ]
+}

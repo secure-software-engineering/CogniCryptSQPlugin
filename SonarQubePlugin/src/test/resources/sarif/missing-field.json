@@ -1,0 +1,11 @@
+{
+  "sarifVersion": "2.0.0",
+  "runs": [{
+    "results": [{
+      "violatedRule": null,
+      "errorType": null,
+      "locations": [],
+      "message": { "text": null, "richText": null }
+    }]
+  }]
+}

@@ -1,0 +1,20 @@
+{
+    "status": "ready",
+    "defaultSeverity": "Critical",
+    "title": "PBEKeySpec: Missing required pre-conditions",
+    "type": "Vulnerability",
+    "quickfix": "infeasible",
+    "securityStandards": {
+        "CWE": [
+            259,
+            295,
+            307,
+            760
+        ]
+    },
+    "tags": [
+        "cognicrypt",
+        "pbekeyspec",
+        "requiredpredicateerror"
+    ]
+}
