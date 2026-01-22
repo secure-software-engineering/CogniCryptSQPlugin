@@ -16,6 +16,8 @@ services:
       - ./plugins:/opt/sonarqube/extensions/plugins
       - ./projects:/projects
       - /root/secai:/home/sonarqube/secai
+    env_file:
+      - ./AIFix/.env
     networks:
       -  secai
     restart: always

@@ -41,10 +41,12 @@ theme:
 # Navigation structure
 nav:
   - Home: index.md
-  - Getting Started: 
-    - Installation: getting-started/installation.md
-    - Quick Start: getting-started/quickstart.md
-    - Server Setup: getting-started/server-setup.md
+  - Getting Started:
+    - Overview: getting-started/overview.md
+    - Prerequisites: getting-started/prerequisites.md
+    - New Server Setup: getting-started/server-setup.md
+    - Add to Existing SonarQube Server: getting-started/add-to-existing.md
+    - First Analysis: getting-started/first-analysis.md
   - User Guide:
     - Issue Management: user-guide/issue-management.md
     - Error Tree: user-guide/error-tree.md
