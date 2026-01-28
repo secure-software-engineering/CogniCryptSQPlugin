@@ -2,11 +2,15 @@
 
 Some prerequisites must be fulfilled before you can proceed with the installation.
 
+---
+
 ## Hardware Requirements
 
 If you intend to set up a new SonarQube server instead of using an existing one you can check [here](https://docs.sonarsource.com/sonarqube-server/server-installation/server-host-requirements) for the exact hardware requirements. In general, it is recommended to have at least 4 GB RAM. They also suggest at least 30 GB disk space, though this depends on how much code you intend to analyze; the size of the docker image itself is less than 2 GB.
 
 For the *SecAI* plugin two additional docker containers will be installed. Combined, the two images will require roughly 15 GB of disk space.
+
+---
 
 ## Software Requirements
 
@@ -22,3 +26,18 @@ Where to install Java depends on how your SonarQube instance is installed:
 
 1. If you are running SonarQube [from a **ZIP** file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file) then you can simply install Java 17+ on your host machine. <!-- TODO: check if JAVA_HOME is needed -->
 2. If you are using [a **Docker** image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image) TODO
+
+---
+
+## API Keys
+
+In order to use the *AIFix* and *Code Generation* features you API keys. If you only intend to use one of the two platforms you do not need keys for both. You will need to copy the generated keys during the *SecAI* setup.
+
+### OpenAI API Key
+
+Visit [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys) and sign in to your OpenAI account.
+Click **Create new secret key**.
+
+### Google API Key
+
+Visit [Google Cloud Console](https://console.cloud.google.com/). Create a new project or select existing one. Enable required APIs (e.g., Google AI Platform). Go to **Credentials → Create Credentials → API Key**.
