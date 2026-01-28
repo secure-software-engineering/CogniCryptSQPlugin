@@ -5,11 +5,11 @@ Please check the [prerequisites](prerequisites.md) before proceeding.
 You will also need the following from the [release page](https://github.com/secure-software-engineering/CogniCryptSQPlugin/releases) of our GitHub repository:
 
 - SecAI plugin jar: `sonar-secai-plugin-1.0.0.jar` (or later)
-- `secai-for-existing-sq.zip`
+- `secai-for-existing-sq-1.0.0.zip`
 
 The size of images built for the additional docker containers will be around 15 GB combined.
 
-Unpack the `secai-for-existing-sq.zip` file in the location where you intend to install the additional components. This location should be accessible to your administrators. The resulting file structure should look like this:
+Unpack the `secai-for-existing-sq-1.0.0.zip` file in the location where you intend to install the additional components. This location should be accessible to your administrators. The resulting file structure should look like this:
 
 ```
 /secai-for-existing-sq/

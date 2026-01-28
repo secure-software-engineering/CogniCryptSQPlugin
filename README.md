@@ -2,6 +2,8 @@
 
 This repository combines the different components of the *SecAI* SonarQube plugin, which integrates [*CogniCrypt<sub>SAST</sub>*](https://github.com/CROSSINGTUD/CryptoAnalysis).
 
+---
+
 ## Documentation
 
 You can access the documentation of the plugin using the [*docs* folder](/docs). 
@@ -26,6 +28,10 @@ pip install -r requirements.txt
 mkdocs serve
 ```
 
+To quickly download the documentation instead of cloning the repository check out the releases.
+
+---
+
 ## Components
 
 In order to use all implemented functionality, multiple components have to be combined.
@@ -44,3 +50,15 @@ The directory [Confidence](Confidence) contains the backend for the *confidence 
 
 > [!NOTE]
 > This folder contains only the trained model used for the calculation of the confidence score. The code for training the model  can be found in [this repository](https://github.com/secure-software-engineering/SecAI_FalsePositiveDetector).
+
+---
+
+## Releases
+
+After running `mvn clean package -DskipTests` in the root directory a folder `release` will be created with the following contents:
+
+- `secai-for-existing-sq-<version>.zip`: zip archive containing the source code for *AIFix* and *Confidence Score* and the **docker compose** for just these containers
+- `secai-for-new-sq-<version>.zip`: zip archive containing the source code for *AIFix* and *Confidence Score* and the **docker compose** for a new SonarQube setup
+- `secai-docs-<version>.zip`: zip archive containing the Markdown files of the documentation
+
+An up-to-date version of the plugin jar is generated in the `SonarQubePlugin/target/` directory.
