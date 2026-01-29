@@ -17,5 +17,8 @@
         <file>
             <source>dockerfiles/docker-compose.yml</source>
         </file>
+        <file>
+            <source>dockerfiles/Dockerfile</source>
+        </file>
     </files>
 </assembly>

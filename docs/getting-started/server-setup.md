@@ -21,7 +21,8 @@ Unpack the `secai-for-new-sq-1.0.0.zip` file in the location where you intend to
 │   ┊┄┄ # python files and model files
 │   ├── Dockerfile
 │   └── requirements.txt
-└── docker-compose.yml
+├── docker-compose.yml
+└── Dockerfile
 ```
 
 This comprehensive guide covers both local development setup and production server deployment for the SonarQube SECAI plugin stack.
@@ -40,7 +41,7 @@ Currently, the file `./AIFix/.env` contains placeholders for the API keys. Repla
 
 ## Deployment
 
-Inside the `sonar-for-new-sq` folder run the following commands with administrator rights:
+Inside the `secai-for-new-sq` folder run the following commands with administrator rights:
 
 1. **Build and Start Services**: \
    
