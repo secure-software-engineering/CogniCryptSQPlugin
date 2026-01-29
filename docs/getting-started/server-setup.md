@@ -61,6 +61,7 @@ You can then access your new SonarQube instance at `http://<your_server_ip>:9000
 
 **Common Issues and Solutions:**
 
+- **Problem building sonarqube container:** If the problem is the Maven installation, check for latest version and update *`MAVEN_VERSION`* in `Dockerfile`
 - **Container startup failures:** Check logs with `sudo docker compose logs`
 - **Plugin not loading:** Verify JAR file placement with `docker exec -it sonarqube ls /opt/sonarqube/extensions/plugins`
 - **Database connection issues:** Ensure PostgreSQL container is running and accessible

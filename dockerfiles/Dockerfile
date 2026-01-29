@@ -10,7 +10,7 @@ USER root
     && rm -rf /var/lib/apt/lists/*
 
 # Install Maven
-ENV MAVEN_VERSION=3.9.11
+ENV MAVEN_VERSION=3.9.12
 ENV MAVEN_HOME=/opt/maven
 RUN apt-get update && \
     apt-get install -y curl unzip git && \
