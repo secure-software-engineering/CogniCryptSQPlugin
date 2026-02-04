@@ -1,6 +1,5 @@
 node_modules
 .DS_Store
-target/
 node/
 
 # Eclipse
@@ -60,18 +59,10 @@ deploy-plugin.sh
 !**/test/**/*.json
 !**/test/**/*.jar
 
-.venv/
-venv/
-
 # Python virtual environment
+.venv/
 venv/
 
 # Maven build output
 target/
-
-# IDE-specific folders
-.idea/
-.vscode/
-
-# Log files
-*.log
+dependency-reduced-pom.xml

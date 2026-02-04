@@ -14,6 +14,7 @@
 
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
+    <sootup.version>2.0.0</sootup.version>
   </properties>
 
   <!--   <properties>
@@ -61,7 +62,7 @@
       <!-- packaged with the plugin -->
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.17.0</version>
+      <version>3.20.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -72,61 +73,23 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.17.1</version> <!-- or any version matching the one used by CryptoAnalysis -->
+      <version>2.25.3</version> <!-- or any version matching the one used by CryptoAnalysis -->
       <scope>provided</scope>
     </dependency>
 
-
-
-
-
-
-
-
-    <!-- For testing Sonarqube  -->
+    <!-- SonarQube Dependencies -->
     <dependency>
-        <groupId>org.sonarsource.api.plugin</groupId>
-        <artifactId>sonar-plugin-api-test-fixtures</artifactId>
-        <version>10.11.0.2468</version>
-        <scope>test</scope>
-    </dependency>
-
-    
-
-    <!-- unit tests -->
-    <!-- <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.testingHarnessVersion}</version>
-      <scope>test</scope>
+      <artifactId>sonar-ws</artifactId>
+      <version>10.7.0.96327</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
-    </dependency> -->
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
+      <version>2.13.0.3004</version>
+    </dependency>
 
-
-    <!-- JSON pretty printer using JACKSON -->
-    <!--    <dependency>-->
-    <!--      <groupId>com.fasterxml.jackson.core</groupId>-->
-    <!--      <artifactId>jackson-databind</artifactId>-->
-    <!--      <version>2.17.2</version>-->
-    <!--    </dependency>-->
-
-    <!--    <dependency>-->
-    <!--      <groupId>org.apache.httpcomponents</groupId>-->
-    <!--      <artifactId>httpclient</artifactId>-->
-    <!--      <version>4.5.9</version>-->
-    <!--    </dependency>-->
-
-    <!--    <dependency>-->
-    <!--      <groupId>com.fasterxml.jackson.core</groupId>-->
-    <!--      <artifactId>jackson-databind</artifactId>-->
-    <!--      <version>2.10.0.pr1</version>-->
-    <!--    </dependency>-->
-
+    <!-- Building the project jar to analyze -->
     <!-- Based on: https://stackoverflow.com/questions/5141788/how-to-run-maven-from-java -->
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
@@ -158,8 +121,6 @@
       <version>1.9.18</version>
     </dependency>
 
-
-
     <!-- for Gradle building -->
     <dependency>
       <groupId>org.gradle</groupId>
@@ -167,15 +128,15 @@
       <version>7.3-20210825160000+0000</version>
     </dependency>
 
-    <!-- for SonarQube WebService -->
+
+    <!-- CogniCrypt -->
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-ws</artifactId>
-      <version>10.7.0.96327</version>
+      <groupId>de.fraunhofer.iem</groupId>
+      <artifactId>HeadlessJavaScanner</artifactId>
+      <version>5.0.1</version>
     </dependency>
 
-
-<!--    Crysl Dependency-->
+    <!-- Crysl Dependency-->
     <dependency>
       <groupId>de.darmstadt.tu.crossing.CrySL</groupId>
       <artifactId>de.darmstadt.tu.crossing.CrySL</artifactId>
@@ -186,62 +147,62 @@
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.core</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.java.core</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.java.sourcecode.frontend</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.java.bytecode.frontend</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.jimple.frontend</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.apk.frontend</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.callgraph</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.analysis.intraprocedural</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.analysis.interprocedural</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.qilin</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
       <artifactId>sootup.codepropertygraph</artifactId>
-      <version>2.0.0</version>
+      <version>${sootup.version}</version>
     </dependency>
 
 
 
-    <!-- Testinggg -->
+    <!-- TESTING -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -260,29 +221,21 @@
       <version>5.2.0</version>
       <scope>test</scope>
     </dependency>
-
-
+    <!-- For testing Sonarqube  -->
     <dependency>
-      <groupId>org.sonarsource.analyzer-commons</groupId>
-      <artifactId>sonar-analyzer-commons</artifactId>
-      <version>2.13.0.3004</version>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api-test-fixtures</artifactId>
+      <version>10.11.0.2468</version>
+      <scope>test</scope>
     </dependency>
-
-    <!-- CogniCrypt -->
-
-    <dependency>
-      <groupId>de.fraunhofer.iem</groupId>
-      <artifactId>HeadlessJavaScanner</artifactId>
-      <version>5.0.1</version>
-    </dependency>
-
-    <!-- Dependency for system stubbing tests -->
+    <!-- For system stubbing tests -->
     <dependency>
       <groupId>uk.org.webcompere</groupId>
       <artifactId>system-stubs-jupiter</artifactId>
       <version>2.1.6</version>
       <scope>test</scope>
     </dependency>
+
 
     <!-- Dependencies for code generation -->
     <dependency>
@@ -347,7 +300,7 @@
       <plugin> <!-- Because we skip packaging dependencies -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
         <configuration>
         </configuration>
         <executions>
@@ -358,6 +311,7 @@
             </goals>
             <configuration>
               <minimizeJar>true</minimizeJar>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
               <transformers>
                 <transformer
                         implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -381,7 +335,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
+        <version>3.14.1</version>
         <configuration>
           <fork>true</fork>
           <!-- This fails for me
