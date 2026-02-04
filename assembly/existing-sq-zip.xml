@@ -14,7 +14,7 @@
                 <include>data/**/*</include>
                 <include>faiss_index/*</include>
                 <include>JCA-CrySL-rules/*</include>
-                <include>llm-files/*</include>
+                <include>llm_files/*</include>
                 <include>pydantic_models/*</include>
                 <include>utils/*</include>
                 <include>*.*</include>

@@ -1,8 +1,8 @@
 import json
 import os
 import re
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.docstore.document import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 from logger_config import get_logger
 
 logger = get_logger(__name__)
