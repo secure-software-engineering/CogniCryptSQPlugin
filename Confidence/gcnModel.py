@@ -50,7 +50,7 @@ def node_to_feature_tensor(G, model):
     x_list = []
 
     # Initialize and fit OneHotEncoder
-    type_encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+    type_encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
     type_encoder.fit(np.array(NODE_TYPES).reshape(-1, 1))
 
     # Adapt the node attributes and load only X values (no y anymore)
