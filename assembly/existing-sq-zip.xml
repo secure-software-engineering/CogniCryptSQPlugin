@@ -8,9 +8,26 @@
     <fileSets>
         <fileSet>
             <directory>AIFix</directory>
+            <includes>
+                <include>CCJar/*</include>
+                <include>CWE_Mapping/*</include>
+                <include>data/**/*</include>
+                <include>faiss_index/*</include>
+                <include>JCA-CrySL-rules/*</include>
+                <include>llm-files/*</include>
+                <include>pydantic_models/*</include>
+                <include>utils/*</include>
+                <include>*.*</include>
+                <include>Dockerfile</include>
+            </includes>
         </fileSet>
         <fileSet>
             <directory>Confidence</directory>
+            <includes>
+                <include>*.*</include>
+                <include>Dockerfile</include>
+                <include>LICENSE</include>
+            </includes>
         </fileSet>
     </fileSets>
     <files>
