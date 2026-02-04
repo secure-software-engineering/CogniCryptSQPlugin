@@ -1,5 +1,5 @@
 import { getJSON } from "sonar-request";
-import { SERVER_IP } from "../../../../../../setting";
+import { SERVER_IP } from "../../utils/settings";
 
 export const fetchIssues = async (projectKey) => {
   try {

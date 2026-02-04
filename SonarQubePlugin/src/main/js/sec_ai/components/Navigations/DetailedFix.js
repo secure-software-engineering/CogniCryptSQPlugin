@@ -32,7 +32,7 @@ import {
 } from '../../store/issuesReducer';
 import QuickFixCard from '../Description/QuickFixCard';
 import DiffView from '../Description/DiffView';
-import { SERVER_IP } from '../../../../../../setting';
+import { SERVER_IP } from '../../utils/settings';
 
 const BASE_NAVS = ['Root Cause', 'How to Fix', 'AI Fix', 'More Info'];
 
