@@ -20,7 +20,7 @@ services:
       - ./AIFix/.env
     networks:
       -  secai
-    restart: always
+    restart: unless-stopped
 
   aifix:
     build: ./AIFix
@@ -35,7 +35,7 @@ services:
       -  secai
     volumes:
       - ./AIFix:/app
-    restart: always
+    restart: unless-stopped
 
   confidence:
     build: ./Confidence
@@ -48,7 +48,7 @@ services:
       - secai
     volumes:
       - ./Confidence:/app
-    restart: always
+    restart: unless-stopped
 
 volumes:
   sonarqube_data:

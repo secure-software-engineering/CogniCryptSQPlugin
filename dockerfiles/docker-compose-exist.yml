@@ -10,7 +10,7 @@ services:
       - ./AIFix/.env
     volumes:
       - ./AIFix:/app
-    restart: always
+    restart: unless-stopped
 
   confidence:
     build: ./Confidence
@@ -21,4 +21,4 @@ services:
       - "8001"
     volumes:
       - ./Confidence:/app
-    restart: always
+    restart: unless-stopped
