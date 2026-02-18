@@ -1,6 +1,6 @@
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from aifix.pydantic_models.VulnerabilityAnalysis import VulnerabilityAnalysis
+from aifix.utils.VulnerabilityAnalysis import VulnerabilityAnalysis
 from aifix.logger_config import get_logger
 logger = get_logger(__name__)
 

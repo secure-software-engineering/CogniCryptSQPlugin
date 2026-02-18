@@ -24,6 +24,7 @@ public class SecAISettings {
     private String projectKey;
     private ArrayList<AnalysisTool> tools = new ArrayList<>();
     private String ccMessageType;
+    private String branch;
 
     private SecAISettings(Configuration config) {
         buildSystem = BuildSystem.valueOf(config.get("sonar.secai.build.system").orElse("AUTO"));
@@ -37,6 +38,7 @@ public class SecAISettings {
             }
         }
         ccMessageType = config.get("sonar.secai.cognicrypt.messages").orElse("Shortened");
+        branch = config.get("sonar.branch.name").orElse("main");
     }
 
     private SecAISettings(Request request) {
@@ -48,7 +50,7 @@ public class SecAISettings {
         for (Settings.Setting setting : valuesWsResponse.getSettingsList()) {
             switch (setting.getKey()) {
                 case "sonar.secai.build.system":
-                    buildSystem = BuildSystem.valueOf(Optional.ofNullable(setting.getValue()).orElse("AUTO"));
+                    buildSystem = BuildSystem.valueOf(Optional.of(setting.getValue()).orElse("AUTO"));
                     break;
                 case "sonar.secai.maven.home":
                     List<String> values = new ArrayList<>();
@@ -66,7 +68,10 @@ public class SecAISettings {
                     }
                     break;
                 case "sonar.secai.cognicrypt.messages":
-                    ccMessageType = Optional.ofNullable(setting.getValue()).orElse("Shortened");
+                    ccMessageType = Optional.of(setting.getValue()).orElse("Shortened");
+                    break;
+                case "sonar.branch.name":
+                    branch = Optional.of(setting.getValue()).orElse("main");
                     break;
             }
         }
@@ -74,6 +79,7 @@ public class SecAISettings {
         if (buildSystem == null) buildSystem = BuildSystem.AUTO;
         if (mavenHome == null) mavenHome = new String[0];
         if (ccMessageType == null) ccMessageType = "Shortened";
+        if (branch == null) branch = "main";
     }
 
     public static SecAISettings newInstance(Configuration configuration) {

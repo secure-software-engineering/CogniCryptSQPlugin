@@ -2,12 +2,12 @@ import os
 import pandas as pd
 from typing import Tuple, List, Set
 from aifix.logger_config import get_logger
-from aifix.pydantic_models.VulnerabilityAnalysis import VulnerabilityAnalysis
+from aifix.utils.VulnerabilityAnalysis import VulnerabilityAnalysis
 
 logger = get_logger(__name__)
 
 # CSV path for Excel-based CWE mapping
-CSV_PATH = "CWE_Mapping/CWE_Mapping.csv"
+CSV_PATH = "data/CWE_Mapping/CWE_Mapping.csv"
 
 class CWEMapper:
     def __init__(self):
@@ -86,7 +86,7 @@ class RAGPipeline:
     def run(self, vulnerable_code: str, rule: str, message: str) -> Tuple[VulnerabilityAnalysis, List[str], List[str], str]:
         logger.info("Starting the run function to create context")
         
-        CryslRules_Path = r"data/Crysl_Rules"
+        CryslRules_Path = r"data/Crysl_Rules/.txt"
         ErrorDesc_Path = r"data/CogniCrypt_ErrorDesc"
         
         context = ""
@@ -206,7 +206,7 @@ class RAGPipeline:
         error_id = error_node.get("hashcode") or error_node.get("nodeId", "unknown")
         logger.info(f"Starting trace-aware processing for error: {error_id}")
 
-        CryslRules_Path = r"data/Crysl_Rules"
+        CryslRules_Path = r"data/Crysl_Rules/.txt"
         ErrorDesc_Path = r"data/CogniCrypt_ErrorDesc"
         context = ""
 

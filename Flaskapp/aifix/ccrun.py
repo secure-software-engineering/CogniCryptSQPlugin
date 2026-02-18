@@ -74,7 +74,7 @@ class CCRUN:
             run_cognicrypt(
                 scanner_jar_path=r"CCJar/HeadlessJavaScanner-5.0.1-SNAPSHOT-jar-with-dependencies.jar",
                 app_jar_path=jar_path,
-                rules_dir=r"JCA-CrySL-rules",
+                rules_dir=r"data/Crysl_Rules/.crysl",
                 report_format="SARIF",
                 report_path=sarif_report_dir
             )
@@ -151,7 +151,7 @@ class CCRUN:
         # --- Define paths locally, mirroring the original function's logic ---
         work_dir = os.path.abspath("GeneratedCode")
         scanner_jar = os.path.abspath(r"CCJar/HeadlessJavaScanner-5.0.1-SNAPSHOT-jar-with-dependencies.jar")
-        rules_dir = os.path.abspath(r"JCA-CrySL-rules")
+        rules_dir = os.path.abspath(r"data/Crysl_Rules/.crysl")
         os.makedirs(work_dir, exist_ok=True)
 
         java_path = os.path.join(work_dir, f"{class_name}.java")
