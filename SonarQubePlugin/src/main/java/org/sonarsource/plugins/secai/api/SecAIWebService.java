@@ -124,7 +124,7 @@ public class SecAIWebService implements WebService {
 
         run.createParam("provider")
         .setRequired(false)
-        .setDescription("LLM provider: 'openai', 'ollama', or 'gemini' (default: openai)");
+        .setDescription("LLM provider: 'openai', or 'gemini' (default: openai)");
         
         run.createParam("model")
         .setRequired(false)

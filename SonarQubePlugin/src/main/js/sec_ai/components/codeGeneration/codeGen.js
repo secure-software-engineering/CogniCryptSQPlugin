@@ -43,6 +43,7 @@ function downloadText(fn,t){ const b=new Blob([t||""],{type:"text/plain;charset=
 // Define the models for each provider
 const models = {
   openai: ["gpt-4o", "gpt-4o-mini", "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano"],
+  gemini: ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"]
 };
 
 /* ---------- UI atoms ---------- */
@@ -56,10 +57,11 @@ function ProviderToggle({ provider, setProvider, disabled }) {
         title="Use OpenAI pipeline"
       >OpenAI</button>
       <button
-        role="tab" aria-selected={provider==="ollama"} type="button" disabled
-        style={{...ui.toggleBtn, ...ui.toggleBtnDisabled}}
-        title="Ollama (coming soon)"
-      >Ollama</button>
+        role="tab" aria-selected={provider==="gemini"} type="button"
+        onClick={()=>setProvider("gemini")} disabled={disabled}
+        style={{...ui.toggleBtn, ...(provider==="gemini"?ui.toggleBtnActive:{})}}
+        title="Use Google API"
+      >Google API</button>
     </div>
   );
 }
