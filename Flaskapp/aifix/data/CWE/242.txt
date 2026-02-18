@@ -1,0 +1,6 @@
+CWE-ID: 242
+Name: Use of Inherently Dangerous Function
+Description: The product calls a function that can never be guaranteed to work safely
+Extended Description: Certain functions behave in dangerous ways regardless of how they are used Functions in this category were often implemented without taking security concerns into account The gets() function is unsafe because it does not perform bounds checking on the size of its input An attacker can easily send arbitrarily-sized input to gets() and overflow the destination buffer Similarly, the >> operator is unsafe to use when reading into a statically-allocated character array because it does not perform bounds checking on the size of its input An attacker can easily send arbitrarily-sized input to the >> operator and overflow the destination buffer
+Observed Examples: REFERENCECVE-2007-4004DESCRIPTIONFTP client uses inherently insecure gets() function and is setuid root on some systems, allowing buffer overflowLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-4004
+Potential Mitigations: PHASEImplementation RequirementsDESCRIPTIONBan the use of dangerous functions Use their safe equivalentPHASETestingDESCRIPTIONUse grep or static analysis tools to spot usage of dangerous functions

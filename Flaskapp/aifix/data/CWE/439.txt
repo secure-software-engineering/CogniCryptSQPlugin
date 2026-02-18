@@ -1,0 +1,6 @@
+CWE-ID: 439
+Name: Behavioral Change in New Version or Environment
+Description: A's behavior or functionality changes with a new version of A, or a new environment, which is not known (or manageable) by B
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-1976DESCRIPTIONLinux kernel 22 and above allow promiscuous mode using a different method than previous versions, and ifconfig is not aware of the new method (alternate path property)LINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1976REFERENCECVE-2005-1711DESCRIPTIONProduct uses defunct method from another product that does not return an error code and allows detection avoidanceLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-1711REFERENCECVE-2003-0411DESCRIPTIONchain Code was ported from a case-sensitive Unix platform to a case-insensitive Windows platform where filetype handlers treat jsp and JSP as different extensions JSP source code may be read because JSP defaults to the filetype textLINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0411
+Potential Mitigations: 

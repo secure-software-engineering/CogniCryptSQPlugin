@@ -1,0 +1,6 @@
+CWE-ID: 369
+Name: Divide By Zero
+Description: The product divides a value by zero
+Extended Description: This weakness typically occurs when an unexpected value is provided to the product, or if an error occurs that is not properly detected It frequently occurs in calculations involving physical dimensions such as size, length, width, and height
+Observed Examples: REFERENCECVE-2007-3268DESCRIPTIONInvalid size value leads to divide by zeroLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-3268REFERENCECVE-2007-2723DESCRIPTIONEmpty content triggers divide by zeroLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-2723REFERENCECVE-2007-2237DESCRIPTIONHeight value of 0 triggers divide by zeroLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-2237
+Potential Mitigations: 

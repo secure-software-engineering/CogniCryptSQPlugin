@@ -1,0 +1,6 @@
+CWE-ID: 449
+Name: The UI Performs the Wrong Action
+Description: The UI performs the wrong action with respect to the user's request
+Extended Description: 
+Observed Examples: REFERENCECVE-2001-1387DESCRIPTIONNetwork firewall accidentally implements one command line option as if it were another, possibly leading to behavioral infoleakLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-1387REFERENCECVE-2001-0081DESCRIPTIONCommand line option correctly suppresses a user prompt but does not properly disable a feature, although when the product prompts the user, the feature is properly disabledLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0081REFERENCECVE-2002-1977DESCRIPTIONProduct does not time out according to user specification, leaving sensitive data available after it has expiredLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1977
+Potential Mitigations: PHASETestingDESCRIPTIONPerform extensive functionality testing of the UI The UI should behave as specified

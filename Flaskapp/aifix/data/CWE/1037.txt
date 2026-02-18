@@ -1,0 +1,6 @@
+CWE-ID: 1037
+Name: Processor Optimization Removal or Modification of Security-critical Code
+Description: The developer builds a security-critical protection mechanism into the software, but the processor optimizes the execution of the program such that the mechanism is removed or modified
+Extended Description: 
+Observed Examples: REFERENCECVE-2017-5715DESCRIPTIONIntel, ARM, and AMD processor optimizations related to speculative execution and branch prediction cause access control checks to be bypassed when placing data into the cache Often known as SpectreLINKhttps//wwwcveorg/CVERecord?id=CVE-2017-5715REFERENCECVE-2017-5753DESCRIPTIONIntel, ARM, and AMD processor optimizations related to speculative execution and branch prediction cause access control checks to be bypassed when placing data into the cache Often known as SpectreLINKhttps//wwwcveorg/CVERecord?id=CVE-2017-5753REFERENCECVE-2017-5754DESCRIPTIONIntel processor optimizations related to speculative execution cause access control checks to be bypassed when placing data into the cache Often known as MeltdownLINKhttps//wwwcveorg/CVERecord?id=CVE-2017-5754
+Potential Mitigations: 

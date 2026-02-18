@@ -1,0 +1,6 @@
+CWE-ID: 756
+Name: Missing Custom Error Page
+Description: The product does not return custom error pages to the user, possibly exposing sensitive information
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: 

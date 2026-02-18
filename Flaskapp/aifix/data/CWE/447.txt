@@ -1,0 +1,6 @@
+CWE-ID: 447
+Name: Unimplemented or Unsupported Feature in UI
+Description: A UI function for a security feature appears to be supported and gives feedback to the user that suggests that it is supported, but the underlying functionality is not implemented
+Extended Description: 
+Observed Examples: REFERENCECVE-2000-0127DESCRIPTIONGUI configuration tool does not enable a security option when a checkbox is selected, although that option is honored when manually set in the configuration fileLINKhttps//wwwcveorg/CVERecord?id=CVE-2000-0127REFERENCECVE-2001-0863DESCRIPTIONRouter does not implement a specific keyword when it is used in an ACL, allowing filter bypassLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0863REFERENCECVE-2001-0865DESCRIPTIONRouter does not implement a specific keyword when it is used in an ACL, allowing filter bypassLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0865REFERENCECVE-2004-0979DESCRIPTIONWeb browser does not properly modify security setting when the user sets itLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-0979
+Potential Mitigations: PHASETestingDESCRIPTIONPerform functionality testing before deploying the application

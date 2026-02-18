@@ -1,0 +1,6 @@
+CWE-ID: 549
+Name: Missing Password Field Masking
+Description: The product does not mask passwords during entry, increasing the potential for attackers to observe and capture passwords
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEImplementation RequirementsDESCRIPTIONRecommendations include requiring all password fields in your web application be masked to prevent other users from seeing this information

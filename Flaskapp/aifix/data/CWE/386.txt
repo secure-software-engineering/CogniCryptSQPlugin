@@ -1,0 +1,6 @@
+CWE-ID: 386
+Name: Symbolic Name not Mapping to Correct Object
+Description: A constant symbolic reference to an object is used, even though the reference can resolve to a different object over time
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: 

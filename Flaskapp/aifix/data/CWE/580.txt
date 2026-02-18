@@ -1,0 +1,6 @@
+CWE-ID: 580
+Name: clone() Method Without superclone()
+Description: The product contains a clone() method that does not call superclone() to obtain the new object
+Extended Description: All implementations of clone() should obtain the new object by calling superclone() If a class does not follow this convention, a subclass's clone() method will return an object of the wrong type
+Observed Examples: 
+Potential Mitigations: PHASEImplementationDESCRIPTIONCall superclone() within your clone() method, when obtaining a new objectPHASEImplementationDESCRIPTIONIn some cases, you can eliminate the clone method altogether and use copy constructors

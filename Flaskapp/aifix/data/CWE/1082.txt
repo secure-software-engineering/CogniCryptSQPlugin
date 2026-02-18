@@ -1,0 +1,6 @@
+CWE-ID: 1082
+Name: Class Instance Self Destruction Control Element
+Description: The code contains a class instance that calls the method or function to delete or destroy itself
+Extended Description: For example, in C++, delete this will cause the object to delete itself This issue can prevent the product from running reliably If the relevant code is reachable by an attacker, then this reliability problem might introduce a vulnerability
+Observed Examples: 
+Potential Mitigations: 

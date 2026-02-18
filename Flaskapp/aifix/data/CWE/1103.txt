@@ -1,0 +1,6 @@
+CWE-ID: 1103
+Name: Use of Platform-Dependent Third Party Components
+Description: The product relies on third-party components that do not provide equivalent functionality across all desirable platforms
+Extended Description: This issue makes it more difficult to maintain the product, which indirectly affects security by making it more difficult or time-consuming to find and/or fix vulnerabilities It also might make it easier to introduce vulnerabilities
+Observed Examples: 
+Potential Mitigations: 

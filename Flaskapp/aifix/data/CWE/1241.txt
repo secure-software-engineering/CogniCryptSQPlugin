@@ -1,0 +1,6 @@
+CWE-ID: 1241
+Name: Use of Predictable Algorithm in Random Number Generator
+Description: The device uses an algorithm that is predictable and generates a pseudo-random number
+Extended Description: Pseudo-random number generator algorithms are predictable because their registers have a finite number of possible states, which eventually lead to repeating patterns As a result, pseudo-random number generators (PRNGs) can compromise their randomness or expose their internal state to various attacks, such as reverse engineering or tampering It is highly recommended to use hardware-based true random number generators (TRNGs) to ensure the security of encryption schemes TRNGs generate unpredictable, unbiased, and independent random numbers because they employ physical phenomena, eg, electrical noise, as sources to generate random numbers
+Observed Examples: REFERENCECVE-2021-3692DESCRIPTIONPHP framework uses mt_rand() function (Marsenne Twister) when generating tokensLINKhttps//wwwcveorg/CVERecord?id=CVE-2021-3692
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONA true random number generator should be specified for cryptographic algorithmsPHASEImplementationDESCRIPTIONA true random number generator should be implemented for cryptographic algorithms

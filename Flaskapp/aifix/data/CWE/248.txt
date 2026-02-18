@@ -1,0 +1,6 @@
+CWE-ID: 248
+Name: Uncaught Exception
+Description: An exception is thrown from a function, but it is not caught
+Extended Description: When an exception is not caught, it may cause the program to crash or expose sensitive information
+Observed Examples: REFERENCECVE-2023-41151DESCRIPTIONSDK for OPC Unified Architecture (OPC UA) server has uncaught exception when a socket is blocked for writing but the server tries to send an errorLINKhttps//wwwcveorg/CVERecord?id=CVE-2023-41151REFERENCECVE-2023-21087DESCRIPTIONJava code in a smartphone OS can encounter a boot loop due to an uncaught exceptionLINKhttps//wwwcveorg/CVERecord?id=CVE-2023-21087
+Potential Mitigations: 

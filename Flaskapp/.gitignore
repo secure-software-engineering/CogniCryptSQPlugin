@@ -1,0 +1,16 @@
+/.idea
+/.venv
+/__pychache__
+/**/__pychache__
+
+# generated files in aifix
+/aifix/aifix.log
+/aifix/analysis_results.db
+/aifix/*.pyc
+/aifix/*.pyo
+/aifix/*.pyd
+/aifix/__pycache__/
+/aifix/Main.class
+/aifix/Main.jar
+/aifix/Main.java
+/aifix/GeneratedCode/

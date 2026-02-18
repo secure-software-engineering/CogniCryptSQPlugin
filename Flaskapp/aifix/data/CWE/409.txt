@@ -1,0 +1,6 @@
+CWE-ID: 409
+Name: Improper Handling of Highly Compressed Data (Data Amplification)
+Description: The product does not handle or incorrectly handles a compressed input with a very high compression ratio that produces a large output
+Extended Description: An example of data amplification is a decompression bomb, a small ZIP file that can produce a large amount of data when it is decompressed
+Observed Examples: REFERENCECVE-2009-1955DESCRIPTIONXML bomb in web server moduleLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-1955REFERENCECVE-2003-1564DESCRIPTIONParsing library allows XML bombLINKhttps//wwwcveorg/CVERecord?id=CVE-2003-1564
+Potential Mitigations: 

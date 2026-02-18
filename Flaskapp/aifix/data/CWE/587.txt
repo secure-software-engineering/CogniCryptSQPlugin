@@ -1,0 +1,6 @@
+CWE-ID: 587
+Name: Assignment of a Fixed Address to a Pointer
+Description: The product sets a pointer to a specific address other than NULL or 0
+Extended Description: Using a fixed address is not portable, because that address will probably not be valid in all environments or platforms
+Observed Examples: 
+Potential Mitigations: PHASEImplementationDESCRIPTIONNever set a pointer to a fixed address

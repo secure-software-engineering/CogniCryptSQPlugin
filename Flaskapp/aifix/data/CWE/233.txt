@@ -1,0 +1,6 @@
+CWE-ID: 233
+Name: Improper Handling of Parameters
+Description: The product does not properly handle when the expected number of parameters, fields, or arguments is not provided in input, or if those parameters are undefined
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: 

@@ -1,0 +1,6 @@
+CWE-ID: 378
+Name: Creation of Temporary File With Insecure Permissions
+Description: Opening temporary files without appropriate measures or controls can leave the file, its contents and any function that it impacts vulnerable to attack
+Extended Description: 
+Observed Examples: REFERENCECVE-2022-24823DESCRIPTIONA network application framework uses the Java function createTempFile(), which will create a file that is readable by other local users of the systemLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-24823
+Potential Mitigations: PHASERequirementsDESCRIPTIONMany contemporary languages have functions which properly handle this condition Older C temp file functions are especially susceptiblePHASEImplementationDESCRIPTIONEnsure that you use proper file permissions This can be achieved by using a safe temp file function Temporary files should be writable and readable only by the process that owns the filePHASEImplementationDESCRIPTIONRandomize temporary file names This can also be achieved by using a safe temp-file function This will ensure that temporary files will not be created in predictable places

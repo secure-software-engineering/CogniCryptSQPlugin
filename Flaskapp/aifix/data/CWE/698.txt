@@ -1,0 +1,6 @@
+CWE-ID: 698
+Name: Execution After Redirect (EAR)
+Description: The web application sends a redirect to another location, but instead of exiting, it executes additional code
+Extended Description: 
+Observed Examples: REFERENCECVE-2013-1402DESCRIPTIONExecution-after-redirect allows access to application configuration detailsLINKhttps//wwwcveorg/CVERecord?id=CVE-2013-1402REFERENCECVE-2009-1936DESCRIPTIONchain library file sends a redirect if it is directly requested but continues to execute, allowing remote file inclusion and path traversalLINKhttps//wwwcveorg/CVERecord?id=CVE-2009-1936REFERENCECVE-2007-2713DESCRIPTIONRemote attackers can obtain access to administrator functionality through EARLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-2713REFERENCECVE-2007-4932DESCRIPTIONRemote attackers can obtain access to administrator functionality through EARLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-4932REFERENCECVE-2007-5578DESCRIPTIONBypass of authentication step through EARLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-5578REFERENCECVE-2007-2713DESCRIPTIONChain Execution after redirect triggers eval injectionLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-2713REFERENCECVE-2007-6652DESCRIPTIONchain execution after redirect allows non-administrator to perform static code injectionLINKhttps//wwwcveorg/CVERecord?id=CVE-2007-6652
+Potential Mitigations: 

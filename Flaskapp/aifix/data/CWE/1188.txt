@@ -1,0 +1,6 @@
+CWE-ID: 1188
+Name: Initialization of a Resource with an Insecure Default
+Description: The product initializes or sets a resource with a default that is intended to be changed by the administrator, but the default is not secure
+Extended Description: Developers often choose default values that leave the product as open and easy to use as possible out-of-the-box, under the assumption that the administrator can (or should) change the default value However, this ease-of-use comes at a cost when the default is insecure and the administrator does not change it
+Observed Examples: REFERENCECVE-2022-36349DESCRIPTIONinsecure default variable initialization in BIOS firmware for a hardware board allows DoSLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-36349REFERENCECVE-2022-42467DESCRIPTIONA generic database browser interface has a default mode that exposes a web server to the network, allowing queries to the databaseLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-42467
+Potential Mitigations: 
