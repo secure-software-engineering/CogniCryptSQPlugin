@@ -128,7 +128,7 @@ def infer_dims_from_state(state_dict):
 
 def calculating_confidence(hashcode, dot_graph):
     # load w2v model
-    model_w2v = Word2Vec.load("jimple_word2vec.model")
+    model_w2v = Word2Vec.load("confidence/jimple_word2vec.model")
 
     # Parse DOT string to networkx
     pydot_graphs = pydot.graph_from_dot_data(dot_graph)
@@ -141,7 +141,7 @@ def calculating_confidence(hashcode, dot_graph):
 
     # Load Classifier
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    state = torch.load("gcn_fp_classifier.pth", map_location=device)
+    state = torch.load("confidence/gcn_fp_classifier.pth", map_location=device)
 
     inferred_in, inferred_hidden, inferred_out = infer_dims_from_state(state)
 
