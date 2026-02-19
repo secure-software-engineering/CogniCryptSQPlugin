@@ -17,11 +17,11 @@ class VectorStoreManager:
         )
         return self.vector_store
 
-    def save_store(self, path="faiss_index"):
+    def save_store(self, path="aifix/data/faiss_index"):
         logger.info("Storing the vector DB in local storage")
         self.vector_store.save_local(path)
 
-    def load_store(self, path="faiss_index"):
+    def load_store(self, path="aifix/data/faiss_index"):
         logger.info("Loading the vector DB from local storage")
         self.vector_store = FAISS.load_local(
             folder_path=path,

@@ -7,7 +7,7 @@ from aifix.utils.VulnerabilityAnalysis import VulnerabilityAnalysis
 logger = get_logger(__name__)
 
 # CSV path for Excel-based CWE mapping
-CSV_PATH = "data/CWE_Mapping/CWE_Mapping.csv"
+CSV_PATH = "aifix/data/CWE_Mapping/CWE_Mapping.csv"
 
 class CWEMapper:
     def __init__(self):
@@ -86,8 +86,8 @@ class RAGPipeline:
     def run(self, vulnerable_code: str, rule: str, message: str) -> Tuple[VulnerabilityAnalysis, List[str], List[str], str]:
         logger.info("Starting the run function to create context")
         
-        CryslRules_Path = r"data/Crysl_Rules/.txt"
-        ErrorDesc_Path = r"data/CogniCrypt_ErrorDesc"
+        CryslRules_Path = r"aifix/data/Crysl_Rules/.txt"
+        ErrorDesc_Path = r"aifix/data/CogniCrypt_ErrorDesc"
         
         context = ""
         error_type = rule.split(":")[1].split("_")[0]
@@ -206,8 +206,8 @@ class RAGPipeline:
         error_id = error_node.get("hashcode") or error_node.get("nodeId", "unknown")
         logger.info(f"Starting trace-aware processing for error: {error_id}")
 
-        CryslRules_Path = r"data/Crysl_Rules/.txt"
-        ErrorDesc_Path = r"data/CogniCrypt_ErrorDesc"
+        CryslRules_Path = r"aifix/data/Crysl_Rules/.txt"
+        ErrorDesc_Path = r"aifix/data/CogniCrypt_ErrorDesc"
         context = ""
 
         # Extract rule and message from error node (handle both formats)

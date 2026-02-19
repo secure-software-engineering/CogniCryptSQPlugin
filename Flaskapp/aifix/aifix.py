@@ -151,8 +151,8 @@ def ai_fix(code_input: str, rule: str, message: str, llm_model: str, iterations_
     rag_pipeline = RAGPipeline(doc_processor, vs_manager, handler)  # Orchestrates retrieval-augmented generation
 
     # Set up or load the CWE knowledge base for contextual analysis
-    CWE_File_Path = r"data/CWE"
-    if not os.path.exists("data/faiss_index"):
+    CWE_File_Path = r"aifix/data/CWE"
+    if not os.path.exists("aifix/data/faiss_index"):
         # First-time setup: create vector database from CWE documents
         logger.info("Index does not exist, creating one")
         chunks = doc_processor.load_and_split(CWE_File_Path)  # Chunk CWE docs for embedding
@@ -277,8 +277,8 @@ def new_ai_fix(extracted_data: dict):
         rag_pipeline = RAGPipeline(doc_processor, vs_manager, handler)
 
         # Set up or load the CWE knowledge base
-        CWE_File_Path = r"data/CWE"
-        if not os.path.exists("data/faiss_index"):
+        CWE_File_Path = r"aifix/data/CWE"
+        if not os.path.exists("aifix/data/faiss_index"):
             logger.info("FAISS index not found, creating a new one...")
             chunks = doc_processor.load_and_split(CWE_File_Path)
             vs_manager.create_store(chunks)
