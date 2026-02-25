@@ -23,6 +23,9 @@
                 <include>requirements.txt</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>nginx</directory>
+        </fileSet>
     </fileSets>
     <files>
         <file>

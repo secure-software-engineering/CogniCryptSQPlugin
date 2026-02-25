@@ -19,27 +19,35 @@ services:
     env_file:
       - ./Flaskapp/aifix/.env
     networks:
-      -  secai
+      - secai
     restart: unless-stopped
 
+  nginx:
+    image: nginx:1.29.5
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - secai
+      - internal
+    depends_on:
+      - flaskapp
+    restart: unless-stopped
+    
   flaskapp:
     build: ./Flaskapp
     container_name: flaskapp
-    ports:
-      - "80:80"
-    expose:
-      - "80"
     env_file:
       - ./Flaskapp/aifix/.env
     volumes:
       - ./Flaskapp:/app
-    restart: unless-stopped
     networks:
-      - secai
-
-volumes:
-  sonarqube_data:
-  sonarqube_extensions:
+      internal:
+        aliases:
+          - flask-app
+    restart: unless-stopped
 
 networks:
   secai:
