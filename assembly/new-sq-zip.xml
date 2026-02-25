@@ -19,6 +19,7 @@
                 <include>confidence/LICENSE</include>
 
                 <include>Dockerfile</include>
+                <include>gunicorn.conf.py</include>
                 <include>main.py</include>
                 <include>requirements.txt</include>
             </includes>
