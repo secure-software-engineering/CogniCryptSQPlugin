@@ -1,6 +1,7 @@
 # Server
 flask==3.1.2
 flask-cors==6.0.2
+gunicorn==25.1.0
 
 # Confidence Score
 gensim==4.4.0
