@@ -3,6 +3,7 @@ package org.sonarsource.plugins.secai.code_generation;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 
+@Deprecated
 public class ollama_LLM {
 
     private final ChatModel model;

@@ -30,7 +30,7 @@ public class codegenMain {
         documentProcessor doc = new documentProcessor(workDir);
         cogniCryptRunner cc = new cogniCryptRunner(workDir);
 
-        boolean useOllama = provider != null && provider.equalsIgnoreCase("ollama");
+//        boolean useOllama = provider != null && provider.equalsIgnoreCase("ollama");
         boolean useGemini = provider != null && provider.equalsIgnoreCase("gemini");
 
         String outText = "";
@@ -44,9 +44,10 @@ public class codegenMain {
             String cryslRules = "";
             String descriptions = "";
 
-            if (useOllama) {
-                generatedCode = doc.splitGPTResponse(new ollama_LLM().Generate(userQuery, doc.readAllCryslRules()));
-            } else if (useGemini) {
+//            if (useOllama) {
+//                generatedCode = doc.splitGPTResponse(new ollama_LLM().Generate(userQuery, doc.readAllCryslRules()));
+//            } else
+                if (useGemini) {
                 gemini_LLM llm = new gemini_LLM(GOOGLE_API_KEY, model);
                 generatedCode = doc.splitGPTResponse(llm.Generate(userQuery, doc.readAllCryslRules()));
             }
@@ -78,11 +79,12 @@ public class codegenMain {
                 // Use the user-provided maxIterations to control the loop
                 for (; iterations < maxIterations; ++iterations)
                 {
-                    if (useOllama)
-                    {
-                        generatedCode = new ollama_LLM().GenerateIterations(generatedCode, processedReport, cryslRules, descriptions);
-                    }
-                    else if (useGemini)
+//                    if (useOllama)
+//                    {
+//                        generatedCode = new ollama_LLM().GenerateIterations(generatedCode, processedReport, cryslRules, descriptions);
+//                    }
+//                    else
+                        if (useGemini)
                     {
                         gemini_LLM llm = new gemini_LLM(GOOGLE_API_KEY, model);
                         generatedCode = llm.GenerateIterations(generatedCode, processedReport, cryslRules, descriptions);
