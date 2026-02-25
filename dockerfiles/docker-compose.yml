@@ -17,38 +17,25 @@ services:
       - ./projects:/projects
       - /root/secai:/home/sonarqube/secai
     env_file:
-      - ./AIFix/.env
+      - ./Flaskapp/aifix/.env
     networks:
       -  secai
     restart: unless-stopped
 
-  aifix:
-    build: ./AIFix
-    container_name: aifix
+  flaskapp:
+    build: ./Flaskapp
+    container_name: flaskapp
     ports:
-      - "8000:8000"
+      - "80:80"
     expose:
-      - "8000"
+      - "80"
     env_file:
-      - ./AIFix/.env
-    networks:
-      -  secai
+      - ./Flaskapp/aifix/.env
     volumes:
-      - ./AIFix:/app
+      - ./Flaskapp:/app
     restart: unless-stopped
-
-  confidence:
-    build: ./Confidence
-    container_name: confidence
-    ports:
-      - "80:8001"
-    expose:
-      - "8001"
     networks:
       - secai
-    volumes:
-      - ./Confidence:/app
-    restart: unless-stopped
 
 volumes:
   sonarqube_data:

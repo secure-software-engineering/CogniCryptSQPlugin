@@ -7,26 +7,20 @@
     <baseDirectory>secai-for-existing-sq</baseDirectory>
     <fileSets>
         <fileSet>
-            <directory>AIFix</directory>
+            <directory>Flaskapp</directory>
             <includes>
-                <include>CCJar/*</include>
-                <include>CWE_Mapping/*</include>
-                <include>data/**/*</include>
-                <include>faiss_index/*</include>
-                <include>JCA-CrySL-rules/*</include>
-                <include>llm_files/*</include>
-                <include>pydantic_models/*</include>
-                <include>utils/*</include>
-                <include>*.*</include>
+                <include>aifix/CCJar/*</include>
+                <include>aifix/data/**/*</include>
+                <include>aifix/llm_files/*</include>
+                <include>aifix/utils/*</include>
+                <include>aifix/*.*</include>
+
+                <include>confidence/*.*</include>
+                <include>confidence/LICENSE</include>
+
                 <include>Dockerfile</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>Confidence</directory>
-            <includes>
-                <include>*.*</include>
-                <include>Dockerfile</include>
-                <include>LICENSE</include>
+                <include>main.py</include>
+                <include>requirements.txt</include>
             </includes>
         </fileSet>
     </fileSets>

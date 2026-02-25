@@ -4,12 +4,4 @@
 **/__pycache__
 aifix.log
 analysis_results.db
-
-# generated files in aifix
-/aifix/aifix.log
-/aifix/analysis_results.db
-/aifix/**/__pycache__/
-/aifix/Main.class
-/aifix/Main.jar
-/aifix/Main.java
-/aifix/GeneratedCode/
+/GeneratedCode

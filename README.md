@@ -40,16 +40,29 @@ In order to use all implemented functionality, multiple components have to be co
 
 The directory [SonarQubePlugin](SonarQubePlugin) contains the code of the actual *SecAI* plugin. In order to add the plugin to a SonarQube instance a jar of this project is needed. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
 
+### Flaskapp
+
+The features *AIFix* and *Confidence Score* require an additional python backend. This directory contains a [Flask](https://github.com/pallets/flask/) app implementing the necessary functionality.
+
+> [!NOTE]
+> The folder [`Flaskapp/confidence`](Flaskapp/confidence) contains only the trained model used for the calculation of the confidence score. The code for training the model can be found in [this repository](https://github.com/secure-software-engineering/SecAI_FalsePositiveDetector).
+
 ### AIFix
 
-Inside the [AIFix](AIFix) folder there is the code for the web server managing the *AIFix* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
+Inside the [AIFix](AIFix) folder there is the code for the web server managing only the *AIFix* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
+
+> [!WARNING]
+> *AIFix* was combined with *Confidence Score* in a new directory [Flaskapp](Flaskapp). The code in the [AIFix directory](AIFix) is deprecated and will be removed.
 
 ### Confidence
 
-The directory [Confidence](Confidence) contains the backend for the *confidence score* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
+The directory [Confidence](Confidence) contains the backend for only the *confidence score* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
 
 > [!NOTE]
 > This folder contains only the trained model used for the calculation of the confidence score. The code for training the model  can be found in [this repository](https://github.com/secure-software-engineering/SecAI_FalsePositiveDetector).
+
+> [!WARNING]
+> *Confidence Score* was combined with *AIFix* in a new directory [Flaskapp](Flaskapp). The code in the [Confidence directory](Confidence) is deprecated and will be removed.
 
 ---
 
