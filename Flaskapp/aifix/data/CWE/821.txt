@@ -1,0 +1,6 @@
+CWE-ID: 821
+Name: Incorrect Synchronization
+Description: The product utilizes a shared resource in a concurrent manner, but it does not correctly synchronize access to the resource
+Extended Description: If access to a shared resource is not correctly synchronized, then the resource may not be in a state that is expected by the product This might lead to unexpected or insecure behaviors, especially if an attacker can influence the shared resource
+Observed Examples: 
+Potential Mitigations: 

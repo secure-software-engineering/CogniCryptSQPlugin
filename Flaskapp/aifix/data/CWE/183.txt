@@ -1,0 +1,6 @@
+CWE-ID: 183
+Name: Permissive List of Allowed Inputs
+Description: The product implements a protection mechanism that relies on a list of inputs (or properties of inputs) that are explicitly allowed by policy because the inputs are assumed to be safe, but the list is too permissive - that is, it allows an input that is unsafe, leading to resultant weaknesses
+Extended Description: 
+Observed Examples: REFERENCECVE-2019-12799DESCRIPTIONchain bypass of untrusted deserialization issue (CWE-502) by using an assumed-trusted class (CWE-183)LINKhttps//wwwcveorg/CVERecord?id=CVE-2019-12799REFERENCECVE-2019-10458DESCRIPTIONsandbox bypass using a method that is on an allowlistLINKhttps//wwwcveorg/CVERecord?id=CVE-2019-10458REFERENCECVE-2017-1000095DESCRIPTIONsandbox bypass using unsafe methods that are on an allowlistLINKhttps//wwwcveorg/CVERecord?id=CVE-2017-1000095REFERENCECVE-2019-10458DESCRIPTIONCI/CD pipeline feature has unsafe elements in allowlist, allowing bypass of script restrictionsLINKhttps//wwwcveorg/CVERecord?id=CVE-2019-10458REFERENCECVE-2017-1000095DESCRIPTIONDefault allowlist includes unsafe methods, allowing bypass of sandboxLINKhttps//wwwcveorg/CVERecord?id=CVE-2017-1000095
+Potential Mitigations: 

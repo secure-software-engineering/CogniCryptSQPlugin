@@ -1,0 +1,6 @@
+CWE-ID: 281
+Name: Improper Preservation of Permissions
+Description: The product does not preserve permissions or incorrectly preserves permissions when copying, restoring, or sharing objects, which can cause them to have less restrictive permissions than intended
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-2323DESCRIPTIONIncorrect ACLs used when restoring backups from directories that use symbolic linksLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-2323REFERENCECVE-2001-1515DESCRIPTIONAutomatic modification of permissions inherited from another file systemLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-1515REFERENCECVE-2005-1920DESCRIPTIONPermissions on backup file are created with defaults, possibly less secure than original fileLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-1920REFERENCECVE-2001-0195DESCRIPTIONFile is made world-readable when being clonedLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0195
+Potential Mitigations: 

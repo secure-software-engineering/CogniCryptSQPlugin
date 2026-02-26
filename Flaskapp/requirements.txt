@@ -1,0 +1,27 @@
+# Server
+flask==3.1.2
+flask-cors==6.0.2
+gunicorn==25.1.0
+
+# Confidence Score
+gensim==4.4.0
+numpy==2.4.2
+networkx==3.6.1
+pydot==4.0.1
+torch==2.8.0
+torch-geometric==2.7.0
+scikit-learn==1.8.0
+
+# AIFix
+langchain-text-splitters==1.1.0
+langchain-core==1.2.13
+langchain-community==0.4.1
+langchain-openai==1.1.10
+langchain-google-genai==4.2.0
+langchain-huggingface==1.2.0
+langchain-ollama==1.0.1
+sentence-transformers==5.2.3
+faiss-cpu==1.13.2
+pydantic==2.12.5
+python-dotenv==1.2.1
+pandas==3.0.1

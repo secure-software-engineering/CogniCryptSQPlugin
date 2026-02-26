@@ -1,0 +1,6 @@
+CWE-ID: 468
+Name: Incorrect Pointer Scaling
+Description: In C and C++, one may often accidentally refer to the wrong memory due to the semantics of when math operations are implicitly scaled
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONUse a platform with high-level memory abstractionsPHASEImplementationDESCRIPTIONAlways use array indexing instead of direct pointer manipulationPHASEArchitecture and DesignDESCRIPTIONUse technologies for preventing buffer overflows

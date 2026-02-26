@@ -1,0 +1,6 @@
+CWE-ID: 733
+Name: Compiler Optimization Removal or Modification of Security-critical Code
+Description: The developer builds a security-critical protection mechanism into the software, but the compiler optimizes the program such that the mechanism is removed or modified
+Extended Description: 
+Observed Examples: REFERENCECVE-2008-1685DESCRIPTIONC compiler optimization, as allowed by specifications, removes code that is used to perform checks to detect integer overflowsLINKhttps//wwwcveorg/CVERecord?id=CVE-2008-1685REFERENCECVE-2019-1010006DESCRIPTIONChain compiler optimization (CWE-733) removes or modifies code used to detect integer overflow (CWE-190), allowing out-of-bounds write (CWE-787)LINKhttps//wwwcveorg/CVERecord?id=CVE-2019-1010006
+Potential Mitigations: 

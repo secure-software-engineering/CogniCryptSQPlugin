@@ -1,0 +1,6 @@
+CWE-ID: 430
+Name: Deployment of Wrong Handler
+Description: The wrong handler is assigned to process an object
+Extended Description: An example of deploying the wrong handler would be calling a servlet to reveal source code of a JSP file, or automatically determining type of the object even if it is contradictory to an explicitly specified type
+Observed Examples: REFERENCECVE-2001-0004DESCRIPTIONSource code disclosure via manipulated file extension that causes parsing by wrong DLLLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0004REFERENCECVE-2002-0025DESCRIPTIONWeb browser does not properly handle the Content-Type header field, causing a different application to process the documentLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0025REFERENCECVE-2000-1052DESCRIPTIONSource code disclosure by directly invoking a servletLINKhttps//wwwcveorg/CVERecord?id=CVE-2000-1052REFERENCECVE-2002-1742DESCRIPTIONArbitrary Perl functions can be loaded by calling a non-existent function that activates a handlerLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1742
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONPerform a type check before interpreting an objectPHASEArchitecture and DesignDESCRIPTIONReject any inconsistent types, such as a file with a GIF extension that appears to consist of PHP code

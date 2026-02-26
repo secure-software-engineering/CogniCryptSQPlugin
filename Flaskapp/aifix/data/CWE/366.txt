@@ -1,0 +1,6 @@
+CWE-ID: 366
+Name: Race Condition within a Thread
+Description: If two threads of execution use a resource simultaneously, there exists the possibility that resources may be used while invalid, in turn making the state of execution undefined
+Extended Description: 
+Observed Examples: REFERENCECVE-2022-2621DESCRIPTIONChain two threads in a web browser use the same resource (CWE-366), but one of those threads can destroy the resource before the other has completed (CWE-416)LINKhttps//wwwcveorg/CVERecord?id=CVE-2022-2621
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONUse locking functionality This is the recommended solution Implement some form of locking mechanism around code which alters or reads persistent data in a multithreaded environmentPHASEArchitecture and DesignDESCRIPTIONCreate resource-locking validation checks If no inherent locking mechanisms exist, use flags and signals to enforce your own blocking scheme when resources are being used by other threads of execution

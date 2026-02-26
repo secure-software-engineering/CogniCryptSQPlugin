@@ -1,0 +1,6 @@
+CWE-ID: 303
+Name: Incorrect Implementation of Authentication Algorithm
+Description: The requirements for the product dictate the use of an established authentication algorithm, but the implementation of the algorithm is incorrect
+Extended Description: This incorrect implementation may allow authentication to be bypassed
+Observed Examples: REFERENCECVE-2003-0750DESCRIPTIONConditional should have been an 'or' not an 'and'LINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0750
+Potential Mitigations: 

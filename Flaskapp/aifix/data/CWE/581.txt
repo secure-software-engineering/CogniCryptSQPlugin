@@ -1,0 +1,6 @@
+CWE-ID: 581
+Name: Object Model Violation Just One of Equals and Hashcode Defined
+Description: The product does not maintain equal hashcodes for equal objects
+Extended Description: Java objects are expected to obey a number of invariants related to equality One of these invariants is that equal objects must have equal hashcodes In other words, if aequals(b) == true then ahashCode() == bhashCode()
+Observed Examples: 
+Potential Mitigations: PHASEImplementationDESCRIPTIONBoth Equals() and Hashcode() should be defined

@@ -1,0 +1,262 @@
+{
+    "ordererror": {
+        "description": "A <b>TypestateError</b> is reported when cryptographic operations occur in an incorrect sequence. CrySL rules define a strict ordering of method calls (e.g., an object must be initialized before use). If the operations are performed in an unexpected order, the cryptographic process may become unreliable or insecure. This error ensures that cryptographic APIs are used in their intended sequence, preventing unintended behavior or security gaps in encryption, decryption, and key management.",
+        "examples": [
+            {
+                "rule": "AlgorithmParameterGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.AlgorithmParameters lgParams;\n\tjava.security.spec.AlgorithmParameterSpec genParamSpec; \n\tjava.security.SecureRandom random;\n\tint size;\nEVENTS \n\tg1: getInstance(algorithm); \n\tg2: getInstance(algorithm, _); \n\tGet := g1 | g2; \n\n\ti1: init(size);\n\ti2: init(size, random); \n\ti3: init(genParamSpec); \n\ti4: init(genParamSpec, random); \n\tInit := i1 | i2 | i3 | i4;\n\n\tgp1: algParams = generateParameters();\n\tGenParam := gp1; \nORDER\n\tGet, Init, GenParam</pre>"
+            },
+            {
+                "rule": "AlgorithmParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tbyte[] params; \n\tjava.lang.String format;\n\tbyte[] encParams;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(paramSpec);\n\ti2: init(params);\n\ti3: init(params, _);\n\tInit := i1 | i2 | i3;\n\n\te1: encParams = getEncoded();\n\te2: encParams = getEncoded(format);\n\tGetEncoded := e1 | e2;\nORDER\n\tGet, Init, GetEncoded?</pre>"
+            },
+            {
+                "rule": "CertificateFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inStream;\n\tjava.lang.String encoding;\n\tjava.lang.String type;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\t\n\tgc1: generateCertificate(inStream);\n\tGenCert := gc1;\n\t\n\tgen1: generateCertPath(_);\n\tgen2: generateCertPath(inStream, encoding);\n\tGenCertPath := gen1 | gen2;\n\t\n\tgcrl1: generateCRL(inStream);\n\tGenCRL := gcrl1;\n\t\nORDER\n\tGet, (GenCert | GenCertPath | GenCRL)+</pre>"
+            },
+            {
+                "rule": "CertPathTrustManagerParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.cert.CertPathParameters params;\nEVENTS\n\tc1: CertPathTrustManagerParameters(params);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Cipher",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String transformation;\n\tint encmode;\n\tjava.security.Key key;\n\tjava.security.cert.Certificate certificate;\n\tjava.security.spec.AlgorithmParameterSpec paramSpec;\n\tjava.security.AlgorithmParameters params;\n\n\tint prePlainTextOffset;\n\tint preCipherTextOffset;\n\tint plainTextOffset;\n\tint cipherTextOffset;\n\tint aadOffset;\n\n\tint prePlainTextLen;\n\tint plainTextLen;\n\tint aadLen;\n\n\tbyte[] prePlainText;\n\tbyte[] preCipherText;\n\tjava.nio.ByteBuffer prePlainTextByteBuffer;\n\tjava.nio.ByteBuffer preCipherTextByteBuffer;\n\n\tbyte[] plainText;\n\tbyte[] cipherText;\n\tbyte[] wrappedKeyBytes;\n\tjava.nio.ByteBuffer plainTextByteBuffer;\n\tjava.nio.ByteBuffer cipherTextByteBuffer;\n\t\n\tbyte[] aadBytes;\n\tjava.nio.ByteBuffer aadByteBuffer;\n\t\n\tjava.security.SecureRandom random;\n\t\n\tjava.security.Key wrappedKey;\nEVENTS\n\tg1: getInstance(transformation);\n\tg2: getInstance(transformation, _);\n\tGet := g1 | g2;\n\n\ti1: init(encmode, certificate);\n\ti2: init(encmode, certificate, random);\n\ti3: init(encmode, key);\n\ti4: init(encmode, key, paramSpec);\n\ti5: init(encmode, key, params);\n\ti6: init(encmode, key, paramSpec, random);\n\ti7: init(encmode, key, params, random);\n\ti8: init(encmode, key, random);\n\tIWOIV := i1 | i2 | i3 | i8;\n\tIWIV :=  i4 | i5 | i6 | i7;\n\tInit := IWOIV | IWIV;\n\n\tu1: preCipherText = update(prePlainText);\n\tu2: preCipherText = update(prePlainText, prePlainTextOffset, prePlainTextLen);\n\tu3: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText);\n\tu4: update(prePlainText, prePlainTextOffset, prePlainTextLen, preCipherText, preCipherTextOffset);\n\tu5: update(prePlainTextByteBuffer, preCipherTextByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4 | u5;\n\t\n\tua1: updateAAD(aadBytes);\n\tua2: updateAAD(aadBytes, aadOffset, aadLen);\n\tua3: updateAAD(aadByteBuffer);\n\tAADUpdate := ua1 | ua2 | ua3;\n\t\n\tf1: cipherText = doFinal();\n\tf2: cipherText =  doFinal(plainText);\n\tf3: doFinal(cipherText, cipherTextOffset);\n\tf4: cipherText = doFinal(plainText, plainTextOffset, plainTextLen);\n\tf5: doFinal(plainText, plainTextOffset, plainTextLen, cipherText);\n\tf6: doFinal(plainText, plainTextOffset, plainTextLen, cipherText, cipherTextOffset);\n\tf7: doFinal(plainTextByteBuffer, cipherTextByteBuffer);\n\tFINWOU := f2 | f4 | f5 | f6 | f7;\n\tDoFinal := FINWOU | f1 | f3;\n\n\twkb1: wrappedKeyBytes = wrap(wrappedKey);\n\tWKB := wkb1;\n\n\tiv1: getIV();\n\tIV := iv1;\nORDER\n\tGet, Init+, AADUpdate*, WKB+ | (FINWOU | (Update+, DoFinal))+</pre>"
+            },
+            {
+                "rule": "CipherInputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream inputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: CipherInputStream(inputStream, cipher);\n\tCon := c1;\n\t\n\tr1: read();\n\tr2: read(data); \n\tr3: read(data, offset, len);\n\tRead := r1 | r2 | r3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "CipherOutputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream outputStream;\n\tjavax.crypto.Cipher cipher;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: CipherOutputStream(outputStream, cipher);\n\tCon := c1;\n\t\n\tw1: write(specifiedByte);\n\tw2: write(data);\n\tw3: write(data, offset, len);\n\tWrite := w1 | w2 | w3;\n\t\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "Cookie",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String name;\n\tjava.lang.String value;\n\tboolean flag;\nEVENTS\n\tc1: Cookie(name, value);\n\tCon := c1;\n\t\n\ts1: setSecure(flag);\n\tSetSecure := s1;\nORDER\n\tCon, SetSecure</pre>"
+            },
+            {
+                "rule": "DHGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primeSize;\n\tint exponentSize;\nEVENTS\n\tc1: DHGenParameterSpec(primeSize, exponentSize);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DHParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger g;\n\tint l;\nEVENTS\n\tc1: DHParameterSpec(p, g);\n\tc2: DHParameterSpec(p, g, l);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DigestInputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: DigestInputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: read(); \n\tr2: read(data, offset, len);\n\tRead := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Read+, Close</pre>"
+            },
+            {
+                "rule": "DigestOutputStream",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.OutputStream stream;\n\tjava.security.MessageDigest digest;\n\tbyte[] data;\n\tint offset;\n\tint len;\n\tint specifiedByte;\nEVENTS\n\tc1: DigestOutputStream(stream, digest);\n\tCon := c1;\n\t\n\tr1: write(specifiedByte); \n\tr2: write(data, offset, len);\n\tWrite := r1 | r2;\n\n\tcl1: close();\n\tClose := cl1;\nORDER\n\tCon, Write+, Close</pre>"
+            },
+            {
+                "rule": "DSAGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint primePLen;\n\tint subPrimeQLen;\n\tint seedLen;\nEVENTS\n\tc1: DSAGenParameterSpec(primePLen, subPrimeQLen);\n\tc2: DSAGenParameterSpec(primePLen, subPrimeQLen, seedLen);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "DSAParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.math.BigInteger p;\n\tjava.math.BigInteger q;\n\tjava.math.BigInteger g;\nEVENTS\n\tc1: DSAParameterSpec(p, q, g);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String stdName;\nEVENTS\n\tc1: ECGenParameterSpec(stdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "ECParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.security.spec.EllipticCurve curve;\n\tjava.security.spec.ECPoint g;\n\tjava.math.BigInteger n;\n\tint h;\nEVENTS\n\tc1: ECParameterSpec(curve, g, n, h);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "GCMParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint tagLen;\n\tbyte[] src;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: GCMParameterSpec(tagLen, src);\n\tc2: GCMParameterSpec(tagLen, src, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "HMACParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint outputLen;\nEVENTS\n\tc1: HMACParameterSpec(outputLen);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "IvParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] iv;\n\tint offset;\n\tint len;\nEVENTS\n\tc1: IvParameterSpec(iv);\n\tc2: IvParameterSpec(iv, offset, len);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Key",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.lang.String symmetricKeyAlgorithm;\n\tjava.security.Key pubKey;\n\tjava.security.Key privKey;\n\tjavax.crypto.SecretKey sharedKey;\n\tboolean lastPhase;\n\tbyte[] sharedSecretBuffer;\n\tint offset;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(privKey);\n\ti2: init(privKey, params);\n\ti3: init(privKey, params, random);\n\ti4: init(privKey, random);\n\tInit := i1 | i2 | i3 | i4;\n\n\tdp1: doPhase(pubKey, lastPhase);\n\tDoPhase := dp1;\n\n\tgs1: sharedSecretBuffer = generateSecret();\n\tgs2: generateSecret(sharedSecretBuffer, offset);\n\tGenSecretBuffer := gs1 | g2;\n\t\n\tgs3: sharedKey = generateSecret(symmetricKeyAlgorithm);\n\tGenSecret := gs3 | GenSecretBuffer;\nORDER\n\tGet, Init, DoPhase, GenSecretBuffer</pre>"
+            },
+            {
+                "rule": "KeyFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.spec.KeySpec keySpec;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgpr1: privateKey = generatePrivate(keySpec);\n\tGenPriv := gpr1;\n\t\n\tgpu1: publicKey = generatePublic(keySpec);\n\tGenPubl := gpu1;\nORDER\n\tGet, (GenPriv | GenPubl)*</pre>"
+            },
+            {
+                "rule": "KeyGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tint keysize;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tjavax.crypto.SecretKey key;\n\tjava.lang.String algorithm;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keysize);\n\ti2: init(keysize, random);\n\ti3: init(params);\n\ti4: init(params, random);\n\ti5: init(random);\n\tInit := i1 | i2 | i3 | i4 | i5;\n    \n\tgk1: key = generateKey();\n\tGenKey := gk1;\nORDER\n\tGet, Init?, GenKey</pre>"
+            },
+            {
+                "rule": "KeyManagerFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tchar[] password;\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.KeyManager[] keyManager;\nEVENTS \n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(keyStore, password);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgkm1: keyManager = getKeyManagers();\n\tGetKeyMng := gkm1;\nORDER\n\tGet, Init, GetKeyMng?</pre>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.PrivateKey retPrivateKey;\n\tjava.security.PublicKey retPublicKey;\nEVENTS\n\tc1: KeyPair(publicKey, privateKey);\n\tCon := c1;\n\t\n\tgpu1: retPublicKey = getPublic();\n\tGetPubl := gpu1;\n\t\n\tgpr1: retPrivateKey = getPrivate();\n\tGetPriv := gpr1;\nORDER\n\tCon, (GetPubl | GetPriv)*</pre>"
+            },
+            {
+                "rule": "KeyPairGenerator",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyPair keyPair;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint keysize;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initialize(keysize);\n\ti2: initialize(keysize, _);\n\ti3: initialize(params);\n\ti4: initialize(params, _);\n\tInit := i1 | i2 | i3 | i4;\n\n\tk1: keyPair = generateKeyPair();\n\tk2: keyPair = genKeyPair();\n\tGen := k1 | k2;\nORDER\n\tGet, Init, Gen</pre>"
+            },
+            {
+                "rule": "KeyStore",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.io.InputStream fileInput;\n    \n\tchar[] passwordIn;\n\tchar[] passwordOut;\n\tchar[] passwordKey;\n    \n\tjava.security.KeyStore.Entry entry;\n\tbyte[] byteKey;\n    \n\tjava.security.KeyStore.LoadStoreParameter paramLoad;\n\tjava.security.KeyStore.ProtectionParameter protParamGet;\n\tjava.security.KeyStore.ProtectionParameter protParamSet;\n\tjava.lang.String aliasGet;\n\tjava.lang.String aliasSet;\n\tjava.io.OutputStream fileOutput;\n\tjava.security.KeyStore.LoadStoreParameter paramStore;\n\tjava.lang.String type;\n\tjava.security.cert.Certificate cert;\n    \n\tjava.security.Key key;\n\tjava.lang.String alias;\nEVENTS\n\tg1: getInstance(type);\n\tg2: getInstance(type, _);\n\tGet := g1 | g2;\n\n\tl1: load(fileInput, passwordIn);\n\tl2: load(paramLoad);\n\tLoad := l1 | l2;\n\n\ts1: store(paramStore);\n\ts2: store(fileOutput, passwordOut);\n\tStore := s1 | s2;\n\n\tge1: getEntry(aliasGet, protParamGet);\n\tGetEntry := ge1;\n    \n\tse1: setEntry(aliasSet, entry, protParamSet);\n\tSetEntry := se1;\n\n\tgk1: key = getKey(alias, passwordKey);\n\tGetKey := gk1;\nORDER\n\tGet, Load, ((GetEntry?, GetKey) | (SetEntry, Store))*</pre>"
+            },
+            {
+                "rule": "KeyStoreBuilderParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore.Builder builder;\nEVENTS\n\tc1: KeyStoreBuilderParameters(builder);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "Mac",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjavax.crypto.Mac mac;\n\tjava.security.Key key;\n\tbyte inputByte;\n\tbyte[] preInput;\n\tbyte[] input;\n\tbyte[] output1;\n\tbyte[] output2;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tint offset;\n\tint outOffset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: init(key);\n\ti2: init(key, params);\n\tInit := i1 | i2;\n\n\tu1: update(inputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, offset, len);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\tf1: output1 = doFinal();\n\tf2: output2 = doFinal(input);\n\tf3: doFinal(output1, outOffset);\n\tFinalWU := f2;\n\tFinalWOU := f1 | f3;\n\tFinal := FinalWU | FinalWOU;\nORDER\n\tGet, Init, (FinalWU | (Update+, Final))+</pre>"
+            },
+            {
+                "rule": "MessageDigest",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tbyte preInputByte;\n\tbyte[] preInput;\n\tint preOffset;\n\tint preLen;\n\tjava.nio.ByteBuffer preInputByteBuffer;\n\tbyte[] input;\n\tint offset;\n\tint len;\n\tbyte[] output;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tu1: update(preInputByte);\n\tu2: update(preInput);\n\tu3: update(preInput, preOffset, preLen);\n\tu4: update(preInputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\td1: output = digest();\n\td2: output = digest(input);\n\td3: digest(output, offset, len);\n\tDWOU := d2;\n\tDWU := d1 | d3;\n\tDigest := DWU | DWOU;\nORDER\n\tGet, (DWOU | (Update+, Digest))+</pre>"
+            },
+            {
+                "rule": "MGF1ParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\nEVENTS\n\tc1: MGF1ParameterSpec(mdName);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "OAEPParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String mdName;\n\tjava.lang.String mgfName;\n\tjava.security.spec.AlgorithmParameterSpec mgfSpec;\n\tjavax.crypto.spec.PSource pSrc;\nEVENTS\n\tc1: OAEPParameterSpec(mdName, mgfName, mgfSpec, pSrc);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PasswordAuthentication",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String userName;\n\tjava.lang.String retUserName;\n\tchar[] password;\nEVENTS\n\tc1: PasswordAuthentication(userName, password);\n\tCon := c1;\n\n\tgp1: getPassword();\n\tGetPassword := gp1;\n\t\n\tgu1: retUserName = getUserName();\n\tGetUserName := gu1;\nORDER\n\tCon, (GetPassword | GetUserName)*</pre>"
+            },
+            {
+                "rule": "PBEKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tchar[] password;\n\tbyte[] salt;\n\tint iterationCount;\n\tint keyLength; \nEVENTS\n\tc1: PBEKeySpec(password, salt, iterationCount, keyLength);\n\tCon := c1;\n\t\n\tcp1: clearPassword();\n\tClearPass := cp1;\nORDER\n\tCon, ClearPass</pre>"
+            },
+            {
+                "rule": "PBEParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] salt;\n\tint iterationCount;\n\tjava.security.spec.AlgorithmParameterSpec params;\nEVENTS\n\tc1: PBEParameterSpec(salt, iterationCount);\n\tc2: PBEParameterSpec(salt, iterationCount, params);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXBuilderParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keystore;\n\tjava.security.cert.CertSelector targetConstraints;\n\tjava.util.Set<java.security.cert.TrustAnchor> trustAnchors;\nEVENTS\n\tc1: PKIXBuilderParameters(keystore, targetConstraints);\n\tc2: PKIXBuilderParameters(trustAnchors, targetConstraints);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PKIXParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.KeyStore keyStore;\nEVENTS\n\tc1: PKIXParameters(keyStore);\n\tc2: PKIXParameters(_);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "PrivateKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "PublicKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\nORDER\n\tGetEnc*</pre>"
+            },
+            {
+                "rule": "RSAKeyGenParameterSpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tint keysize;\n\tjava.math.BigInteger publicExponent;\nEVENTS\n\tc1: RSAKeyGenParameterSpec(keysize, publicExponent);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecretKey",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] keyMaterial;\nEVENTS\n\tge1: keyMaterial = getEncoded();\n\tGetEnc := ge1;\n\t\n\td1: destroy();\n\tDestroy := d1;\nORDER\n\tGetEnc*, Destroy?</pre>"
+            },
+            {
+                "rule": "SecretKeyFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjavax.crypto.SecretKey key;\n\tjavax.crypto.SecretKey otherKey;\n\tjava.security.spec.KeySpec keySpec;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\tgS: key = generateSecret(keySpec);\n\ttK: key = translateKey(otherKey);\n\tGen := gS | tK;\nORDER\n\tGet, Gen</pre>"
+            },
+            {
+                "rule": "SecretKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tjava.lang.String keyAlgorithm;\n\tbyte[] keyMaterial;\n\tint len;\n\tint offset;\nEVENTS\n\tc1: SecretKeySpec(keyMaterial, keyAlgorithm);\n\tc2: SecretKeySpec(keyMaterial, offset, len, keyAlgorithm);\n\tCon := c1 | c2;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "SecureRandom",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] seed;\n\tbyte[] genSeed;\n\tjava.lang.String algorithm;\n\tlong lSeed;\n\tbyte[] bytes;\n\tint randInt;\n\tint randIntInRange;\n\tint range;\nEVENTS\n\tc1: SecureRandom();\n\tc2: SecureRandom(seed);\n\tCon := c1 | c2;\n\t\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tgI: getInstanceStrong();\n\tGet := g1 | g2 | gI;\n\t\n\tIns := Get | Con;\n\n\ts1: setSeed(seed);\n\ts2: setSeed(lSeed);\n\tSeed := s1 | s2;\n\n\tgS: genSeed = generateSeed(_);\n\n\tnB: nextBytes(bytes);\n\tnI: randInt = nextInt();\n\tnIR: randIntInRange = nextInt(range);\n\tNext := nB | nI | nIR;\n\t\n\tEnd := gS | Next;\nORDER\n\tIns, (Seed?, End*)*</pre>"
+            },
+            {
+                "rule": "Signature",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tbyte[] sign;\n\tbyte inputByte;\n\tbyte[] input;\n\tbyte[] output;\n\tjava.nio.ByteBuffer inputByteBuffer;\n\tjava.lang.String algorithm;\n\tjava.security.PrivateKey privateKey;\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.Certificate cert;\n\tjava.security.spec.AlgorithmParameterSpec params;\n\tboolean verified;\n\tint offset;\n\tint len;\nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\n\ti1: initSign(privateKey);\n\ti2: initSign(privateKey, _);\n\ti3: initVerify(cert);\n\ti4: initVerify(publicKey);\n\tInitSign := i1 | i2;\n\tInitVerify := i3 | i4;\n\n\tu1: update(input);\n\tu2: update(inputByte);\n\tu3: update(input, offset, len);\n\tu4: update(inputByteBuffer);\n\tUpdate := u1 | u2 | u3 | u4;\n\n\ts1: output = sign();\n\ts2: sign(output, offset, len);\n\tSign := s1 | s2;\n\n\tv1: verified = verify(sign);\n\tv2: verified = verify(sign, offset, len);\n\tVerify := v1 | v2;\nORDER\n\tGet, ((InitSign+, (Update+, Sign+)+ )+ | (InitVerify+, (Update*, Verify+)+ )+ )</pre>"
+            },
+            {
+                "rule": "SSLContext",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String protocol;\n\tjavax.net.ssl.KeyManager[] km; \n\tjavax.net.ssl.TrustManager[] tm; \n\tjavax.net.ssl.SSLEngine eng;\n\tjava.security.SecureRandom random;\nEVENTS\n\tg1: getInstance(protocol);\n\tg2: getInstance(protocol, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(km, tm, random);\n\tInit := i1;\n\t\n\tse1: eng = createSSLEngine();\n\tse2: eng = createSSLEngine(_,_);\n\tEngine := se1 | se2;\nORDER\n\tGet, Init, Engine? </pre>"
+            },
+            {
+                "rule": "SSLEngine",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tec1: setEnabledCipherSuites(cipherSuites);\n\tEnableCipher := ec1;\n\t\n\tep1: setEnabledProtocols(protocols);\n\tEnableProtocol := ep1;\nORDER\n\t(EnableCipher, EnableProtocol) | (EnableProtocol, EnableCipher)</pre>"
+            },
+            {
+                "rule": "SSLParameters",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String[] cipherSuites;\n\tjava.lang.String[] protocols;\nEVENTS\n\tCon1: SSLParameters();\n\tCon2: SSLParameters(cipherSuites);\n\tCon3: SSLParameters(cipherSuites, protocols);\n\t\n\tCipherSuite: setCipherSuites(cipherSuites);\n\tSetProtocol: setProtocols(protocols);\nORDER\n\t(Con1, ((CipherSuite , SetProtocol) | (SetProtocol , CipherSuite))) | (Con2, SetProtocol) | Con3</pre>"
+            },
+            {
+                "rule": "TrustAnchor",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.security.PublicKey publicKey;\n\tjava.security.cert.X509Certificate trustedCert;\n\tjavax.security.auth.x500.X500Principal caPrincipal;\nEVENTS\n\tc1: TrustAnchor(_, publicKey, _);\n\tc2: TrustAnchor(trustedCert, _);\n\tc3: TrustAnchor(caPrincipal, publicKey, _);\n\tCon := c1 | c2 | c3;\nORDER\n\tCon</pre>"
+            },
+            {
+                "rule": "TrustManagerFactory",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS\n\tjava.lang.String algorithm;\n\tjava.security.KeyStore keyStore;\n\tjavax.net.ssl.ManagerFactoryParameters params;\n\tjavax.net.ssl.TrustManager[] trustManager; \nEVENTS\n\tg1: getInstance(algorithm);\n\tg2: getInstance(algorithm, _);\n\tGet := g1 | g2;\n\t\n\ti1: init(keyStore);\n\ti2: init(params);\n\tInit := i1 | i2;\n\t\n\tgtm1: trustManager = getTrustManagers();\n\tGetTrustMng := gtm1;\nORDER\n\tGet, Init, GetTrustMng?</pre>"
+            },
+            {
+                "rule": "X509EncodedKeySpec",
+                "misuse": "The method calls for this class were not executed in the intended order.",
+                "solution": "The correct and secure order of operations is defined as follows: <pre>OBJECTS \n\tbyte[] encodedKey;\nEVENTS\n\tc1: X509EncodedKeySpec(encodedKey);\n\tCon := c1;\nORDER\n\tCon</pre>"
+            }
+        ]
+    }
+}

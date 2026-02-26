@@ -1,0 +1,6 @@
+CWE-ID: 223
+Name: Omission of Security-relevant Information
+Description: The product does not record or display information that would be important for identifying the source or nature of an attack, or determining if an action is safe
+Extended Description: 
+Observed Examples: REFERENCECVE-1999-1029DESCRIPTIONLogin attempts are not recorded if the user disconnects before the maximum number of triesLINKhttps//wwwcveorg/CVERecord?id=CVE-1999-1029REFERENCECVE-2002-1839DESCRIPTIONSender's IP address not recorded in outgoing e-mailLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1839REFERENCECVE-2000-0542DESCRIPTIONFailed authentication attempts are not recorded if later attempt succeedsLINKhttps//wwwcveorg/CVERecord?id=CVE-2000-0542
+Potential Mitigations: 

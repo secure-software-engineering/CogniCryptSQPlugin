@@ -1,0 +1,6 @@
+CWE-ID: 331
+Name: Insufficient Entropy
+Description: The product uses an algorithm or scheme that produces insufficient entropy, leaving patterns or clusters of values that are more likely to occur than others
+Extended Description: 
+Observed Examples: REFERENCECVE-2001-0950DESCRIPTIONInsufficiently random data used to generate session tokens using C rand() Also, for certificate/key generation, uses a source that does not block when entropy is lowLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0950REFERENCECVE-2008-2108DESCRIPTIONChain insufficient precision (CWE-1339) in random-number generator causes some zero bits to be reliably generated, reducing the amount of entropy (CWE-331)LINKhttps//wwwcveorg/CVERecord?id=CVE-2008-2108
+Potential Mitigations: PHASEImplementationDESCRIPTIONDetermine the necessary entropy to adequately provide for randomness and predictability This can be achieved by increasing the number of bits of objects such as keys and seeds

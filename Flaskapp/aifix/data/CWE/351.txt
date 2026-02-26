@@ -1,0 +1,6 @@
+CWE-ID: 351
+Name: Insufficient Type Distinction
+Description: The product does not properly distinguish between different types of elements in a way that leads to insecure behavior
+Extended Description: 
+Observed Examples: REFERENCECVE-2005-2260DESCRIPTIONBrowser user interface does not distinguish between user-initiated and synthetic eventsLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-2260REFERENCECVE-2005-2801DESCRIPTIONProduct does not compare all required data in two separate elements, causing it to think they are the same, leading to loss of ACLs Similar to Same Name errorLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-2801
+Potential Mitigations: 

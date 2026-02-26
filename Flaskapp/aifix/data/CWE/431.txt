@@ -1,0 +1,6 @@
+CWE-ID: 431
+Name: Missing Handler
+Description: A handler is not available or implemented
+Extended Description: When an exception is thrown and not caught, the process has given up an opportunity to decide if a given failure or event is worth a change in execution
+Observed Examples: REFERENCECVE-2022-25302DESCRIPTIONSDK for OPC Unified Architecture (OPC UA) is missing a handler for when a cast fails, allowing for a crashLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-25302
+Potential Mitigations: PHASEImplementationDESCRIPTIONHandle all possible situations (eg error condition)PHASEImplementationDESCRIPTIONIf an operation can throw an Exception, implement a handler for that specific exception

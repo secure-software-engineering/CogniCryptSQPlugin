@@ -1,0 +1,6 @@
+CWE-ID: 483
+Name: Incorrect Block Delimitation
+Description: The code does not explicitly delimit a block that is intended to contain 2 or more statements, creating a logic error
+Extended Description: In some languages, braces (or other delimiters) are optional for blocks When the delimiter is omitted, it is possible to insert a logic error in which a statement is thought to be in a block but is not In some cases, the logic error can have security implications
+Observed Examples: REFERENCECVE-2014-1266DESCRIPTIONincorrect indentation of goto statement makes it more difficult to detect an incorrect goto (Apple's goto fail)LINKhttps//wwwcveorg/CVERecord?id=CVE-2014-1266
+Potential Mitigations: PHASEImplementationDESCRIPTIONAlways use explicit block delimitation and use static-analysis technologies to enforce this practice

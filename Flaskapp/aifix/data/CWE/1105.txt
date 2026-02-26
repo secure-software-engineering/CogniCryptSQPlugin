@@ -1,0 +1,6 @@
+CWE-ID: 1105
+Name: Insufficient Encapsulation of Machine-Dependent Functionality
+Description: The product or code uses machine-dependent functionality, but it does not sufficiently encapsulate or isolate this functionality from the rest of the code
+Extended Description: This issue makes it more difficult to port or maintain the product, which indirectly affects security by making it more difficult or time-consuming to find and/or fix vulnerabilities It also might make it easier to introduce vulnerabilities
+Observed Examples: 
+Potential Mitigations: 

@@ -1,0 +1,6 @@
+CWE-ID: 1327
+Name: Binding to an Unrestricted IP Address
+Description: The product assigns the address 0000 for a database server, a cloud service/instance, or any computing resource that communicates remotely
+Extended Description: When a server binds to the address 0000, it allows connections from every IP address on the local machine, effectively exposing the server to every possible network This might be much broader access than intended by the developer or administrator, who might only be expecting the server to be reachable from a single interface/network
+Observed Examples: REFERENCECVE-2022-21947DESCRIPTIONDesktop manager for Kubernetes and container management binds a service to 0000, allowing users on the network to make requests to a dashboard APILINKhttps//wwwcveorg/CVERecord?id=CVE-2022-21947
+Potential Mitigations: PHASESystem ConfigurationDESCRIPTIONAssign IP addresses that are not 0000EFFECTIVENESSHighPHASESystem ConfigurationSTRATEGYFirewallDESCRIPTIONUnwanted connections to the configured server may be denied through a firewall or other packet filtering measuresEFFECTIVENESSHigh

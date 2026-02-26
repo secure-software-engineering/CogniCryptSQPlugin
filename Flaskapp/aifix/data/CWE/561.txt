@@ -1,0 +1,6 @@
+CWE-ID: 561
+Name: Dead Code
+Description: The product contains dead code, which can never be executed
+Extended Description: Dead code is code that can never be executed in a running program The surrounding code makes it impossible for a section of code to ever be executed
+Observed Examples: REFERENCECVE-2014-1266DESCRIPTIONchain incorrect goto in Apple SSL product bypasses certificate validation, allowing Adversary-in-the-Middle (AITM) attack (Apple goto fail bug) CWE-705 (Incorrect Control Flow Scoping) -> CWE-561 (Dead Code) -> CWE-295 (Improper Certificate Validation) -> CWE-393 (Return of Wrong Status Code) -> CWE-300 (Channel Accessible by Non-Endpoint)LINKhttps//wwwcveorg/CVERecord?id=CVE-2014-1266
+Potential Mitigations: PHASEImplementationDESCRIPTIONRemove dead code before deploying the applicationPHASETestingDESCRIPTIONUse a static analysis tool to spot dead code

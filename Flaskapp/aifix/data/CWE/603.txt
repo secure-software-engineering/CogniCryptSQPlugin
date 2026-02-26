@@ -1,0 +1,6 @@
+CWE-ID: 603
+Name: Use of Client-Side Authentication
+Description: A client/server product performs authentication within client code but not in server code, allowing server-side authentication to be bypassed via a modified client that omits the authentication check
+Extended Description: Client-side authentication is extremely weak and may be breached easily Any attacker may read the source code and reverse-engineer the authentication mechanism to access parts of the application which would otherwise be protected
+Observed Examples: REFERENCECVE-2022-33139DESCRIPTIONSCADA system only uses client-side authentication, allowing adversaries to impersonate other usersLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-33139REFERENCECVE-2006-0230DESCRIPTIONClient-side check for a password allows access to a server using crafted XML requests from a modified clientLINKhttps//wwwcveorg/CVERecord?id=CVE-2006-0230
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONDo not rely on client side data Always perform server side authentication

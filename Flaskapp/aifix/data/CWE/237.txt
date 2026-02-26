@@ -1,0 +1,6 @@
+CWE-ID: 237
+Name: Improper Handling of Structural Elements
+Description: The product does not handle or incorrectly handles inputs that are related to complex structures
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: 

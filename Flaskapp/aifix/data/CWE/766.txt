@@ -1,0 +1,6 @@
+CWE-ID: 766
+Name: Critical Data Element Declared Public
+Description: The product declares a critical variable, field, or member to be public when intended security policy requires it to be private
+Extended Description: This issue makes it more difficult to maintain the product, which indirectly affects security by making it more difficult or time-consuming to find and/or fix vulnerabilities It also might make it easier to introduce vulnerabilities
+Observed Examples: REFERENCECVE-2010-3860DESCRIPTIONvariables declared public allow remote read of system properties such as user name and home directoryLINKhttps//wwwcveorg/CVERecord?id=CVE-2010-3860
+Potential Mitigations: PHASEImplementationDESCRIPTIONData should be private, static, and final whenever possible This will assure that your code is protected by instantiating early, preventing access, and preventing tampering

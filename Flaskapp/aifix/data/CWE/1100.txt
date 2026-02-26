@@ -1,0 +1,6 @@
+CWE-ID: 1100
+Name: Insufficient Isolation of System-Dependent Functions
+Description: The product or code does not isolate system-dependent functionality into separate standalone modules
+Extended Description: This issue makes it more difficult to maintain and/or port the product, which indirectly affects security by making it more difficult or time-consuming to find and/or fix vulnerabilities It also might make it easier to introduce vulnerabilities
+Observed Examples: 
+Potential Mitigations: 

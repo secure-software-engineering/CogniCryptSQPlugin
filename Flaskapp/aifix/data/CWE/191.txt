@@ -1,0 +1,6 @@
+CWE-ID: 191
+Name: Integer Underflow (Wrap or Wraparound)
+Description: The product subtracts one value from another, such that the result is less than the minimum allowable integer value, which produces a value that is not equal to the correct result
+Extended Description: This can happen in signed and unsigned cases
+Observed Examples: REFERENCECVE-2004-0816DESCRIPTIONInteger underflow in firewall via malformed packetLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-0816REFERENCECVE-2004-1002DESCRIPTIONInteger underflow by packet with invalid lengthLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-1002REFERENCECVE-2005-0199DESCRIPTIONLong input causes incorrect length calculationLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-0199REFERENCECVE-2005-1891DESCRIPTIONMalformed icon causes integer underflow in loop counter variableLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-1891
+Potential Mitigations: 

@@ -1,0 +1,6 @@
+CWE-ID: 348
+Name: Use of Less Trusted Source
+Description: The product has two different sources of the same data or information, but it uses the source that has less support for verification, is less trusted, or is less resistant to attack
+Extended Description: 
+Observed Examples: REFERENCECVE-2001-0860DESCRIPTIONProduct uses IP address provided by a client, instead of obtaining it from the packet headers, allowing easier spoofingLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0860REFERENCECVE-2004-1950DESCRIPTIONWeb product uses the IP address in the X-Forwarded-For HTTP header instead of a server variable that uses the connecting IP address, allowing filter bypassLINKhttps//wwwcveorg/CVERecord?id=CVE-2004-1950REFERENCECVE-2001-0908DESCRIPTIONProduct logs IP address specified by the client instead of obtaining it from the packet headers, allowing information hidingLINKhttps//wwwcveorg/CVERecord?id=CVE-2001-0908REFERENCECVE-2006-1126DESCRIPTIONPHP application uses IP address from X-Forwarded-For HTTP header, instead of REMOTE_ADDRLINKhttps//wwwcveorg/CVERecord?id=CVE-2006-1126
+Potential Mitigations: 
