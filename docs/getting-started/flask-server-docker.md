@@ -1,41 +1,43 @@
-# Add SecAI Plugin to Existing SonarQube Server
+# Install Flaskapp Using Docker
 
 Please check the [prerequisites](prerequisites.md) before proceeding.
 
 You will also need the following from the [release page](https://github.com/secure-software-engineering/CogniCryptSQPlugin/releases) of our GitHub repository:
 
-- SecAI plugin jar: `sonar-secai-plugin-1.0.0.jar` (or later)
-- `secai-for-existing-sq-1.0.0.zip`
+- SecAI plugin jar: `sonar-secai-plugin-1.1.0.jar` (or later)
+- `secai-for-existing-sq-1.1.0.zip`
 
-The size of images built for the additional docker containers will be around 15 GB combined.
+The size of images built for the additional docker containers will be around 9 GB.
 
-Unpack the `secai-for-existing-sq-1.0.0.zip` file in the location where you intend to install the additional components. This location should be accessible to your administrators. The resulting file structure should look like this:
+Unpack the `secai-for-existing-sq-1.1.0.zip` file in the location where you intend to install the additional components. This location should be accessible to your administrators. The resulting file structure should look like this:
 
 ```
 /secai-for-existing-sq/
-├── AIFix/
-│   ┊┄┄ # python files and additional folders
+├── Flaskapp/
+│   ├── aifix/
+│   │   ┊┄┄ # python files and additional folders
+│   │   └── .env
+│   ├── confidence/
+│   │   └┄┄ # python files and model files
 │   ├── .env
 │   ├── Dockerfile
+│   ├── gunicorn.conf.py
+│   ├── main.py
 │   └── requirements.txt
-├── Confidence/
-│   ┊┄┄ # python files and model files
-│   ├── Dockerfile
-│   └── requirements.txt
-└── docker-compose-exist.yml
+├── nginx/
+│   └── default.conf
+└── docker-compose.yml
 ```
-
-If you are installing the additional containers on a different host machine than your SonarQube instance you will need a different `jar`. For this clone the [repository](https://github.com/secure-software-engineering/CogniCryptSQPlugin) and change the IP address in the file `/SonarQubePlugin/setting.js` from `127.0.0.1` to the IP address of your new host. Then run `mvn clean package -DskipTests` in the `SonarQubePlugin` folder. The new jar will be inside the `SonarQubePlugin/target/` directory.
 
 ---
 
-## Install *AIFix* and *Confidence Score* Components
+## Create Flaskapp Docker
 
-The *AIFix* and *Confidence Score* components are installed in docker containers separate from the main SonarQube server.
+The *AIFix* and *Confidence Score* features are installed in a *flaskapp* docker container separate from the main SonarQube server. An *nginx* docker is used as a reverse proxy.
 
 ### Environment Variables
 
-In this guide we use `.env`-files to set environment variables in our docker container. The `.env` file inside the `AIFix` directory should look as follows:
+In this guide we use `.env`-files to set environment variables in our docker container. The `.env` file inside the `Flaskapp/aifix` directory should look as follows:
 
 ```
 # OpenAI API Configuration (ChatGPT)
@@ -45,13 +47,16 @@ OPEN_AI_API_KEY=your_openai_api_key_here
 GOOGLE_API_KEY=your_google_api_key_here
 
 # Flask Configuration
-FLASK_ENV=production
 FLASK_DEBUG=false
 ```
 
-If you wish to use the cloud-based LLMs ChatGPT and Gemini you will have to replace the respective environent variable with your API key. This key will be used for every outgoing request.
+If you wish to use the cloud-based LLMs [ChatGPT](https://chatgpt.com/) and [Gemini](https://gemini.google.com/) you will have to replace the placeholder assigned to the respective environent variable with your [own API key](prerequisites.md#api-keys). This key will be used for every outgoing request.
 
-All variables set in this file must also be set on the SonarQube server. How you approach this depends on whether your SonarQube server was installed [from a `ZIP` file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file) or [from a `Docker` image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image).
+// TODO: FLASK_IP
+
+> **Security Note**: Never commit `.env` files to version control. Add them to your `.gitignore` file (or equivalent). At most, manually add a sample file with placeholders as a hint for new users.
+
+If you intend to use the *Code Generation* feature (which is separate from the *AIFix* feature) the API keys set in this file must also be set on the SonarQube server. How you approach this depends on whether your SonarQube server was installed [from a `ZIP` file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file) or [from a `Docker` image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image).
 
 #### SonarQube from a ZIP file
 
@@ -73,29 +78,34 @@ Among the unpacked files in the `secai-for-existing-sq` directory there should b
 
 ```yml
 services:
-    aifix:
-        build: ./AIFix
-        container_name: aifix
-        ports:
-            - "8000:8000"
-        expose:
-            - "8000"
-        env_file:
-            - ./AIFix/.env
-        volumes:
-            - ./AIFix:/app
-        restart: always
+  nginx:
+    image: nginx:1.29.5
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - internal
+    depends_on:
+      - flaskapp
+    restart: unless-stopped
     
-    confidence:
-        build: ./Confidence
-        container_name: confidence
-        ports:
-            - "80:8001"
-        expose:
-            - "8001"
-        volumes:
-            - ./Confidence:/app
-        restart: always
+  flaskapp:
+    build: ./Flaskapp
+    container_name: flaskapp
+    env_file:
+      - ./Flaskapp/aifix/.env
+    volumes:
+      - ./Flaskapp:/app
+    networks:
+      internal:
+        aliases:
+          - flask-app
+    restart: unless-stopped
+
+networks:
+  internal:
 ```
 
 If you are running SonarQube from a docker container and installing the new components on the same host machine, then they must share a [network](https://docs.docker.com/reference/compose-file/networks/) to communicate. 
@@ -104,37 +114,34 @@ If you did not specify a network in the `compose`-file or `docker run command` y
 
 ```yml
 services:
-    aifix:
-        build: ./AIFix
-        container_name: aifix
-        ports:
-            - "8000:8000"
-        expose:
-            - "8000"
-        env_file:
-            - ./AIFix/.env
-        volumes:
-            - ./AIFix:/app
-        restart: always
-        networks:
-          -  secai
-
-    confidence:
-        build: ./Confidence
-        container_name: confidence
-        ports:
-            - "80:8001"
-        expose:
-            - "8001"
-        volumes:
-            - ./Confidence:/app
-        restart: always
-        networks:
-            - secai
+  nginx:
+    image: nginx:1.29.5
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - internal
+    depends_on:
+      - flaskapp
+    restart: unless-stopped
+    
+  flaskapp:
+    build: ./Flaskapp
+    container_name: flaskapp
+    env_file:
+      - ./Flaskapp/aifix/.env
+    volumes:
+      - ./Flaskapp:/app
+    networks:
+      internal:
+        aliases:
+          - flask-app
+    restart: unless-stopped
 
 networks:
-    secai:
-        - driver: bridge
+  internal:
 ```
 
 Add the same network to your SonarQube `docker compose` or add `--network=secai` to your `docker run` command. As adding the *SecAI* plugin itself will also require restarting your SonarQube docker you do not need to do it immediately.
@@ -142,10 +149,10 @@ Add the same network to your SonarQube `docker compose` or add `--network=secai`
 After checking the network configuration (if necessary) you can start your docker containers by running the following command from within your `secai-for-existing-sq` directory:
 
 ```bash
-docker compose up -f docker-compose-exist.yml -d --build
+docker compose up -d --build
 ```
 
-Your *aifix* and *confidence* docker containers should now be built and then running. You can stop the containers by running `docker stop <container_name>`. To start them again use `docker start <container_name>`.
+Your *flaskapp* and *nginx* docker containers should now be built and then running. You can stop the containers by running `docker stop <container_name>`. To start them again use `docker start <container_name>`.
 
 ---
 
@@ -155,7 +162,7 @@ The final step is to add the actual plugin to the server and activate it. How yo
 
 ### SonarQube from a ZIP file
 
-Locate the directory containing your SonarQube distribution. Among other folders such as `elasticsearch` there should be a folder called `extensions`. Copy the SecAI plugin jar (`sonar-secai-plugin-1.0.0.jar`) to `extensions/plugins/`.
+Locate the directory containing your SonarQube distribution. Among other folders such as `elasticsearch` there should be a folder called `extensions`. Copy the SecAI plugin jar (`sonar-secai-plugin-1.1.0.jar`) to `extensions/plugins/`.
 
 The plugin will only be detected by the server after a [restart](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file/starting-stopping-server). Then an administrator account can verify its presence under **Administration > Marketplace > Plugins > Installed**. 
 
@@ -163,10 +170,10 @@ The plugin will only be detected by the server after a [restart](https://docs.so
 
 ### SonarQube from Docker
 
-Ensure that the server is running and copy the `sonar-secai-plugin-1.0.0.jar` file to `/opt/sonarqube/extensions/plugins`. If you are using Docker Desktop or an equivalent application with a graphical user interface you can simply drag and drop or upload the file. Otherwise, you can execute the following command:
+Ensure that the server is running and copy the `sonar-secai-plugin-1.1.0.jar` file to `/opt/sonarqube/extensions/plugins`. If you are using Docker Desktop or an equivalent application with a graphical user interface you can simply drag and drop or upload the file. Otherwise, you can execute the following command:
 
 ```bash
-docker cp ./sonar-secai-plugin-1.0.0.jar sonarqube:/opt/sonarqube/extensions/plugins
+docker cp ./sonar-secai-plugin-1.1.0.jar sonarqube:/opt/sonarqube/extensions/plugins
 ```
 
 > Note: The above example assumes that your SonarQube docker container is named `sonarqube`. Additionally, on Windows the **jar path** should use backslash ("\\") instead of forward slash ("/").

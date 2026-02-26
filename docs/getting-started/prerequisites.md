@@ -20,12 +20,14 @@ The components required for the features *Confidence Score* and *AIFix* are inst
 
 ### Java
 
-The *Code Generation* feature requires Java 17+ to verify the generated code. If you are using this guide to set up a new SonarQube server then this is handled automatically. However, if you are expanding an exiting SonarQube instance this step is necessary to be able to use this feature. 
+The *Code Generation* feature requires Java 17+ to verify the generated code. If you are using this guide to set up a new SonarQube server then this is handled automatically. However, if you are expanding an existing SonarQube instance this step is necessary to be able to use this feature. 
 
 Where to install Java depends on how your SonarQube instance is installed:
 
 1. If you are running SonarQube [from a **ZIP** file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file) then you can simply install Java 17+ on your host machine. <!-- TODO: check if JAVA_HOME is needed -->
 2. If you are using [a **Docker** image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image) TODO
+
+### Python
 
 ---
 

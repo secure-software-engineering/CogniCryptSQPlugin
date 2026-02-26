@@ -1,3 +1,12 @@
 # Overview
 
-This guide covers the [prerequisites](prerequisites.md) necessary for setting up a [new SonarQube server](server-setup.md) with the *SecAI* plugin installed or simply extending an [existing one](add-to-existing.md). Afterwards, you can run your [first analysis](first-analysis.md).
+*SecAI* consists of two components:
+
+1. A Flaskapp for the *AIFix* and *Confidence Score* features. It can be installed in a docker container or on a host machine with Linux as the opertaing system.
+2. A plugin for a SonarQube server.
+
+Before proceeding with the installation check out the [prerequisites](prerequisites.md).
+
+
+ 
+Afterwards, you can run your [first analysis](first-analysis.md).

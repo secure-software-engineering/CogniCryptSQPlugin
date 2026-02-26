@@ -44,8 +44,12 @@ nav:
   - Getting Started:
     - Overview: getting-started/overview.md
     - Prerequisites: getting-started/prerequisites.md
-    - New Server Setup: getting-started/server-setup.md
-    - Add to Existing SonarQube Server: getting-started/add-to-existing.md
+    - Install Flask Server:
+      - Using Docker: getting-started/flask-server-docker.md
+      - On Linux: getting-started/flask-server-linux.md
+    - SonarQube Setup:
+      - Installed From ZIP File: getting-started/sq-zip.md
+      - Installed Using Docker: getting-started/sq-docker.md
     - First Analysis: getting-started/first-analysis.md
   - User Guide:
     - Issue Management: user-guide/issue-management.md
