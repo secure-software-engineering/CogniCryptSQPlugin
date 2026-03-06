@@ -124,7 +124,7 @@ def ai_fix(code_input: str, rule: str, message: str, llm_model: str, iterations_
     
     # Map each provider to its corresponding API key environment variable
     if provider == "OPENAI":
-        api_key_env = "OPENAI_API_KEY"
+        api_key_env = "OPEN_AI_API_KEY"
     elif provider == "GEMINI":
         api_key_env = "GOOGLE_API_KEY"  
     elif provider == "OLLAMA":
@@ -254,7 +254,7 @@ def new_ai_fix(extracted_data: dict):
         # This logic is adapted from your original ai_fix function
         provider, selected_model = _parse_provider_and_model(llm_model_name)
         if provider == "OPENAI":
-            api_key_env = "OPENAI_API_KEY"
+            api_key_env = "OPEN_AI_API_KEY"
         elif provider == "GEMINI":
             api_key_env = "GOOGLE_API_KEY"
         elif provider == "OLLAMA":
