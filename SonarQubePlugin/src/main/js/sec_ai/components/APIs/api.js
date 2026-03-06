@@ -1,5 +1,5 @@
 import { getJSON } from "sonar-request";
-import { SERVER_IP } from "../../../../../../setting";
+import { SERVER_IP } from "../../utils/settings";
 
 export const fetchIssues = async (projectKey) => {
   try {
@@ -41,7 +41,7 @@ export const fetchSourceCode = async (componentKey, line, contextLines) => {
 
 export const sendToExternalApi = async (codeSnippet, _rule, _fullpathfromroottobottom, _selectednode, _sourcecodeanalysis, _message, model, itr) => {
   try {
-    const response = await fetch(`http://${SERVER_IP}:8000/newfix`, {
+    const response = await fetch(`http://${SERVER_IP}/newfix`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

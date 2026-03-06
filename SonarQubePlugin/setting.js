@@ -1,1 +1,0 @@
-export const SERVER_IP = "127.0.0.1"; // Change this to your server's IP address

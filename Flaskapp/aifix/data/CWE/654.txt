@@ -1,0 +1,6 @@
+CWE-ID: 654
+Name: Reliance on a Single Factor in a Security Decision
+Description: A protection mechanism relies exclusively, or to a large extent, on the evaluation of a single condition or the integrity of a single object or entity in order to make a decision about granting access to restricted resources or functionality
+Extended Description: 
+Observed Examples: REFERENCECVE-2022-35248DESCRIPTIONChat application skips validation when Central Authentication Service (CAS) is enabled, effectively removing the second factor from two-factor authenticationLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-35248
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONUse multiple simultaneous checks before granting access to critical operations or granting critical privileges A weaker but helpful mitigation is to use several successive checks (multiple layers of security)PHASEArchitecture and DesignDESCRIPTIONUse redundant access rules on different choke points (eg, firewalls)

@@ -1,7 +1,10 @@
 package org.sonarsource.plugins.secai.api;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.sonar.api.server.ws.WebService;
@@ -23,6 +26,7 @@ public class SecAIWebService implements WebService {
         NewController controller = context.createController("api/secai");
 
         controller.createAction("triggerAnalysis")
+                .setSince("SecAI version 1.0.0")
                 .setHandler((request, response) -> {
                     response.stream().setMediaType("text/event-stream");
                     response.setHeader("Connection", "keep-alive");
@@ -35,6 +39,7 @@ public class SecAIWebService implements WebService {
                 .setDescription("Triggers CogniCrypt analysis for the specified JAR file");
 
         controller.createAction("getFullSarifReport")
+                .setSince("SecAI version 1.0.0")
                 .setDescription("Returns the full SARIF analysis report from the generated file")
                 .setHandler((request, response) -> {
                     try {
@@ -76,10 +81,41 @@ public class SecAIWebService implements WebService {
                         writer.flush();
                     }
                 });
+
+        controller.createAction("getAIConfiguration")
+                .setDescription("Returns whether API keys were set for OpenAI and Google API " +
+                        "(true/false, not the keys themselves) and the IP address of the AIFix and Confidence Score backend.")
+                .setSince("SecAI version 1.1.0")
+                .setInternal(true)
+                .setHandler(((request, response) -> {
+                    response.stream().setMediaType("application/json");
+
+                    try {
+                        Map<String, Object> json = new HashMap<>();
+                        Map<String, String> env = System.getenv();
+                        json.put("openai", env.containsKey("OPEN_AI_API_KEY")
+                                && !env.get("OPEN_AI_API_KEY").equals("your_openai_api_key_here"));
+                        json.put("google", env.containsKey("GOOGLE_API_KEY")
+                                && !env.get("GOOGLE_API_KEY").equals("your_google_api_key_here"));
+                        json.put("flask_ip", env.getOrDefault("FLASK_IP", "127.0.0.1"));
+
+                        response.stream().setStatus(200);
+
+                        PrintWriter writer = new PrintWriter(response.stream().output());
+                        writer.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(json));
+                        writer.flush();
+                    } catch (Exception e) {
+                        response.stream().setStatus(404);
+
+                        PrintWriter writer = new PrintWriter(response.stream().output());
+                        writer.println("{\"error\": \"Internal server error: " + e.getMessage() + "\"}");
+                        writer.flush();
+                    }
+                }));
         
         NewAction run = controller.createAction("runCodeGeneration")
         .setDescription("Run the full SecAI code-generation pipeline")
-        .setSince("1.0")
+        .setSince("SecAI version 1.0.0")
         .setPost(true);
 
         run.createParam("prompt")               // 1 required parameter
@@ -88,7 +124,7 @@ public class SecAIWebService implements WebService {
 
         run.createParam("provider")
         .setRequired(false)
-        .setDescription("LLM provider: 'openai', 'ollama', or 'gemini' (default: openai)");
+        .setDescription("LLM provider: 'openai', or 'gemini' (default: openai)");
         
         run.createParam("model")
         .setRequired(false)

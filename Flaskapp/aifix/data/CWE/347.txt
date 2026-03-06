@@ -1,0 +1,6 @@
+CWE-ID: 347
+Name: Improper Verification of Cryptographic Signature
+Description: The product does not verify, or incorrectly verifies, the cryptographic signature for data
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-1796DESCRIPTIONDoes not properly verify signatures for trusted entitiesLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1796REFERENCECVE-2005-2181DESCRIPTIONInsufficient verification allows spoofingLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-2181REFERENCECVE-2005-2182DESCRIPTIONInsufficient verification allows spoofingLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-2182REFERENCECVE-2002-1706DESCRIPTIONAccepts a configuration file without a Message Integrity Check (MIC) signatureLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-1706
+Potential Mitigations: 

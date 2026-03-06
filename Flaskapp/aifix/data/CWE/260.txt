@@ -1,0 +1,6 @@
+CWE-ID: 260
+Name: Password in Configuration File
+Description: The product stores a password in a configuration file that might be accessible to actors who do not know the password
+Extended Description: This can result in compromise of the system for which the password is used An attacker could gain access to this file and learn the stored password or worse yet, change the password to one of their choosing
+Observed Examples: REFERENCECVE-2022-38665DESCRIPTIONA continuous delivery pipeline management tool stores an unencypted password in a configuration fileLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-38665
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONAvoid storing passwords in easily accessible locationsPHASEArchitecture and DesignDESCRIPTIONConsider storing cryptographic hashes of passwords as an alternative to storing in plaintext

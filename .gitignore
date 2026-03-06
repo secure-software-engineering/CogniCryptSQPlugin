@@ -2,3 +2,5 @@
 /site/
 /target/
 /release/
+/.vscode
+/Confidence/.idea

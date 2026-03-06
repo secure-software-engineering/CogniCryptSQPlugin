@@ -1,0 +1,6 @@
+CWE-ID: 440
+Name: Expected Behavior Violation
+Description: A feature, API, or function does not perform according to its specification
+Extended Description: 
+Observed Examples: REFERENCECVE-2003-0187DESCRIPTIONProgram uses large timeouts on unconfirmed connections resulting from inconsistency in linked lists implementationsLINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0187REFERENCECVE-2003-0465DESCRIPTIONstrncpy in Linux kernel acts different than libc on x86, leading to expected behavior difference - sort of a multiple interpretation error?LINKhttps//wwwcveorg/CVERecord?id=CVE-2003-0465REFERENCECVE-2005-3265DESCRIPTIONBuffer overflow in product stems the use of a third party library function that is expected to have internal protection against overflows, but doesn'tLINKhttps//wwwcveorg/CVERecord?id=CVE-2005-3265
+Potential Mitigations: 

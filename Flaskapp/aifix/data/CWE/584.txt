@@ -1,0 +1,6 @@
+CWE-ID: 584
+Name: Return Inside Finally Block
+Description: The code has a return statement inside a finally block, which will cause any thrown exception in the try block to be discarded
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEImplementationDESCRIPTIONDo not use a return statement inside the finally block The finally block should have cleanup code

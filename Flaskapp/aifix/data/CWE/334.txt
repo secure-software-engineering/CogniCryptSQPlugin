@@ -1,0 +1,6 @@
+CWE-ID: 334
+Name: Small Space of Random Values
+Description: The number of possible random values is smaller than needed by the product, making it more susceptible to brute force attacks
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-0583DESCRIPTIONProduct uses 5 alphanumeric characters for filenames of expense claim reports, stored under web rootLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0583REFERENCECVE-2002-0903DESCRIPTIONProduct uses small number of random numbers for a code to approve an action, and also uses predictable new user IDs, allowing attackers to hijack new accountsLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0903REFERENCECVE-2003-1230DESCRIPTIONSYN cookies implementation only uses 32-bit keys, making it easier to brute force ISNLINKhttps//wwwcveorg/CVERecord?id=CVE-2003-1230REFERENCECVE-2004-0230DESCRIPTIONComplex predictability / randomness (reduced space)LINKhttps//wwwcveorg/CVERecord?id=CVE-2004-0230
+Potential Mitigations: PHASEArchitecture and Design RequirementsSTRATEGYLibraries or FrameworksDESCRIPTIONUse products or modules that conform to FIPS 140-2 [REF-267] to avoid obvious entropy problems Consult FIPS 140-2 Annex C (Approved Random Number Generators)

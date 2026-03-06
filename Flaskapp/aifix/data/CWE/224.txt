@@ -1,0 +1,6 @@
+CWE-ID: 224
+Name: Obscured Security-relevant Information by Alternate Name
+Description: The product records security-relevant information according to an alternate name of the affected entity, instead of the canonical name
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-0725DESCRIPTIONAttacker performs malicious actions on a hard link to a file, obscuring the real target fileLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0725
+Potential Mitigations: 

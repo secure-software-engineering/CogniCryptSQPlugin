@@ -1,0 +1,6 @@
+CWE-ID: 419
+Name: Unprotected Primary Channel
+Description: The product uses a primary channel for administration or restricted functionality, but it does not properly protect the channel
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONDo not expose administrative functionnality on the user UIPHASEArchitecture and DesignDESCRIPTIONProtect the administrative/restricted functionality with a strong authentication mechanism

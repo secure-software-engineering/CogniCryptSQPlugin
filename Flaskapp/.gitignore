@@ -1,0 +1,7 @@
+/.idea
+/.venv
+/__pycache__
+**/__pycache__
+aifix.log
+analysis_results.db
+/GeneratedCode

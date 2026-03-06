@@ -1,0 +1,22 @@
+{
+    "nocalltoerror": {
+        "description": "A <b>NoCallToError</b> is triggered when a method is explicitly prohibited in a cryptographic usage pattern, yet it has been invoked. CrySL rules may specify that certain method calls should not occur under specific conditions, such as restricting init() for certain algorithms that do not require explicit initialization. This error signals that the cryptographic implementation does not follow secure guidelines and may introduce security weaknesses.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "In order to get a new <code>Cipher</code> object one of the following <code>getInstance</code> methods must be called:<pre>Cipher.getInstance(String transformation);\nCipher.getInstance(String transformation, String provider);\nCipher.getInstance(String transformation, Provider provider);</pre>The <code>String transformation</code> can be formed as either of the following: <ul><li>\"algorithm/mode/padding\"</li><li>\"algorithm\"</li></ul>Calling the <code>init</code> method could be any of the following calls:<pre>c.init(int encmode, Certificate certificate);\nc.init(int encmode, Certificate certificate, random);\nc.init(int encmode, Key key);\nc.init(int encmode, Key key, AlgorithmParameterSpec paramSpec);\nc.init(int encmode, Key key, AlgorithmParameters params);\nc.init(int encmode, Key key, AlgorithmParameterSpec paramSpec, SecureRandom random);\nc.init(int encmode, Key key, AlgorithmParameters params, SecureRandom random);\nc.init(int encmode, Key key, SecureRandom random);</pre>",
+                "solution": "The method <code>init</code> should <b>not</b> be called if the algorithm used for <code>getInstance</code> is one of the following:<ul><li>AES</li><li>PBEWithHmacSHA224AndAES_128</li> <li>PBEWithHmacSHA256AndAES_128</li> <li>PBEWithHmacSHA384AndAES_128</li> <li>PBEWithHmacSHA512AndAES_128</li> <li>PBEWithHmacSHA224AndAES_256</li> <li>PBEWithHmacSHA256AndAES_256</li> <li>PBEWithHmacSHA384AndAES_256</li> <li>PBEWithHmacSHA512AndAES_256</li></ul><br>If the value of <code>encmode</code> is <b>not</b> <code>1</code> or <code>ENCRYPT_MODE</code> <b>and</b> the <code>mode</code> is one of the following:<ul><li>CTR</li><li>CTS</li><li>CFB</li><li>OFB</li></ul>then the following method configurations should <b>not</b> be called:<pre>c.init(encmode, certificate);\nc.init(encmode, certificate, random);\nc.init(encmode, key);\nc.init(encmode, key, random);</pre><br>Also, if the <code>mode</code> is one of the following:<ul><li>CTR</li><li>CTS</li><li>CFB</li><li>ECB</li><li>OFB</li></ul>then the following methods should <b>not</b> be called:<pre>c.updateAAD(byte[] aadBytes);\nc.updateAAD(byte[] aadBytes, int aadOffset, int aadLen);\nc.updateAAD(ByteBuffer aadByteBuffer);</pre>"
+            },
+            {
+                "rule": "KeyAgreement",
+                "misuse": "The following call should never be made:<pre>SecretKey sharedKey = keAgreement.generateSecret(symmetricKeyAlgorithm);</pre>",
+                "solution": "Instead use <pre>byte[] sharedSecretBuffer = keyAgreement.generateSecret();</pre> or <pre>byte[] sharedSecretBuffer = new byte[1024];\ngenerateSecret(sharedSecretBuffer, offset);</pre>"
+            },
+            {
+                "rule": "KeyPair",
+                "misuse": "The following constructor must be called before the <code>privateKey</code> and <code>publicKey</code> can be returned:<pre>KeyPair kp = new KeyPair(PrublicKey publicKey, PrivateKey, privateKey);</pre>",
+                "solution": ""
+            }
+        ]
+    }
+}

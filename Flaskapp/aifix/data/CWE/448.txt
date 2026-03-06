@@ -1,0 +1,6 @@
+CWE-ID: 448
+Name: Obsolete Feature in UI
+Description: A UI function is obsolete and the product does not warn the user
+Extended Description: 
+Observed Examples: 
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONRemove the obsolete feature from the UI Warn the user that the feature is no longer supported

@@ -1,0 +1,6 @@
+CWE-ID: 256
+Name: Plaintext Storage of a Password
+Description: Storing a password in plaintext may result in a system compromise
+Extended Description: Password management issues occur when a password is stored in plaintext in an application's properties, configuration file, or memory Storing a plaintext password in a configuration file allows anyone who can read the file access to the password-protected resource In some contexts, even storage of a plaintext password in memory is considered a security risk if the password is not cleared immediately after it is used
+Observed Examples: REFERENCECVE-2022-30275DESCRIPTIONRemote Terminal Unit (RTU) uses a driver that relies on a password stored in plaintextLINKhttps//wwwcveorg/CVERecord?id=CVE-2022-30275
+Potential Mitigations: PHASEArchitecture and DesignDESCRIPTIONAvoid storing passwords in easily accessible locationsPHASEArchitecture and DesignDESCRIPTIONConsider storing cryptographic hashes of passwords as an alternative to storing in plaintextPHASEDESCRIPTIONA programmer might attempt to remedy the password management problem by obscuring the password with an encoding function, such as base 64 encoding, but this effort does not adequately protect the password because the encoding can be detected and decoded easilyEFFECTIVENESSNone

@@ -1,0 +1,6 @@
+CWE-ID: 349
+Name: Acceptance of Extraneous Untrusted Data With Trusted Data
+Description: The product, when processing trusted data, accepts any untrusted data that is also included with the trusted data, treating the untrusted data as if it were trusted
+Extended Description: 
+Observed Examples: REFERENCECVE-2002-0018DESCRIPTIONDoes not verify that trusted entity is authoritative for all entities in its responseLINKhttps//wwwcveorg/CVERecord?id=CVE-2002-0018REFERENCECVE-2006-5462DESCRIPTIONuse of extra data in a signature allows certificate signature forgingLINKhttps//wwwcveorg/CVERecord?id=CVE-2006-5462
+Potential Mitigations: 

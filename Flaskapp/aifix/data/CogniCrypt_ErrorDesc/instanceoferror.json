@@ -1,0 +1,12 @@
+{
+    "instanceoferror": {
+        "description": "An <b>InstanceOfError</b> occurs when an object used in a cryptographic operation does not match the expected type. CrySL rules enforce type constraints on cryptographic objects (e.g., a Cipher object might require a SecretKey, but a PublicKey is provided instead). This error prevents incorrect type usage that could lead to runtime failures, security vulnerabilities, or unintentional misconfiguration of cryptographic components.",
+        "examples": [
+            {
+                "rule": "Cipher",
+                "misuse": "Depending on the parameters used during the initialization of the Cipher object (call to <code>init</code>) a specific algorithm has to be used in <code>getInstance</code>.",
+                "solution": "For the method calls<pre>init(opmode, key);\ninit(opmode, key, paramSpec);\ninit(opmode, key, params);\ninit(opmode, key, paramSpec, secureRandom);\ninit(opmode, key, params, secureRandom);\ninit(opmode, key, secureRandom);</pre>use different algorithms if <details><summary>key is a <code>javax.crypto.SecretKey</code></summary>The algorithm has to be one of the following:<ul><li>AES</li> <li>PBEWithHmacSHA224AndAES_128</li> <li>PBEWithHmacSHA256AndAES_128</li> <li>PBEWithHmacSHA384AndAES_128</li> <li>PBEWithHmacSHA512AndAES_128</li> <li>PBEWithHmacSHA224AndAES_256</li> <li>PBEWithHmacSHA256AndAES_256</li> <li>PBEWithHmacSHA384AndAES_256</li> <li>PBEWithHmacSHA512AndAES_256</li></ul></details>or<details><summary>key is a <code>java.security.PublicKey</code> or <code>java.security.PrivateKey</code></summary>The algorithm has to be <i>RSA</i>.</details><br>For the following method calls<pre>init(opmode, certificate);\ninit(opmode, certificate, secureRandom);</pre>if a <code>java.security.Certificate</code> is used the algorithm has to be <i>RSA</i>.<br><br>For all mentioned method calls, if opmode is one of <code>WRAP_MODE</code> or <code>UNWRAP_MODE</code> the algorithm also has to be <i>RSA</i>.</details>"
+            }
+        ]
+    }
+}

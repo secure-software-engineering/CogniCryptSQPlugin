@@ -7,12 +7,12 @@ class LLMName(Enum):
 
 from .openai import OpenAIHandler
 from .gemini import GeminiHandler
-from .ollama import OllamaHandler
+# from .ollama import OllamaHandler
 
 _LOOKUP = {
     LLMName.OPENAI: OpenAIHandler,
     LLMName.GEMINI: GeminiHandler,
-    LLMName.OLLAMA: OllamaHandler
+#     LLMName.OLLAMA: OllamaHandler
 }
 
 def get_handler(name: str | LLMName, **options):

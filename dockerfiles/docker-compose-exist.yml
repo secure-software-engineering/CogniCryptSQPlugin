@@ -1,24 +1,29 @@
 services:
-  aifix:
-    build: ./AIFix
-    container_name: aifix
+  nginx:
+    image: nginx:1.29.5
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
     ports:
-      - "8000:8000"
-    expose:
-      - "8000"
+      - 80:80
+    networks:
+      - internal
+    depends_on:
+      - flaskapp
+    restart: unless-stopped
+    
+  flaskapp:
+    build: ./Flaskapp
+    container_name: flaskapp
     env_file:
-      - ./AIFix/.env
+      - ./Flaskapp/aifix/.env
     volumes:
-      - ./AIFix:/app
-    restart: always
+      - ./Flaskapp:/app
+    networks:
+      internal:
+        aliases:
+          - flask-app
+    restart: unless-stopped
 
-  confidence:
-    build: ./Confidence
-    container_name: confidence
-    ports:
-      - "80:8001"
-    expose:
-      - "8001"
-    volumes:
-      - ./Confidence:/app
-    restart: always
+networks:
+  internal:
