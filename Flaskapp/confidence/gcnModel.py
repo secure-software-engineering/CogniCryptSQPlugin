@@ -11,6 +11,8 @@ import networkx as nx
 import ast
 from gensim.models import Word2Vec
 
+import base64, gzip
+
 class GCNGraphClassifier(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels):
         super().__init__()
@@ -126,14 +128,44 @@ def infer_dims_from_state(state_dict):
     return inferred_in, inferred_hidden, inferred_out
 
 
+def prep_dot_graph(dot_graph: str):
+    """
+    The expected value of dot_graph will be gzip(base64(graph)). However, older implementations will instead provide the plain sot graph.
+    """
+    pydot_graphs = pydot.graph_from_dot_data(dot_graph)
+
+    # pydot_graphs will be None if there was a ParsingError
+    if pydot_graphs:
+        return pydot_graphs
+
+    # Check if the graph is still base64 encoded and gzipped
+    decoded_graph = base64.b64decode(dot_graph)
+    if base64.b64encode(decoded_graph).decode("utf-8") == dot_graph:
+        try:
+            pydot_graphs = pydot.graph_from_dot_data(decoded_graph.decode("utf-8"))
+        except UnicodeDecodeError:
+            pass
+
+    if pydot_graphs:
+        return pydot_graphs
+
+    # Try unzipping it before
+    unzipped_graph = gzip.decompress(decoded_graph).decode("utf-8")
+    pydot_graphs = pydot.graph_from_dot_data(unzipped_graph)
+
+    if pydot_graphs:
+        return pydot_graphs
+
+    # If the function is still running then parsing is not possible
+    raise ValueError("No graph parsed from the provided DOT string.")
+
+
 def calculating_confidence(hashcode, dot_graph):
     # load w2v model
     model_w2v = Word2Vec.load("confidence/jimple_word2vec.model")
 
     # Parse DOT string to networkx
-    pydot_graphs = pydot.graph_from_dot_data(dot_graph)
-    if not pydot_graphs:
-        raise ValueError("No graph parsed from the provided DOT string.")
+    pydot_graphs = prep_dot_graph(dot_graph)
     G = nx.drawing.nx_pydot.from_pydot(pydot_graphs[0]).to_undirected()
 
     # Build features for the single graph

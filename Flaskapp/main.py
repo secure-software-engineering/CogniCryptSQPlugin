@@ -20,6 +20,20 @@ def entry_point():
     result = calculating_confidence(hashcode, dot_graph)
     return jsonify(result)
 
+@app.route('/fpall', methods=['POST'])
+def entry_point_all():
+    request_data = request.get_json()
+
+    result = {"fp_scores" : []}
+    # Calculate individual scores
+    for err in request_data.get("errors", []):
+        hashcode = err.get("hashcode")
+        dot_graph = err.get("dot_graph")
+        result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph))
+
+    print("Result:\n", result)
+    return jsonify(result)
+
 @app.route('/aifix', methods=['POST'])
 def aifix():
     logger.info("Post API function to start the AI Fix analysis")
