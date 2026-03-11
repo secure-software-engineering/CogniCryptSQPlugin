@@ -1,5 +1,5 @@
-# Chnage the base image to the latest SonarQube LTS version or any other preferred version
-FROM sonarqube:25.2.0.102705-community 
+# Change the base image to the latest SonarQube LTS version or any other preferred version
+FROM sonarqube:26.3.0.120487-community 
 
 USER root
 
@@ -10,5 +10,5 @@ USER root
     && rm -rf /var/lib/apt/lists/*
 
 USER sonarqube
-ENV PATH="${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${GRADLE_HOME}/bin:${PATH}"
-ENV SONAR_JAVA_PATH = "/usr/lib/jvm/java-21-openjdk-amd64/bin/java"
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+ENV SONAR_JAVA_PATH="/usr/lib/jvm/java-21-openjdk-amd64/bin/java"
