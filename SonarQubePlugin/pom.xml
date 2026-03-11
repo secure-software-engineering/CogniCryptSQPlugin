@@ -5,12 +5,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.sonarsource.plugins.secai</groupId>
-  <artifactId>sonar-secai-plugin</artifactId>
+  <artifactId>secai-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>1.1.0</version>
+  <version>1.2.0_SNAPSHOT</version>
 
-  <name>Secai Plugin for SonarQube Server 10.x</name>
-  <description>SecAI of Plugin for SonarQube Server: Cryptographic API misuse using cognicrypt</description>
+  <name>SecAI Plugin for SonarQube Server 10.x</name>
+  <description>SecAI Plugin for SonarQube Server: Detecting Cryptographic API misuse using CogniCrypt</description>
 
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
