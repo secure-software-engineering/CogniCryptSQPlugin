@@ -5,17 +5,17 @@ import {
     getActiveproject,
     getRuleDescriptor,
     getDotFromIssueRaw
-} from '../APIs/api';
+} from './APIs/api';
 
-import IssueList from '../Description/IssueList';
-import AiFix from '../Description/AiFix';
-import DetailedDescription from '../Description/DetailedDescription';
+import IssueList from './Description/IssueList';
+import AiFix from './Description/AiFix';
+import DetailedDescription from './Description/DetailedDescription';
 import {
     buildRootCauseHTML,
     buildHowToFixHTML,
     buildMoreInfoHTML
-} from '../../utils/htmlBuilders';
-import { fetchMetricIssues, getPriorityFromScore } from '../../utils/issuesService';
+} from '../utils/htmlBuilders';
+import { fetchMetricIssues, getPriorityFromScore } from '../utils/issuesService';
 
 import {
     selectAiSolution,
@@ -29,10 +29,10 @@ import {
     setProjectKey,
     setSelectedIssue,
     setSourceCode
-} from '../../store/issuesReducer';
-import QuickFixCard from '../Description/QuickFixCard';
-import DiffView from '../Description/DiffView';
-import { SERVER_IP } from '../../utils/settings';
+} from '../store/issuesReducer';
+import QuickFixCard from './Description/QuickFixCard';
+import DiffView from './Description/DiffView';
+import { SERVER_IP } from '../utils/settings';
 
 const BASE_NAVS = ['Root Cause', 'How to Fix', 'AI Fix', 'More Info'];
 

@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import NavigationBar from './components/Navigations/NavigationBar';
+import NavigationBar from './components/NavigationBar';
 import store from './store/store';
 
 // This is the entry point of the SecAI Plugin
