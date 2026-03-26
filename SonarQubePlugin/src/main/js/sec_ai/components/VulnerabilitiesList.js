@@ -124,39 +124,48 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         }
 
         try {
-            const rawDot = await getDotFromIssueRaw(issue?._raw);
-            if (!rawDot) {
-                setFpError('No CPG found for this issue');
-                setFpLoading(false);
-                console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz or dotGraph)');
-                return;
-            }
+            let score = issue.fp_score;
 
+            // If the fp score isn't saved, try to calculate it individually
+            if (score === -1) {
+                console.log("No fp score, fetching individual score")
+                const rawDot = await getDotFromIssueRaw(issue?._raw);
+                if (!rawDot) {
+                    setFpError('No CPG found for this issue');
+                    setFpLoading(false);
+                    console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz or dotGraph)');
+                    return;
+                }
 
-            const dotGraph = String(rawDot).replace(/\r\n/g, '\n');
+                const dotGraph = String(rawDot).replace(/\r\n/g, '\n');
 
+                const hashcode = String(getIssueHashcode(issue) || '');
+                const res = await fetch(`http://${SERVER_IP}/fp`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                    body: JSON.stringify({hashcode, dot_graph: dotGraph})
+                });
 
-            const hashcode = String(getIssueHashcode(issue) || '');
-            const res = await fetch(`http://${SERVER_IP}/fp`, {
-                method: 'POST',
-                mode: 'cors',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ hashcode, dot_graph: dotGraph })
-            });
+                const text = await res.text();
+                let json = {};
+                try {
+                    json = text ? JSON.parse(text) : {};
+                } catch (_) {
+                }
 
-            const text = await res.text();
-            let json = {};
-            try { json = text ? JSON.parse(text) : {}; } catch (_) { }
+                if (!res.ok) {
+                    const msg = json?.error || `HTTP ${res.status}: ${text?.slice?.(0, 300) ?? ''}`;
+                    throw new Error(msg);
+                }
 
-            if (!res.ok) {
-                const msg = json?.error || `HTTP ${res.status}: ${text?.slice?.(0, 300) ?? ''}`;
-                throw new Error(msg);
+                const p = json?.probability_score ?? json?.probability ?? json?.score ?? null;
+                score = typeof p === 'number' ? p : (p ? Number(p) : null);
             }
 
             // 4) display probability_score as percentage
-            const p = json?.probability_score ?? json?.probability ?? json?.score ?? null;
-            setFpScore(typeof p === 'number' ? p : (p ? Number(p) : null));
-            const priority = getPriorityFromScore(p, issue?._raw?.severity);
+            setFpScore(score);
+            const priority = getPriorityFromScore(score, issue?._raw?.severity);
             setPriority(priority);
             setFpError(null);
         } catch (e) {
@@ -173,6 +182,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         const run = async () => {
             setLoading(true);
             try {
+                // Locate the active project
                 const projects = await findProjects();
                 const _id = new URLSearchParams(window.location.search).get('id');
                 if (!projects || !_id) { setLoading(false); return; }
@@ -180,8 +190,32 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 const activeProject = getActiveproject(_id, projects);
                 if (!activeProject?.key) { setLoading(false); return; }
 
+                // Fetch the metric entry containing the issue details from SecAI
                 dispatch(setProjectKey(activeProject.key));
                 const metricIssues = await fetchMetricIssues(activeProject.key);
+
+                // Fetch fp scores
+                const fp_data = [];
+                metricIssues.forEach((issue) => {
+                    fp_data.push({hashcode: issue.key || issue._raw?.hashcode, dot_graph: issue._raw?.cpgBase64Gz});
+                });
+                const res = await fetch(`http://${SERVER_IP}/fpall`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ errors: fp_data })
+                });
+
+                // Parse results
+                const text = await res.text();
+                let json = {};
+                try { json = text ? JSON.parse(text) : {}; } catch (_) { }
+
+                // Save generated fp scores
+                // Results are in the same order as the issues
+                metricIssues.forEach((issue, i) => {
+                    issue.fp_score = json.fp_scores[i].probability_score;
+                });
 
                 if (!isMounted) return;
                 dispatch(setIssues(metricIssues));
@@ -253,7 +287,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         <div style={styles.container}>
             <div style={styles.sidebar}>
                 {loading ? (
-                    <p style={styles.loadingText}>Loading issues...</p>
+                    <p style={styles.loadingText}>Loading issues and calculating confidence scores...</p>
                 ) : (
                     <ul style={styles.issueList}>
                         {(issues || []).length === 0 ? (
@@ -275,7 +309,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 {selectedIssue ? (
                     <div style={styles.detailWrapper}>
                         <div style={styles.titleRow}>
-                            <div style={{ flex: 2 }}>
+                            <div style={{ flex: 2, width: '85%' }}>
                                 <h2 style={styles.mainTitle}>
                                     {selectedIssue.message || 'Issue'}
                                 </h2>
@@ -371,7 +405,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                         </div>
                     </div>
                 ) : (
-                    <p style={styles.placeholderText}>Click an issue to view details and compute the FP confidence.</p>
+                    <p style={styles.placeholderText}>Click an issue to view details.</p>
                 )}
             </div>
         </div>
@@ -384,7 +418,8 @@ const styles = {
         display: 'flex',
         height: 'inherit',
         fontFamily: 'Arial, sans-serif',
-        flex: '1', width: '100%',
+        flex: '1',
+        width: '100%',
         maxWidth: '100%'
     },
     sidebar: {
@@ -412,14 +447,26 @@ const styles = {
         maxWidth: '78%',
         overflowY: 'auto'
     },
-    loadingText: { fontStyle: 'italic', color: '#888', padding: '20px' },
-    placeholderText: { fontStyle: 'italic', color: '#aaa', padding: '20px', textAlign: 'center' },
-    detailWrapper: { padding: '20px' },
-    mainTitle: {
-        fontSize: '20px',
-        margin: 0
+    loadingText: {
+        fontStyle: 'italic',
+        color: '#888',
+        padding: '20px'
     },
-    tabs: { display: 'flex', gap: '10px', marginBottom: '20px' },
+    placeholderText: {
+        fontStyle: 'italic',
+        color: '#aaa',
+        padding: '20px',
+        textAlign: 'center'
+    },
+    detailWrapper: {
+        padding: '20px',
+        maxWidth: '100%'
+    },
+    tabs: {
+        display: 'flex',
+        gap: '10px',
+        marginBottom: '20px'
+    },
     tab: {
         padding: '10px 15px',
         borderRadius: '8px',
@@ -441,7 +488,8 @@ const styles = {
         background: '#fff',
         borderRadius: '10px',
         padding: '20px',
-        boxShadow: '0 0 10px rgba(0,0,0,0.05)'
+        boxShadow: '0 0 10px rgba(0,0,0,0.05)',
+        maxWidth: '100%'
     },
     titleRow: {
         display: 'flex',
@@ -454,15 +502,21 @@ const styles = {
         marginBottom: '20px',
         border: '1px solid #dee2e6'
     },
+    mainTitle: {
+        fontSize: '20px',
+        margin: 0,
+        wordWrap: 'break-word'
+    },
     titleRight: {
         fontSize: '14px',
         fontWeight: 'bold',
         color: '#555',
         display: 'flex',
         flexDirection: 'column',
+        flex: 0.5,
         alignItems: 'center',
         gap: '15px',
-        flex: 0.5
+        width: '15%'
     },
     confidence: {
         backgroundColor: '#e0e7ff',

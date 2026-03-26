@@ -207,7 +207,7 @@ export async function getDotFromIssueRaw(raw) {
 
 /**
  * Send DOT to the external FP service.
- * POST http://131.234.29.71/fp
+ * POST http://SERVER_IP/fp
  * Body: { hashcode: string, dot_graph: string }
  */
 export async function sendDotForPrediction({ endpoint = `http://${SERVER_IP}/fp`, hashcode, dotGraph, timeoutMs = 20000 }) {
