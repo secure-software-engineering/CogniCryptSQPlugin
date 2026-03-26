@@ -42,14 +42,8 @@ theme:
 nav:
   - Home: index.md
   - Getting Started:
-    - Overview: getting-started/overview.md
+    - Setup: getting-started/overview.md
     - Prerequisites: getting-started/prerequisites.md
-    - Install Flask Server:
-      - Using Docker: getting-started/flask-server-docker.md
-      - On Linux: getting-started/flask-server-linux.md
-    - SonarQube Setup:
-      - Installed From ZIP File: getting-started/sq-zip.md
-      - Installed Using Docker: getting-started/sq-docker.md
     - First Analysis: getting-started/first-analysis.md
   - User Guide:
     - Issue Management: user-guide/issue-management.md

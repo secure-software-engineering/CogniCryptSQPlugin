@@ -25,21 +25,27 @@ Unpack the `secai-for-existing-sq-1.1.0.zip` file in the location where you inte
 │   ├── main.py
 │   └── requirements.txt
 ├── nginx/
-│   └── default.conf
+│   └── default.conf.template
 └── docker-compose.yml
 ```
 
 As we are not using docker the files `docker-compose.yml` and `Flaskapp/Dockerfile` can be safely deleted.
 
-## Server Name
-
-The server name given in line 7 of the file `nginx/default.conf` is how the *SecAI* plugin installed on the SonarQube server is meant to reach the flask app backend.
-
-If the flask app is installed on the same host machine as your SonarQube instance, no changes are necessary as the plugin will default to the localhost IP of `127.0.0.1`.
-
-Otherwise, you sill need to change the server name, e.g. to the IP address of the machine hosting the flask app. The change will need to be added to the SonarQube server as well by setting the environment variable **FLASK_IP** on its host. PLease see [here](TODO) for details.
-
 ## Environment Variables
+
+In a docker setup the needed variables would be handled with a `.env`-file. However, when not using docker you will need to set the environment variables on the host machine itself.
+
+Please turn to online guides on creating environment variables for your Linux distribution.
+
+> **Note:** Changes made to an environment variable with commands often revert when the console from which the command was sent is closed. Make sure to set the variables permanently or create an easily reusable script.
+
+### Server Name
+
+The server name the *SecAI* plugin installed on the SonarQube server uses to reach the flask app backend is tied to the **FLASK_IP** environment variable.
+
+If the flask app is installed on the same host machine as your SonarQube instance and all of the projects you intend to analyse, you can simply set **FLASK_IP** to `127.0.0.1`. Otherwise, it is recommended to use the IP address of your host machine.
+
+### API Keys
 
 In order to use the *AIFix* feature the following environment variables need to be set:
 
@@ -47,12 +53,6 @@ In order to use the *AIFix* feature the following environment variables need to 
 - **GOOGLE_API_KEY** for Gemini
 
 Whether or not you wish to provide API keys for both or only one depends on which LLMs you intend to use.
-
-// TODO: flask debug
-
-Please turn to online guides on creating environment variables for your Linux distribution.
-
-> **Note:** Changes made to an environment variable with commands often revert when the console from which the command was sent is closed. Make sure to set the variables permanently or create an easily reusable script.
 
 ## Install Requirements
 
@@ -77,13 +77,13 @@ sudo apt update
 sudo apt install nginx
 ```
 
-After installing there should be a folder `/etc/nginx/`. Move the configuration file `secai-for-existing-sq/nginx/default.conf` to `/etc/nginx/conf.d/default.conf`. Ensure that the [server name](#server-name) in the file was updated as necessary.
+After installing there should be a folder `/etc/nginx/`. Move the configuration file `secai-for-existing-sq/nginx/default.conf.template` and replace `/etc/nginx/templates/default.conf.template`.
 
-## Run gunicorn
+## Run gunicorn?
 
 // TODO
 // adjust number of workers if necessary
 
-## Run nginx
+## Run nginx?
 
 // TODO
