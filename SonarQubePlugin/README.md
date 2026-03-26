@@ -36,3 +36,26 @@ Everytime changes are made, simply run following command to automatically copy t
 ``` bash
 ./deploy-sonarqube-plugin.sh 
 ```
+
+
+## Adding pages to the webapp
+
+If you you wish add to or make changes to the custom pages of the webapp, refer to the [official SonarQube documentation](https://docs.sonarsource.com/sonarqube-community-build/extension-guide/developing-a-plugin/adding-pages-to-the-webapp).
+
+For easy testing and debugging run a SonarQube docker with the plugin installed.
+
+You can then run the following commands:
+- Install the dependencies with
+
+  ```bash
+  npm install
+  ```
+- Start a local version of the webapp
+
+  ```bash
+  npm start
+  ```
+
+  This server can be reached under `http://localhost:3000` and uses your local JavaScript files directly. The interface gets updated everytime a file is saved without needing a server restart.
+
+  For further instructions, including changing the port and url, refer to SonarQube's [custom plugin example](https://github.com/SonarSource/sonar-custom-plugin-example/).
