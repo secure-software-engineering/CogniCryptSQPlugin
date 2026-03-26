@@ -6,8 +6,8 @@ WORKINGDIR=$(pwd)
 # Variables
 DOCKER_CONTAINER_NAME="sonarqube"   # Name of your SonarQube container
 PLUGIN_SOURCE_DIR="./target"        # plugin target directory
-JAR_FILE="sonar-secai-plugin-1.0.0.jar"  # JAR name of plugin JAR
-SONARQUBE_PLUGIN_DIR="/opt/sonarqube/extensions/plugins"  # NEEDS to be UPDATED: Plugin directory inside the container
+JAR_FILE="secai-plugin-1.2.0.jar"  # JAR name of plugin JAR
+SONARQUBE_PLUGIN_DIR="/opt/sonarqube/extensions/plugins"
 
 # Build the JAR file
 echo "Building the JAR file using Maven..."
@@ -55,34 +55,7 @@ fi
 
 echo "Deployment complete! $JAR_FILE has been built, copied to $SONARQUBE_PLUGIN_DIR, and the Docker container has been restarted."
 
-echo "Starting LSP server for quick fix!"
-
-# Update: path of LSP_Server, where POM.xml resides!
-LSP_DIR="./Lsp_server/lsptest"
-LSP_JAR="lsptest-1.0-SNAPSHOT.jar" 
-
 
 echo "Waiting for SonarQube to be fully up...!"
 # Waiting for approx 40 sec. for sonarqube to be operational!
 sleep 40
-
-
-echo "Building the subproject with Maven..."
-cd "$LSP_DIR" || { echo "Error: Directory $LSP_DIR does not exist!"; exit 1; }
-mvn clean package
-
-if [ $? -ne 0 ]; then
-  echo "Error: Maven build failed for subproject. Please check your Maven project setup."
-  exit 1
-fi
-
-cd "$WORKINGDIR"
-
-# Step: Run the jar from subproject's target
-if [ ! -f "$LSP_DIR/target/$LSP_JAR" ]; then
-  echo "Error: Subproject JAR file $LSP_DIR/target/$LSP_JAR does not exist after Maven build."
-  exit 1
-fi
-
-echo "Running the subproject JAR..."
-java -jar "$LSP_DIR/target/$LSP_JAR"

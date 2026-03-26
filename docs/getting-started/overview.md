@@ -7,9 +7,9 @@
 
 Before proceeding with the installation check out the [prerequisites](prerequisites.md).
 
-1. Download the following files:
+1. Download the following files from the [release page](https://github.com/secure-software-engineering/CogniCryptSQPlugin/releases):
     - zip archive: `secai-for-exist-sq` if you already have a SonarQube server, `secai-for-new-sq` if you intend to create a new one
-    - SecAI plugin jar
+    - *SecAI* plugin jar
 2. Unzip the archive on the intended host machine in a location that all administrators can access.
 3. In the file `Flaskapp/aifix/.env`:
     - Replace the placeholders for the API keys of the LLMs you intend to use.
@@ -31,7 +31,7 @@ Before proceeding with the installation check out the [prerequisites](prerequisi
             Alternatively, use the command below to move the file to `/opt/sonarqube/extensions/plugins` (on the running container `sonarqube`):
 
             ```bash
-            docker cp ./sonar-secai-plugin-1.1.0.jar sonarqube:/opt/sonarqube/extensions/plugins
+            docker cp ./secai-plugin-1.1.0.jar sonarqube:/opt/sonarqube/extensions/plugins
             ```
         - With SonarQube installed from a zip file: Locate the `extensions/plugins` folder inside your SonarQube distribution and move the jar into it.
     - Restart the SonarQube instance for the changes to take effect. You should receive a warning about third-party plugins and the plugin should be listed under **Administration > Marketplace > Plugins > Installed**.
