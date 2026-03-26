@@ -4,4 +4,5 @@
 **/__pycache__
 aifix.log
 analysis_results.db
+fp.db
 /GeneratedCode
