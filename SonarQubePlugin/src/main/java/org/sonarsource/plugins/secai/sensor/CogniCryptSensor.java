@@ -75,7 +75,7 @@ public class CogniCryptSensor implements Sensor {
                     CCIssueReporter reporter = new CCIssueReporter(sensorContext);
                     reporter.parseAndReportIssues(issueList, jarPath);
 
-                    String fullJson = reporter.getErrorJsonString();
+                    String fullJson = "{ \"timestamp\": " + System.currentTimeMillis() + ", \"issues\": " + reporter.getErrorJsonString() + "}";
 
                     if (fullJson != null && !fullJson.isEmpty()) {
                         sensorContext.<String>newMeasure()

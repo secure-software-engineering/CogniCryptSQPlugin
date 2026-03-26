@@ -192,7 +192,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
 
                 // Fetch the metric entry containing the issue details from SecAI
                 dispatch(setProjectKey(activeProject.key));
-                const metricIssues = await fetchMetricIssues(activeProject.key);
+                const { lastAnalysis, metricIssues } = await fetchMetricIssues(activeProject.key);
 
                 // Fetch fp scores
                 const fp_data = [];
@@ -203,7 +203,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                     method: 'POST',
                     mode: 'cors',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ errors: fp_data })
+                    body: JSON.stringify({ last_analysis: lastAnalysis, errors: fp_data })
                 });
 
                 // Parse results

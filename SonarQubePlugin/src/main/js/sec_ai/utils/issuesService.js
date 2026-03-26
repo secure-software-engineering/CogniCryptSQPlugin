@@ -1,7 +1,13 @@
 import { WEIGHT } from "./modelOptions";
 
 /** Safe JSON.parse with fallback */
-const safeJSONParse = (text, fallback) => { try { return JSON.parse(text); } catch { return fallback; } };
+const safeJSONParse = (text, fallback) => {
+    try {
+        return JSON.parse(text);
+    } catch {
+        return fallback;
+    }
+};
 
 /** Normalize file paths for stable matching */
 const normalizePath = (p) => {
@@ -42,13 +48,16 @@ export async function fetchMetricIssues(projectKey) {
     const res = await fetch(
         `/api/measures/component?component=${encodeURIComponent(projectKey)}&metricKeys=secai.cognicrypt.error.tree`
     );
-    if (!res.ok) return [];
+    if (!res.ok) return { lastAnalysis: null , metricIssues: []};
 
     const json = await res.json();
     const rawValue = json?.component?.measures?.[0]?.value ?? null;
     if (!rawValue) return [];
 
-    const flatList = safeJSONParse(rawValue, []);
+
+    const parsed = safeJSONParse(rawValue, []);
+    const lastAnalysis = parsed.timestamp ?? new Date().getTime();
+    const flatList = parsed.issues ?? parsed;
     if (!Array.isArray(flatList) || flatList.length === 0) return [];
 
     // Dedup-ish: sig by component|line|rule|message
@@ -62,7 +71,8 @@ export async function fetchMetricIssues(projectKey) {
             mapped.push(issue);
         }
     });
-    return mapped;
+
+    return { lastAnalysis, metricIssues: mapped };
 }
 
 export const getPriorityFromScore = (p, s) => {

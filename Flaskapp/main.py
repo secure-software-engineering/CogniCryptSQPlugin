@@ -1,11 +1,16 @@
+from datetime import datetime
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from aifix.aifix import ai_fix, new_ai_fix
 from aifix.logger_config import get_logger
 from aifix import payload_extraction, app_db
+from confidence import fp_db
+from confidence.fp_db import get_fp_score, is_outdated
 from confidence.gcnModel import calculating_confidence
 
 app_db.init_db()
+fp_db.init_db()
 logger = get_logger(__name__)
 
 app = Flask(__name__)
@@ -23,13 +28,25 @@ def entry_point():
 @app.route('/fpall', methods=['POST'])
 def entry_point_all():
     request_data = request.get_json()
+    last_analysis = request_data.get("last_analysis", datetime.now())
+    outdated = is_outdated(last_analysis)
+    logger.info("There are no up-to-date fp scores. Calculating new scores.")
 
     result = {"fp_scores" : []}
     # Calculate individual scores
     for err in request_data.get("errors", []):
         hashcode = err.get("hashcode")
         dot_graph = err.get("dot_graph")
-        result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph))
+
+        if not outdated:
+            saved_score = get_fp_score(hashcode, last_analysis)
+            result["fp_scores"].append({
+                "hashcode": hashcode,
+                "prediction": saved_score[0],
+                "probability_score": saved_score[1]
+            })
+        else:
+            result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph))
 
     print("Result:\n", result)
     return jsonify(result)

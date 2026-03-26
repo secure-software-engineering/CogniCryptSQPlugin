@@ -73,7 +73,8 @@ function ErrorVis({ onJumpToIssue }) {
 
                 const treeJson = await treeRes.json();
                 const rawValue = treeJson?.component?.measures?.[0]?.value ?? null;
-                const flatList = JSON.parse(rawValue || '[]');
+                const parsed = JSON.parse(rawValue || '{ "issues": []}');
+                const flatList = parsed.issues;
                 allIssuesRef.current = issuesRes || [];
                 flatListRef.current = flatList;
 

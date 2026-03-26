@@ -13,6 +13,9 @@ from gensim.models import Word2Vec
 
 import base64, gzip
 
+from confidence.fp_db import save_fp_score
+
+
 class GCNGraphClassifier(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels):
         super().__init__()
@@ -201,6 +204,10 @@ def calculating_confidence(hashcode, dot_graph):
         predicted_class = pred_class
         probability = probs.tolist()
         print(f"prediction: {pred_class}, probs: {probs}")
+
+        # Store calculated score
+        save_fp_score(hashcode, predicted_class, probability[1])
+
         return {
             "hashcode":hashcode,
             "prediction": predicted_class,
