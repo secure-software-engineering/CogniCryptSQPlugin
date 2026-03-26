@@ -20,7 +20,7 @@ export const mapTreeNodeToIssue = (node, idx = 0) => {
     'unknown/unknown';
 
   const component = normalizePath(file);
-  const line = node?.line ?? node?.reportLocation?.start?.[0] ?? 0;
+  const line = node?.reportLocation?.start?.[0] ?? 0;
   const rule = node?.rule || null; 
   const message = node?.message || node?.errorType || 'Issue';
   const key = node?.key || node?.hashcode || `${component}:${line}:${rule ?? 'rule'}:${idx}`;

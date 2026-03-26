@@ -271,7 +271,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 )}
             </div>
 
-            <div style={styles.chatPane}>
+            <div style={styles.descriptionPane}>
                 {selectedIssue ? (
                     <div style={styles.detailWrapper}>
                         <div style={styles.titleRow}>
@@ -380,14 +380,20 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
 
 // Styles
 const styles = {
-    container: { display: 'flex', height: 'inherit', fontFamily: 'Arial, sans-serif', flex: '1', width: '100%', maxWidth: '100%' },
+    container: {
+        display: 'flex',
+        height: 'inherit',
+        fontFamily: 'Arial, sans-serif',
+        flex: '1', width: '100%',
+        maxWidth: '100%'
+    },
     sidebar: {
         width: '22%',
         background: 'rgb(245, 247, 250)',
         borderRight: '1px solid rgb(221, 221, 221)',
         overflowY: 'auto',
         borderRadius: '20px',
-        scrollbarWidth: 'none'
+        scrollbarWidth: '5px'
     },
     issueList: {
         listStyle: 'none',
@@ -397,11 +403,22 @@ const styles = {
         flexDirection: 'column',
         gap: '10px'
     },
-    chatPane: { flex: 1, display: 'flex', flexDirection: 'column', padding: '10px', width: '100%', maxWidth: '100%', overflowY: 'auto' },
+    descriptionPane: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '10px',
+        width: '78%',
+        maxWidth: '78%',
+        overflowY: 'auto'
+    },
     loadingText: { fontStyle: 'italic', color: '#888', padding: '20px' },
     placeholderText: { fontStyle: 'italic', color: '#aaa', padding: '20px', textAlign: 'center' },
     detailWrapper: { padding: '20px' },
-    mainTitle: { fontSize: '20px', margin: 0 },
+    mainTitle: {
+        fontSize: '20px',
+        margin: 0
+    },
     tabs: { display: 'flex', gap: '10px', marginBottom: '20px' },
     tab: {
         padding: '10px 15px',
