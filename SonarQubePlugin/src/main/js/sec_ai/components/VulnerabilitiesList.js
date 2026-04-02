@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     findProjects,
     getActiveproject,
-    getRuleDescriptor,
-    getDotFromIssueRaw
+    getRuleDescriptor
 } from './APIs/api';
 
 import IssueList from './Description/IssueList';
@@ -15,7 +14,7 @@ import {
     buildHowToFixHTML,
     buildMoreInfoHTML
 } from '../utils/htmlBuilders';
-import { fetchMetricIssues, getPriorityFromScore } from '../utils/issuesService';
+import {fetchFPScores, fetchMetricIssues, fetchSingleFPScore, getPriorityFromScore} from '../utils/issuesService';
 
 import {
     selectAiSolution,
@@ -129,35 +128,19 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
             // If the fp score isn't saved, try to calculate it individually
             if (score === -1) {
                 console.log("No fp score, fetching individual score")
-                const rawDot = await getDotFromIssueRaw(issue?._raw);
-                if (!rawDot) {
+                const dotGraph = issue?._raw?.cpgBase64Gz;
+                if (!dotGraph) {
                     setFpError('No CPG found for this issue');
                     setFpLoading(false);
-                    console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz or dotGraph)');
+                    console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz)');
                     return;
                 }
 
-                const dotGraph = String(rawDot).replace(/\r\n/g, '\n');
-
                 const hashcode = String(getIssueHashcode(issue) || '');
-                const res = await fetch(`http://${SERVER_IP}/fp`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-                    body: JSON.stringify({hashcode, dot_graph: dotGraph})
-                });
+                const projectKey = new URLSearchParams(window.location.search).get('id');
+                const activeBranch = new URLSearchParams(window.location.search).get('branch');
 
-                const text = await res.text();
-                let json = {};
-                try {
-                    json = text ? JSON.parse(text) : {};
-                } catch (_) {
-                }
-
-                if (!res.ok) {
-                    const msg = json?.error || `HTTP ${res.status}: ${text?.slice?.(0, 300) ?? ''}`;
-                    throw new Error(msg);
-                }
+                const json = await fetchSingleFPScore(hashcode, dotGraph, projectKey, activeBranch);
 
                 const p = json?.probability_score ?? json?.probability ?? json?.score ?? null;
                 score = typeof p === 'number' ? p : (p ? Number(p) : null);
@@ -194,34 +177,10 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
 
                 // Fetch the metric entry containing the issue details from SecAI
                 dispatch(setProjectKey(activeProject.key));
-                const { lastAnalysis, metricIssues } = await fetchMetricIssues(activeProject.key);
+                let { lastAnalysis, metricIssues } = await fetchMetricIssues(activeProject.key);
 
                 // Fetch fp scores
-                const fp_data = [];
-                metricIssues.forEach((issue) => {
-                    fp_data.push({hashcode: issue.key || issue._raw?.hashcode, dot_graph: issue._raw?.cpgBase64Gz});
-                });
-                const res = await fetch(`http://${SERVER_IP}/fpall`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        last_analysis: lastAnalysis,
-                        project: activeProject.key,
-                        branch: activeBranch,
-                        errors: fp_data })
-                });
-
-                // Parse results
-                const text = await res.text();
-                let json = {};
-                try { json = text ? JSON.parse(text) : {}; } catch (_) { }
-
-                // Save generated fp scores
-                // Results are in the same order as the issues
-                metricIssues.forEach((issue, i) => {
-                    issue.fp_score = json.fp_scores[i].probability_score;
-                });
+                metricIssues = await fetchFPScores(lastAnalysis, metricIssues, activeProject.key, activeBranch);
 
                 if (!isMounted) return;
                 dispatch(setIssues(metricIssues));
@@ -230,7 +189,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 if (jumpTarget && metricIssues.length > 0) {
                     const match = metricIssues.find(i => i._raw.hashcode === jumpTarget.hashcode);
                     if (match) {
-                        handleIssueClick(match);
+                        await handleIssueClick(match);
                         clearJumpTarget?.();
                     }
                 }

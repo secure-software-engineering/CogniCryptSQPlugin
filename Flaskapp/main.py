@@ -25,8 +25,11 @@ def entry_point():
     request_data = request.get_json()
     hashcode = request_data.get("hashcode")
     dot_graph = request_data.get("dot_graph")
+    project = request_data.get("project", "default")
+    branch = request_data.get("branch", "main")
+    fp_logger.info("Calculating singular fp score.")
 
-    result = calculating_confidence(hashcode, dot_graph)
+    result = calculating_confidence(hashcode, dot_graph, project, branch)
     return jsonify(result)
 
 @app.route('/fpall', methods=['POST'])

@@ -1,4 +1,5 @@
 import { WEIGHT } from "./modelOptions";
+import {SERVER_IP} from "./settings";
 
 /** Safe JSON.parse with fallback */
 const safeJSONParse = (text, fallback) => {
@@ -45,8 +46,10 @@ export const mapTreeNodeToIssue = (node, idx = 0) => {
 
 /** Fetch new metric-based issues from the Sonar 'error tree' measure */
 export async function fetchMetricIssues(projectKey) {
+    const branch = new URLSearchParams(window.location.search).get('branch')
+    const branchArg = branch ? `&branch=${encodeURIComponent(branch)}` : "";
     const res = await fetch(
-        `/api/measures/component?component=${encodeURIComponent(projectKey)}&metricKeys=secai.cognicrypt.error.tree`
+        `/api/measures/component?component=${encodeURIComponent(projectKey)}${branchArg}&metricKeys=secai.cognicrypt.error.tree`
     );
     if (!res.ok) return { lastAnalysis: null , metricIssues: []};
 
@@ -73,6 +76,74 @@ export async function fetchMetricIssues(projectKey) {
     });
 
     return { lastAnalysis, metricIssues: mapped };
+}
+
+/** Fetch the false positive scores for the given issues. Returns the issues after the fp scores were added to the objects */
+export async function fetchFPScores(lastAnalysis, metricIssues, projectKey, branchName) {
+    if (!metricIssues) return [];
+
+    const fp_data = [];
+    metricIssues.forEach((issue) => {
+        fp_data.push({hashcode: issue.key || issue._raw?.hashcode, dot_graph: issue._raw?.cpgBase64Gz});
+    });
+    const res = await fetch(`http://${SERVER_IP}/fpall`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+            last_analysis: lastAnalysis,
+            project: projectKey,
+            branch: branchName,
+            errors: fp_data })
+    });
+
+    // Parse results
+    const text = await res.text();
+    let json = {};
+    try { json = text ? JSON.parse(text) : {}; } catch (_) { }
+
+    // Save generated fp scores
+    // Results are in the same order as the issues
+    metricIssues.forEach((issue, i) => {
+        issue.fp_score = json.fp_scores[i].probability_score;
+    });
+
+    return metricIssues;
+}
+
+/**
+ * Send DOT to the external FP service.
+ * POST http://SERVER_IP/fp
+ * Body: { hashcode: string, dot_graph: string }
+ */
+export async function fetchSingleFPScore(hashcode, dotGraph, projectKey, branchName) {
+    if (!hashcode) throw new Error('sendDotForPrediction: hashcode is required');
+    if (!dotGraph) throw new Error('sendDotForPrediction: dotGraph is required');
+
+    const endpoint = `http://${SERVER_IP}/fp`;
+
+    const res = await fetch(endpoint, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+            hashcode: String(hashcode),
+            dot_graph: dotGraph,
+            project: projectKey,
+            branch: branchName
+        })
+    });
+
+    const text = await res.text();
+    let json = {};
+    try { json = text ? JSON.parse(text) : {}; } catch { /* leave {} */ }
+
+    if (!res.ok) {
+        const msg = json?.error || `HTTP ${res.status}: ${text?.slice?.(0, 300) ?? ''}`;
+        throw new Error(msg);
+    }
+
+    return json; // { hashcode, prediction, probability_score }
 }
 
 export const getPriorityFromScore = (p, s) => {
