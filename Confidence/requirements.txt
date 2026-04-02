@@ -1,9 +1,0 @@
-gensim==4.4.0
-numpy==2.4.2
-networkx==3.6.1
-pydot==4.0.1
-torch==2.10.0
-torch-geometric==2.7.0
-scikit-learn==1.8.0
-flask==3.1.2
-flask-cors==6.0.2
