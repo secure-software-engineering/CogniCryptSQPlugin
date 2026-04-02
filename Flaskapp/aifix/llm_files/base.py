@@ -1,8 +1,8 @@
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from aifix.utils.VulnerabilityAnalysis import VulnerabilityAnalysis
-from aifix.logger_config import get_logger
-logger = get_logger(__name__)
+from logger_config import get_aifix_logger
+logger = get_aifix_logger(__name__)
 
 # IMPROVED VERSION
 DBSearch_Prompt = ChatPromptTemplate.from_template(

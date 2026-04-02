@@ -293,11 +293,11 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         <div style={styles.container}>
             <div style={styles.sidebar}>
                 {loading ? (
-                    <p style={styles.loadingText}>Loading issues and calculating confidence scores...</p>
+                    <p style={styles.loadingText}>Loading issues and calculating confidence scores... If there are many issues this may take a while.</p>
                 ) : (
                     <ul style={styles.issueList}>
                         {(issues || []).length === 0 ? (
-                            <p style={styles.loadingText}>No issues found.</p>
+                            <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis.</p>
                         ) : (
                             issues.map(issue => (
                                 <IssueList

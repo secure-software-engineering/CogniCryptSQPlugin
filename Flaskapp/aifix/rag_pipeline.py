@@ -1,10 +1,10 @@
 import os
 import pandas as pd
 from typing import Tuple, List, Set
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 from aifix.utils.VulnerabilityAnalysis import VulnerabilityAnalysis
 
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 
 # CSV path for Excel-based CWE mapping
 CSV_PATH = "aifix/data/CWE_Mapping/CWE_Mapping.csv"

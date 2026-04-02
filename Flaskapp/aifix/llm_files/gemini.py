@@ -3,9 +3,9 @@ import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from .base import BaseLLM
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 
 _GEMINI_MODEL_ALIASES = {
     # === Gemini 2.5 family (only supported models) ===

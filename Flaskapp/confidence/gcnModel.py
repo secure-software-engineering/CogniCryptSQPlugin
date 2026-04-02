@@ -14,6 +14,7 @@ from gensim.models import Word2Vec
 import base64, gzip
 
 from confidence.fp_db import save_fp_score
+from logger_config import get_fp_logger
 
 
 class GCNGraphClassifier(torch.nn.Module):
@@ -29,6 +30,9 @@ class GCNGraphClassifier(torch.nn.Module):
         x = F.relu(self.conv2(x, edge_index))
         x = global_mean_pool(x, batch)  # [num_graphs, hidden_dim]
         return self.lin(x)
+
+
+logger = get_fp_logger(__name__)
 
 #known node types, for the CPG nodes
 NODE_TYPES = [
@@ -53,7 +57,7 @@ def node_to_feature_tensor(G, model):
 
     # Adapt the node attributes and load only X values (no y anymore)
     for node, attr in G.nodes(data=True):
-        print(G.nodes[node])
+        logger.debug(G.nodes[node])
         
         # Parse and clean "type"
         type_str = attr.get('"type"', "")
@@ -117,7 +121,7 @@ def clean_node_attributes(G):
         G.nodes[node].clear()
         G.nodes[node].update(cleaned)
 
-#get the dimensions of the to be loaded gcn model, so that one does not have to load them manualy
+#get the dimensions of the to be loaded gcn model, so that one does not have to load them manually
 def infer_dims_from_state(state_dict):
    
     two_d = [(k, v.shape) for k, v in state_dict.items() if isinstance(v, torch.Tensor) and v.ndim == 2]
@@ -133,7 +137,7 @@ def infer_dims_from_state(state_dict):
 
 def prep_dot_graph(dot_graph: str):
     """
-    The expected value of dot_graph will be gzip(base64(graph)). However, older implementations will instead provide the plain sot graph.
+    The expected value of dot_graph will be gzip(base64(graph)). However, older implementations will instead provide the plain dot graph.
     """
     pydot_graphs = pydot.graph_from_dot_data(dot_graph)
 
@@ -154,6 +158,7 @@ def prep_dot_graph(dot_graph: str):
 
     # Try unzipping it before
     unzipped_graph = gzip.decompress(decoded_graph).decode("utf-8")
+    print(unzipped_graph)
     pydot_graphs = pydot.graph_from_dot_data(unzipped_graph)
 
     if pydot_graphs:
@@ -183,7 +188,7 @@ def calculating_confidence(hashcode, dot_graph, project, branch):
     # Feature dimension sanity check
     feature_dim = vectorized_G.x.size(1)
     if feature_dim != inferred_in:
-        print(f"[WARN] Data feature dim ({feature_dim}) != model expected in_channels ({inferred_in}). "
+        logger.warning(f"Data feature dim ({feature_dim}) != model expected in_channels ({inferred_in}). "
               f"Proceeding with model dims from checkpoint.")
 
     model = GCNGraphClassifier(
@@ -203,7 +208,7 @@ def calculating_confidence(hashcode, dot_graph, project, branch):
         pred_class = int(probs.argmax())
         predicted_class = pred_class
         probability = probs.tolist()
-        print(f"prediction: {pred_class}, probs: {probs}")
+        logger.info(f"Error {hashcode} in project {project}:\n\t- prediction: {pred_class}\n\t- probabilities [tp, fp]: {probs}")
 
         # Store calculated score
         save_fp_score(hashcode, project, branch, predicted_class, probability[1])

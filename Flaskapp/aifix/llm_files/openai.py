@@ -6,9 +6,9 @@ from langchain_openai import ChatOpenAI
 
 from .base import BaseLLM
 
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 
 _OPENAI_MODEL_ALIASES = {
     # === GPT-4.1 family (only supported models) ===

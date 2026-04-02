@@ -1,8 +1,20 @@
+# IDE-specific files
 /.idea
+/.vscode
+
+# Python cache and venv
 /.venv
 /__pycache__
 **/__pycache__
+
+# log files
 aifix.log
+fp.log
+app.log
+
+# databases
 analysis_results.db
 fp.db
+
+# generated code
 /GeneratedCode
