@@ -139,26 +139,26 @@ def prep_dot_graph(dot_graph: str):
     """
     The expected value of dot_graph will be gzip(base64(graph)). However, older implementations will instead provide the plain dot graph.
     """
-    pydot_graphs = pydot.graph_from_dot_data(dot_graph)
+    if dot_graph.strip().startswith("digraph") or dot_graph.strip().startswith("graph"):
+        pydot_graphs = pydot.graph_from_dot_data(dot_graph)
 
-    # pydot_graphs will be None if there was a ParsingError
-    if pydot_graphs:
-        return pydot_graphs
+        # pydot_graphs will be None if there was a ParsingError
+        if pydot_graphs:
+            return pydot_graphs
 
     # Check if the graph is still base64 encoded and gzipped
     decoded_graph = base64.b64decode(dot_graph)
     if base64.b64encode(decoded_graph).decode("utf-8") == dot_graph:
         try:
             pydot_graphs = pydot.graph_from_dot_data(decoded_graph.decode("utf-8"))
+
+            if pydot_graphs:
+                return pydot_graphs
         except UnicodeDecodeError:
             pass
 
-    if pydot_graphs:
-        return pydot_graphs
-
     # Try unzipping it before
     unzipped_graph = gzip.decompress(decoded_graph).decode("utf-8")
-    print(unzipped_graph)
     pydot_graphs = pydot.graph_from_dot_data(unzipped_graph)
 
     if pydot_graphs:
@@ -208,7 +208,7 @@ def calculating_confidence(hashcode, dot_graph, project, branch):
         pred_class = int(probs.argmax())
         predicted_class = pred_class
         probability = probs.tolist()
-        logger.info(f"Error {hashcode} in project {project}:\n\t- prediction: {pred_class}\n\t- probabilities [tp, fp]: {probs}")
+        logger.info(f"Issue {hashcode} in project {project}:\n\t- prediction: {pred_class}\n\t- probabilities [tp, fp]: {probs}")
 
         # Store calculated score
         save_fp_score(hashcode, project, branch, predicted_class, probability[1])
