@@ -20,6 +20,7 @@
 
                 <include>Dockerfile</include>
                 <include>gunicorn.conf.py</include>
+                <include>logger_config.py</include>
                 <include>main.py</include>
                 <include>requirements.txt</include>
             </includes>
