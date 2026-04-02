@@ -163,7 +163,7 @@ def prep_dot_graph(dot_graph: str):
     raise ValueError("No graph parsed from the provided DOT string.")
 
 
-def calculating_confidence(hashcode, dot_graph):
+def calculating_confidence(hashcode, dot_graph, project, branch):
     # load w2v model
     model_w2v = Word2Vec.load("confidence/jimple_word2vec.model")
 
@@ -206,7 +206,7 @@ def calculating_confidence(hashcode, dot_graph):
         print(f"prediction: {pred_class}, probs: {probs}")
 
         # Store calculated score
-        save_fp_score(hashcode, predicted_class, probability[1])
+        save_fp_score(hashcode, project, branch, predicted_class, probability[1])
 
         return {
             "hashcode":hashcode,

@@ -29,7 +29,9 @@ def entry_point():
 def entry_point_all():
     request_data = request.get_json()
     last_analysis = request_data.get("last_analysis", datetime.now())
-    outdated = is_outdated(last_analysis)
+    project = request_data.get("project", "default")
+    branch = request_data.get("branch", "main")
+    outdated = is_outdated(last_analysis, project, branch)
     logger.info("There are no up-to-date fp scores. Calculating new scores.")
 
     result = {"fp_scores" : []}
@@ -39,14 +41,14 @@ def entry_point_all():
         dot_graph = err.get("dot_graph")
 
         if not outdated:
-            saved_score = get_fp_score(hashcode, last_analysis)
+            saved_score = get_fp_score(hashcode, project, branch, last_analysis)
             result["fp_scores"].append({
                 "hashcode": hashcode,
                 "prediction": saved_score[0],
                 "probability_score": saved_score[1]
             })
         else:
-            result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph))
+            result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph, project, branch))
 
     print("Result:\n", result)
     return jsonify(result)

@@ -190,6 +190,8 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 const activeProject = getActiveproject(_id, projects);
                 if (!activeProject?.key) { setLoading(false); return; }
 
+                const activeBranch = new URLSearchParams(window.location.search).get('branch') ?? "main";
+
                 // Fetch the metric entry containing the issue details from SecAI
                 dispatch(setProjectKey(activeProject.key));
                 const { lastAnalysis, metricIssues } = await fetchMetricIssues(activeProject.key);
@@ -203,7 +205,11 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                     method: 'POST',
                     mode: 'cors',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ last_analysis: lastAnalysis, errors: fp_data })
+                    body: JSON.stringify({
+                        last_analysis: lastAnalysis,
+                        project: activeProject.key,
+                        branch: activeBranch,
+                        errors: fp_data })
                 });
 
                 // Parse results
