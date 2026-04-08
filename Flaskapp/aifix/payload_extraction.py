@@ -1,10 +1,10 @@
 import json
 import os
 import re
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 
 # --- Logger Setup ---
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 
 # --- Helper Functions (Internal to this module) ---
 def _extract_and_strip_package(source_code):

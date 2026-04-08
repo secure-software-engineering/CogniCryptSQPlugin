@@ -11,6 +11,12 @@ import networkx as nx
 import ast
 from gensim.models import Word2Vec
 
+import base64, gzip
+
+from confidence.fp_db import save_fp_score
+from logger_config import get_fp_logger
+
+
 class GCNGraphClassifier(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels):
         super().__init__()
@@ -24,6 +30,9 @@ class GCNGraphClassifier(torch.nn.Module):
         x = F.relu(self.conv2(x, edge_index))
         x = global_mean_pool(x, batch)  # [num_graphs, hidden_dim]
         return self.lin(x)
+
+
+logger = get_fp_logger(__name__)
 
 #known node types, for the CPG nodes
 NODE_TYPES = [
@@ -48,7 +57,7 @@ def node_to_feature_tensor(G, model):
 
     # Adapt the node attributes and load only X values (no y anymore)
     for node, attr in G.nodes(data=True):
-        print(G.nodes[node])
+        logger.debug(G.nodes[node])
         
         # Parse and clean "type"
         type_str = attr.get('"type"', "")
@@ -112,7 +121,7 @@ def clean_node_attributes(G):
         G.nodes[node].clear()
         G.nodes[node].update(cleaned)
 
-#get the dimensions of the to be loaded gcn model, so that one does not have to load them manualy
+#get the dimensions of the to be loaded gcn model, so that one does not have to load them manually
 def infer_dims_from_state(state_dict):
    
     two_d = [(k, v.shape) for k, v in state_dict.items() if isinstance(v, torch.Tensor) and v.ndim == 2]
@@ -126,14 +135,45 @@ def infer_dims_from_state(state_dict):
     return inferred_in, inferred_hidden, inferred_out
 
 
-def calculating_confidence(hashcode, dot_graph):
+def prep_dot_graph(dot_graph: str):
+    """
+    The expected value of dot_graph will be gzip(base64(graph)). However, older implementations will instead provide the plain dot graph.
+    """
+    if dot_graph.strip().startswith("digraph") or dot_graph.strip().startswith("graph"):
+        pydot_graphs = pydot.graph_from_dot_data(dot_graph)
+
+        # pydot_graphs will be None if there was a ParsingError
+        if pydot_graphs:
+            return pydot_graphs
+
+    # Check if the graph is still base64 encoded and gzipped
+    decoded_graph = base64.b64decode(dot_graph)
+    if base64.b64encode(decoded_graph).decode("utf-8") == dot_graph:
+        try:
+            pydot_graphs = pydot.graph_from_dot_data(decoded_graph.decode("utf-8"))
+
+            if pydot_graphs:
+                return pydot_graphs
+        except UnicodeDecodeError:
+            pass
+
+    # Try unzipping it before
+    unzipped_graph = gzip.decompress(decoded_graph).decode("utf-8")
+    pydot_graphs = pydot.graph_from_dot_data(unzipped_graph)
+
+    if pydot_graphs:
+        return pydot_graphs
+
+    # If the function is still running then parsing is not possible
+    raise ValueError("No graph parsed from the provided DOT string.")
+
+
+def calculating_confidence(hashcode, dot_graph, project, branch):
     # load w2v model
     model_w2v = Word2Vec.load("confidence/jimple_word2vec.model")
 
     # Parse DOT string to networkx
-    pydot_graphs = pydot.graph_from_dot_data(dot_graph)
-    if not pydot_graphs:
-        raise ValueError("No graph parsed from the provided DOT string.")
+    pydot_graphs = prep_dot_graph(dot_graph)
     G = nx.drawing.nx_pydot.from_pydot(pydot_graphs[0]).to_undirected()
 
     # Build features for the single graph
@@ -148,7 +188,7 @@ def calculating_confidence(hashcode, dot_graph):
     # Feature dimension sanity check
     feature_dim = vectorized_G.x.size(1)
     if feature_dim != inferred_in:
-        print(f"[WARN] Data feature dim ({feature_dim}) != model expected in_channels ({inferred_in}). "
+        logger.warning(f"Data feature dim ({feature_dim}) != model expected in_channels ({inferred_in}). "
               f"Proceeding with model dims from checkpoint.")
 
     model = GCNGraphClassifier(
@@ -168,7 +208,11 @@ def calculating_confidence(hashcode, dot_graph):
         pred_class = int(probs.argmax())
         predicted_class = pred_class
         probability = probs.tolist()
-        print(f"prediction: {pred_class}, probs: {probs}")
+        logger.info(f"Issue {hashcode} in project {project}:\n\t- prediction: {pred_class}\n\t- probabilities [tp, fp]: {probs}")
+
+        # Store calculated score
+        save_fp_score(hashcode, project, branch, predicted_class, probability[1])
+
         return {
             "hashcode":hashcode,
             "prediction": predicted_class,

@@ -3,19 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     findProjects,
     getActiveproject,
-    getRuleDescriptor,
-    getDotFromIssueRaw
-} from '../APIs/api';
+    getRuleDescriptor
+} from './APIs/api';
 
-import IssueList from '../Description/IssueList';
-import AiFix from '../Description/AiFix';
-import DetailedDescription from '../Description/DetailedDescription';
+import IssueList from './Description/IssueList';
+import AiFix from './Description/AiFix';
+import DetailedDescription from './Description/DetailedDescription';
 import {
     buildRootCauseHTML,
     buildHowToFixHTML,
     buildMoreInfoHTML
-} from '../../utils/htmlBuilders';
-import { fetchMetricIssues, getPriorityFromScore } from '../../utils/issuesService';
+} from '../utils/htmlBuilders';
+import {fetchFPScores, fetchMetricIssues, fetchSingleFPScore, getPriorityFromScore} from '../utils/issuesService';
 
 import {
     selectAiSolution,
@@ -29,10 +28,10 @@ import {
     setProjectKey,
     setSelectedIssue,
     setSourceCode
-} from '../../store/issuesReducer';
-import QuickFixCard from '../Description/QuickFixCard';
-import DiffView from '../Description/DiffView';
-import { SERVER_IP } from '../../utils/settings';
+} from '../store/issuesReducer';
+import QuickFixCard from './Description/QuickFixCard';
+import DiffView from './Description/DiffView';
+import { SERVER_IP } from '../utils/settings';
 
 const BASE_NAVS = ['Root Cause', 'How to Fix', 'AI Fix', 'More Info'];
 
@@ -124,39 +123,32 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         }
 
         try {
-            const rawDot = await getDotFromIssueRaw(issue?._raw);
-            if (!rawDot) {
-                setFpError('No CPG found for this issue');
-                setFpLoading(false);
-                console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz or dotGraph)');
-                return;
-            }
+            let score = issue.fp_score;
 
+            // If the fp score isn't saved, try to calculate it individually
+            if (score === -1) {
+                console.log("No fp score, fetching individual score")
+                const dotGraph = issue?._raw?.cpgBase64Gz;
+                if (!dotGraph) {
+                    setFpError('No CPG found for this issue');
+                    setFpLoading(false);
+                    console.warn('[FP] No DOT/CPG present in _raw (expecting cpgBase64Gz)');
+                    return;
+                }
 
-            const dotGraph = String(rawDot).replace(/\r\n/g, '\n');
+                const hashcode = String(getIssueHashcode(issue) || '');
+                const projectKey = new URLSearchParams(window.location.search).get('id');
+                const activeBranch = new URLSearchParams(window.location.search).get('branch');
 
+                const json = await fetchSingleFPScore(hashcode, dotGraph, projectKey, activeBranch);
 
-            const hashcode = String(getIssueHashcode(issue) || '');
-            const res = await fetch(`http://${SERVER_IP}/fp`, {
-                method: 'POST',
-                mode: 'cors',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ hashcode, dot_graph: dotGraph })
-            });
-
-            const text = await res.text();
-            let json = {};
-            try { json = text ? JSON.parse(text) : {}; } catch (_) { }
-
-            if (!res.ok) {
-                const msg = json?.error || `HTTP ${res.status}: ${text?.slice?.(0, 300) ?? ''}`;
-                throw new Error(msg);
+                const p = json?.probability_score ?? json?.probability ?? json?.score ?? null;
+                score = typeof p === 'number' ? p : (p ? Number(p) : null);
             }
 
             // 4) display probability_score as percentage
-            const p = json?.probability_score ?? json?.probability ?? json?.score ?? null;
-            setFpScore(typeof p === 'number' ? p : (p ? Number(p) : null));
-            const priority = getPriorityFromScore(p, issue?._raw?.severity);
+            setFpScore(score);
+            const priority = getPriorityFromScore(score, issue?._raw?.severity);
             setPriority(priority);
             setFpError(null);
         } catch (e) {
@@ -173,6 +165,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         const run = async () => {
             setLoading(true);
             try {
+                // Locate the active project
                 const projects = await findProjects();
                 const _id = new URLSearchParams(window.location.search).get('id');
                 if (!projects || !_id) { setLoading(false); return; }
@@ -180,8 +173,14 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 const activeProject = getActiveproject(_id, projects);
                 if (!activeProject?.key) { setLoading(false); return; }
 
+                const activeBranch = new URLSearchParams(window.location.search).get('branch') ?? "main";
+
+                // Fetch the metric entry containing the issue details from SecAI
                 dispatch(setProjectKey(activeProject.key));
-                const metricIssues = await fetchMetricIssues(activeProject.key);
+                let { lastAnalysis, metricIssues } = await fetchMetricIssues(activeProject.key);
+
+                // Fetch fp scores
+                metricIssues = await fetchFPScores(lastAnalysis, metricIssues, activeProject.key, activeBranch);
 
                 if (!isMounted) return;
                 dispatch(setIssues(metricIssues));
@@ -190,7 +189,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 if (jumpTarget && metricIssues.length > 0) {
                     const match = metricIssues.find(i => i._raw.hashcode === jumpTarget.hashcode);
                     if (match) {
-                        handleIssueClick(match);
+                        await handleIssueClick(match);
                         clearJumpTarget?.();
                     }
                 }
@@ -253,11 +252,11 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         <div style={styles.container}>
             <div style={styles.sidebar}>
                 {loading ? (
-                    <p style={styles.loadingText}>Loading issues...</p>
+                    <p style={styles.loadingText}>Loading issues and calculating confidence scores... If there are many issues this may take a while.</p>
                 ) : (
                     <ul style={styles.issueList}>
                         {(issues || []).length === 0 ? (
-                            <p style={styles.loadingText}>No issues found.</p>
+                            <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis.</p>
                         ) : (
                             issues.map(issue => (
                                 <IssueList
@@ -271,11 +270,11 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                 )}
             </div>
 
-            <div style={styles.chatPane}>
+            <div style={styles.descriptionPane}>
                 {selectedIssue ? (
                     <div style={styles.detailWrapper}>
                         <div style={styles.titleRow}>
-                            <div style={{ flex: 2 }}>
+                            <div style={{ flex: 2, width: '85%' }}>
                                 <h2 style={styles.mainTitle}>
                                     {selectedIssue.message || 'Issue'}
                                 </h2>
@@ -371,7 +370,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                         </div>
                     </div>
                 ) : (
-                    <p style={styles.placeholderText}>Click an issue to view details and compute the FP confidence.</p>
+                    <p style={styles.placeholderText}>Click an issue to view details.</p>
                 )}
             </div>
         </div>
@@ -380,14 +379,21 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
 
 // Styles
 const styles = {
-    container: { display: 'flex', height: 'inherit', fontFamily: 'Arial, sans-serif', flex: '1', width: '100%', maxWidth: '100%' },
+    container: {
+        display: 'flex',
+        height: 'inherit',
+        fontFamily: 'Arial, sans-serif',
+        flex: '1',
+        width: '100%',
+        maxWidth: '100%'
+    },
     sidebar: {
         width: '22%',
         background: 'rgb(245, 247, 250)',
         borderRight: '1px solid rgb(221, 221, 221)',
         overflowY: 'auto',
         borderRadius: '20px',
-        scrollbarWidth: 'none'
+        scrollbarWidth: '5px'
     },
     issueList: {
         listStyle: 'none',
@@ -397,12 +403,35 @@ const styles = {
         flexDirection: 'column',
         gap: '10px'
     },
-    chatPane: { flex: 1, display: 'flex', flexDirection: 'column', padding: '10px', width: '100%', maxWidth: '100%', overflowY: 'auto' },
-    loadingText: { fontStyle: 'italic', color: '#888', padding: '20px' },
-    placeholderText: { fontStyle: 'italic', color: '#aaa', padding: '20px', textAlign: 'center' },
-    detailWrapper: { padding: '20px' },
-    mainTitle: { fontSize: '20px', margin: 0 },
-    tabs: { display: 'flex', gap: '10px', marginBottom: '20px' },
+    descriptionPane: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '10px',
+        width: '78%',
+        maxWidth: '78%',
+        overflowY: 'auto'
+    },
+    loadingText: {
+        fontStyle: 'italic',
+        color: '#888',
+        padding: '20px'
+    },
+    placeholderText: {
+        fontStyle: 'italic',
+        color: '#aaa',
+        padding: '20px',
+        textAlign: 'center'
+    },
+    detailWrapper: {
+        padding: '20px',
+        maxWidth: '100%'
+    },
+    tabs: {
+        display: 'flex',
+        gap: '10px',
+        marginBottom: '20px'
+    },
     tab: {
         padding: '10px 15px',
         borderRadius: '8px',
@@ -424,7 +453,8 @@ const styles = {
         background: '#fff',
         borderRadius: '10px',
         padding: '20px',
-        boxShadow: '0 0 10px rgba(0,0,0,0.05)'
+        boxShadow: '0 0 10px rgba(0,0,0,0.05)',
+        maxWidth: '100%'
     },
     titleRow: {
         display: 'flex',
@@ -437,15 +467,21 @@ const styles = {
         marginBottom: '20px',
         border: '1px solid #dee2e6'
     },
+    mainTitle: {
+        fontSize: '20px',
+        margin: 0,
+        wordWrap: 'break-word'
+    },
     titleRight: {
         fontSize: '14px',
         fontWeight: 'bold',
         color: '#555',
         display: 'flex',
         flexDirection: 'column',
+        flex: 0.5,
         alignItems: 'center',
         gap: '15px',
-        flex: 0.5
+        width: '15%'
     },
     confidence: {
         backgroundColor: '#e0e7ff',

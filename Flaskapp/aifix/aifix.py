@@ -6,13 +6,13 @@ from aifix.llm_files import get_handler
 from aifix.rag_pipeline import RAGPipeline
 import re
 from typing import Dict, Any, Tuple
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 from aifix.ccrun import CCRUN
 from aifix.utils.code_sanitizer import extract_java_source
 import shutil
 
 # Initialize logging and load environment variables (API keys, etc.)
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 load_dotenv()
 
 def cleanup_generated_files():

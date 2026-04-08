@@ -1,11 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import ErrorVis from '../errorTree/ErrorVis';
+import ErrorVis from './errorTree/ErrorVis';
 import { ReactFlowProvider } from 'reactflow';
-import DetailedFix from './DetailedFix';
-import CodeGen  from '../codeGeneration/codeGen';
+import DetailedFix from './VulnerabilitiesList';
+import CodeGen  from './codeGeneration/codeGen';
 import { useDispatch } from 'react-redux';
-import { setSelectedTab } from '../../store/issuesReducer';
+import { setSelectedTab } from '../store/issuesReducer';
 
 function NavigationBar() {
     const dispatch = useDispatch();
