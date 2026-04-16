@@ -1,8 +1,8 @@
 # AIFix
 
-This feature can be accessed through the custom *SecAI* web pages. If you are unsure how to reach this part of the interface, refer to the [this overview](overview.md).
+This feature can be accessed through the custom *SecAI* web pages. If you are unsure how to reach this part of the interface, refer to the [this overview](overview.md#custom-web-pages-within-sonarqube).
 
-When viewing an issue in the vulnerabilities list or in the error tree
+More specifically, you can find the *AIFix* feature by selecting the **AIFix** tab when viewing an issue in the [vulnerabilities list](./vulnerabilies-list.md) or by clicking an error node in the [error tree](error-tree.md).
 
 ![AIFix tab in the detailed issue view]()
 
@@ -15,3 +15,7 @@ The result includes an explanation, the code fix and *CWE* mappings.
 ![Generated AIFix]()
 
 diff view
+
+## AIFix returns *Unexpected Error*
+
+In the `Flaskapp` folder of your backend there is a log file called `aifix.log`. This may provide additional insight into the problem. Furthermore, the file `app.log` logs all http requests received and sent by the flask server.

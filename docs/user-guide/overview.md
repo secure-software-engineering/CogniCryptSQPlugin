@@ -13,16 +13,26 @@ To follow along you can download the demo project [`SecAI-demo.zip`](../../SecAI
 
 The native SonarQube interface is simply what you see when you open SonarQube's web interface in a browser. If you click on your project and open the **Issues** tab you will find a list of all detected issues.
 
+![SonarQube issue interface with filter for CogniCrypt]()
+
+Here, you can filter the issues based on different aspects, such as CWEs, severity, or tags. Currently, the only SAST tool integrated into *SecAI* is *CogniCrypt<sub>SAST</sub>*, which means that all issues detected by the plugin will be tagged `cognicrypt`.
+
+By selecting an issue you can open a detailed view of the error. At the top there is the error message and the severity. The tabs below that allow you to switch between a code snippet which shows the error location highlighted and in relation to other errors, tabs to further explain the issue and how to fix it, an activity tab to show the issue history, and a final tab with references for more info. On the left side is the list of issues to allow you to navigate to different issues but also additional locations relating to the current error.
+
+![Selected issue in SonarQube web interface]()
+
 ---
 
 ## Custom Web Pages Within SonarQube
 
 Not all information and features could be integrated in the native SonarQube interface. Therefore, a custom web page was added to the SonarQube interface. It can be accessed in each project under the **More** tab and is called *SecAI analysis*.
 
+> **Note:** Sometimes the first attempt at opening the page fails with the error message `Page extension failed.`. In this case simply try again.
+
 ![Screenshot showing how to access the custom *SecAI* web page using the right-most tab called **More**](images/access-custom-pages.PNG)
 
-It opens to the vulnerabilities list.(feature list) more info [here](vulnerabilies-list.md)
+The custom page opens to a vulnerabilities list similar to the issue list of the native SonarQube interface. However, this list only includes the issues detected by *CogniCrypt<sub>SAST</sub>*. From this list you can open a detail view for each issue which includes [*Confidence Scores* and *Quick Fixes*](vulnerabilies-list.md) as well as access to the [*AIFix*](./aifix.md) feature.
 
 ![Custom page navigation]()
 
-However, there two more tabs. As the names imply, the [*Error Tree*](error-tree.md) displays the connections between different errors and [*Code Gen*](./code-gen.md) offers code generation for 
+However, there two more tabs. As the names imply, the [*Error Tree*](error-tree.md) displays the connections between different errors and [*Code Gen*](./code-gen.md) offers code generation using LLMs which is then verified using *CogniCrypt<sub>SAST</sub>*.
