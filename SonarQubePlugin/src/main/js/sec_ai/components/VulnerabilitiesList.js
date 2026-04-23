@@ -88,6 +88,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
     const getIssueHashcode = (issue) => issue?._raw?.hashcode || issue?.key || null;
 
     const handleIssueClick = async (issue) => {
+        if (issue instanceof String) issue = issues.find(i => i.key == issue || i._raw.hashcode == issue);
         if (!issue) return;
         dispatch(setAiSolution(null));
         dispatch(setSelectedIssue(issue));

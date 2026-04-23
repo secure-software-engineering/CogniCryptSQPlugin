@@ -133,7 +133,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
 
 
     // state variables
-    const issue = customIssue || selectedIssue;
+    const issue = customIssue || selectedIssue._raw;
 
     const [apiLoading, setApiLoading] = useState(false);
     const [prSettingsValid, setPrSettingsValid] = useState(true);
@@ -256,14 +256,14 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
         }
         
         // Extract source code analysis before AI fix
-        if (issue._raw) {
+        if (issue) {
             try {
-                fullPath = await buildFullErrorPath(issue._raw, projectKey);
+                fullPath = await buildFullErrorPath(issue, projectKey);
                 const { extractSourceCodeFromPath } = await import('../errorTree/helperCalls');
                 sourceCodeResults = await extractSourceCodeFromPath(fullPath, projectKey);
                 dispatch(setSourceCodeResults(sourceCodeResults));
 
-                cleanSelectedNodes = filterCpgField(issue._raw);
+                cleanSelectedNodes = filterCpgField(issue);
                 fullPath = filterCpgField(fullPath);
 
             } catch (error) {
@@ -274,8 +274,8 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
         dispatch(setAiSolution(null));
         setApiLoading(true);
 
-        const codeSnippet = issue?._raw?.codeSnippet || sourceSnippet;
-        if (codeSnippet && fullPath && sourceCodeResults && issue._raw) {
+        const codeSnippet = issue?.codeSnippet || sourceSnippet;
+        if (codeSnippet && fullPath && sourceCodeResults && issue) {
             try {
                 const _res = await sendToExternalApi(
                     codeSnippet,
@@ -307,7 +307,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
 
     const handleRequest = (issue) => {
         // Just get the relative path after the last colon (SonarQube convention)
-        let filePath = issue.component;
+        let filePath = issue.component || issue.reportLocation?.filePath;
         const parts = filePath.split(':');
         if (parts.length > 1) {
             filePath = parts[parts.length - 1];
@@ -322,8 +322,8 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 fileUri: filePath,          // relative path!
-                line: issue.line || 1,
-                column: issue.column || 1
+                line: issue.reportLocation?.start[0] || issue.line || 1,
+                column: issue.reportLocation?.start[1] || issue.column || 1
             })
         });
 
@@ -453,7 +453,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
                 </div>
             )}
 
-            {aiFix && issue && issue.component && issue.line && (
+            {aiFix && issue && (issue.component || issue.reportLocation?.filePath) && issue.line && (
                 <button
                     style={{ marginTop: '10px', background: '#ccc', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 14px', fontWeight: 'bold', cursor: 'not-allowed' }}
                     onClick={() =>
@@ -465,7 +465,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
                 </button>
             )}
 
-            {aiFix && issue && issue.component && issue.line && (
+            {aiFix && issue && (issue.component || issue.reportLocation?.filePath) && issue.line && (
                 <>
                     <button
                         style={{
