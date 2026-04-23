@@ -100,21 +100,6 @@ The service supports multiple LLM providers with specific model configurations o
 
 **Free API Access**: Google Gemini provides free API access up to generous usage limits, making it an excellent choice for development and testing.
 
-### **5.3 Self-Hosted/Local Models Support**
-
-**Experimental Ollama Integration**: The platform includes experimental support for self-hosted models through Ollama integration (`llm_files/ollama.py`).
-
-**Current Status**:
-- Functionality exists but has not been thoroughly tested
-- Requires additional configuration and setup modifications
-- Not recommended for production use without extensive testing
-
-**Configuration Requirements**: Would require:
-- Local Ollama installation and setup
-- Model downloading and configuration
-- Environment variable setup (`OLLAMA_MODEL`, `OLLAMA_BASE_URL`)
-- Potential modifications to prompt templates for optimal performance
-
 ***
 
 ## **6 API Key Setup Guide**
@@ -160,7 +145,7 @@ This section provides comprehensive instructions for setting up, configuring, an
 **Repository Selection**: The main development branch is `Main` which contains the latest features and improvements. Clone this branch for the most up-to-date functionality:
 
 ```bash
-git clone https://github.com/secure-software-engineering/pg-secai.git
+git clone https://github.com/secure-software-engineering/CogniCryptSQPlugin.git
 cd SECAI
 ```
 

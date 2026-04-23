@@ -1,5 +1,7 @@
 # Error Tree
 
+See [user guide](../user-guide/error-tree.md) for usage details and examples.
+
 ## Abstract
 
 Error Tree provides an interactive, graph-based visualization of security analysis findings. Unlike traditional flat lists, this approach explicitly models the causal relationships between issues, enabling users to trace, analyze, and remediate interconnected errors more efficiently.[4][5] This documentation covers the design, architecture, data model, graph construction algorithms, and interactive components of the Error Tree feature in the SecAI SonarQube Plugin. [4][5]

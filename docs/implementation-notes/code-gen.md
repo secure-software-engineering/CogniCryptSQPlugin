@@ -14,7 +14,7 @@ By utilizing an LLM and CogniCrypt in tandem, this feature creates an iterative 
 
 The Code Generation feature is presented through an intuitive user interface designed to streamline the creation of secure code. The interface allows users to provide natural language prompts and, in return, receive validated Java code accompanied by a detailed security analysis.
 
-Before submitting a request, the user can configure the generation pipeline by selecting a Large Language Model (LLM) provider (OpenAI, Google Gemini, or self-hosted via Ollama), a specific model, and the number of iterations for the feedback loop. Once submitted, the system initiates a cycle where the LLM generates code, which is then automatically analyzed by CogniCrypt for security violations. This process repeats for the specified number of iterations. Upon completion, the user is presented with the final version of the generated code and a report detailing any persistent security issues.
+Before submitting a request, the user can configure the generation pipeline by selecting a Large Language Model (LLM) provider (OpenAI, Google Gemini), a specific model, and the number of iterations for the feedback loop. Once submitted, the system initiates a cycle where the LLM generates code, which is then automatically analyzed by CogniCrypt for security violations. This process repeats for the specified number of iterations. Upon completion, the user is presented with the final version of the generated code and a report detailing any persistent security issues.
 
 ***
 
@@ -58,56 +58,19 @@ The pipeline concludes when one of the exit conditions for the iterative loop is
 
     If the maximum number of iterations is reached and violations still persist, the last generated version of the code is returned. The final CogniCrypt report is appended as a block comment to make the user aware of remaining issues
 
-
 ***
 
-## **4. Guide**
-
-This section provides a step-by-step walkthrough on how to use the Code Generation feature within the SonarQube interface.
-
-### 4.1 Accessing the Code Generation Interface
-
-To begin, navigate to your project's main dashboard in SonarQube. On the top navigation bar, click on the SecAI tab. From the sidebar menu that appears, select Code Generation to open the main interface for generating and validating cryptographic code.
-
-### 4.2 Configuring the Generation Pipeline
-
-Before submitting a request, you can configure the generation pipeline to tailor the process to your needs. The following options are available at the top of the interface:
-
-- LLM Provider: Choose the Large Language Model provider you wish to use. The available options are OpenAI (with API keys) and Ollama (self-hosted models)
-
-- Model: Select a specific model from the chosen provider. The dropdown will populate with relevant models, such as gpt-4o.
-
-- Iterations: Specify the maximum number of times the feedback loop should run. This controls how many attempts the system will make to fix any detected security violations.
-
-### 4.3 Submitting a Prompt
-
-In the main text area, enter a natural language prompt describing the cryptographic functionality you need. For the best results, be clear and specific in your request.
-
-### 4.4 Reviewing the Results
-
-After the pipeline completes its execution, the interface will display the results.
-
-- Generated Code: The final version of the Java code will be presented in the code editor view.
-
-- Analysis Report: A summary of the security analysis will be provided alongside the code. The outcome will be one of the following:
-
-    1. Successful Validation: If CogniCrypt finds no security violations, a success message will be appended as a comment at the end of the generated code.
-
-    2. Unsuccessful Validation: If violations still persist after the maximum number of iterations has been reached, the last generated version of the code will be returned. The final CogniCrypt report, detailing the remaining issues, will be appended as a block comment to make you aware of the unresolved security risks. 
-
-***
-
-## **5. Backend Architecture**
+## 4. Backend Architecture
 
 The Code Generation feature is implemented as a multi-component Java application. The architecture is designed to be modular, with a clear separation of concerns between the main pipeline orchestration, LLM interaction, code processing, and security analysis.
 
-### 5.1 Main Pipeline Orchestration
+### 4.1 Main Pipeline Orchestration
 
 The `codegenMain` class serves as the central orchestrator of the code generation workflow. The `runPipeline` [1] method executes the end-to-end process:
 
 - Initialization: A temporary working directory is created to store the generated code, compiled classes, and analysis reports. Instances of `documentProcessor` and `cogniCryptRunner` are initialized. API keys are retrieved using `getEnvVariable` [2].
 
-- LLM Selection: Based on the provider parameter (`openai`, or `ollama`), the appropriate LLM wrapper class is instantiated.
+- LLM Selection: Based on the provider parameter (`openai`, or `gemini`), the appropriate LLM wrapper class is instantiated.
 
 - Initial Code Generation: The selected LLM is invoked with the user's query and the full set of CrySL rules [4] to generate the initial Java code.
 
@@ -125,15 +88,15 @@ The `codegenMain` class serves as the central orchestrator of the code generatio
 
 - Finalization and Cleanup: The final code and analysis results are returned. The temporary working directory and all its contents are deleted.
 
-### 5.2 LLM Interaction
+### 4.2 LLM Interaction
 
-Interaction with the different LLM providers is abstracted into separate classes (`openai_LLM`, `ollama_LLM`), each implementing a common interface.
+Interaction with the different LLM providers is abstracted into separate classes (`openai_LLM`, `gemini_LLM`), each implementing a common interface.
 
 - `Generate` method [3]: Constructs the initial, detailed prompt containing the user's query and the full context of all 51 CrySL rules. This is designed to guide the LLM towards generating secure code from the outset.
 
 - `GenerateIterations` method [3]: Constructs the prompt for the refinement loop. This prompt includes the previously generated code, the specific issues found by CogniCrypt, the raw CrySL rules that were violated, and detailed error descriptions. This provides the LLM with targeted feedback for fixing the identified vulnerabilities.
 
-### 5.3 Code and Report Handling
+### 4.3 Code and Report Handling
 
 `documentProcessor.java` is responsible for all file I/O and data processing tasks:
 
@@ -149,7 +112,7 @@ Interaction with the different LLM providers is abstracted into separate classes
 
 - `readCryslRules()` and `readErrorDescriptions()` [10]: Read the detailed information for the violated rules to provide rich context to the LLM during the iterative refinement process.
 
-### 5.4 Cognicrypt Execution
+### 4.4 Cognicrypt Execution
 
 The `cogniCryptRunner` class encapsulates the logic for running the external CogniCrypt analysis tool:
 
@@ -159,43 +122,11 @@ The `cogniCryptRunner` class encapsulates the logic for running the external Cog
 
 - `runCC()` [13]: Executes the CogniCrypt HeadlessJavaScanner as a separate process, passing the generated JAR file and the CrySL rules for analysis. It copies the necessary resources (`copyResource` & `copyResourceDir` [14]) into the temporary directory for the analysis run.
 
-
 ***
 
-## **6. Example Walkthrough**
+## 5 API Key Setup Guide
 
-This section contains an example run of the Code Generation pipeline, along with relevant screenshots 
-
-### 6.1 Configuration and Prompt Input
-
-The initial view presents the pipeline configuration options. Here, the user can select the provider, model as well as number of iterations.
-
-![CodeGeneration_Image1](CodeGen_1.png)
-
-Once configured, the user enters a natural language prompt into the text input field, detailing the required cryptographic functionality. Clicking "Generate" initiates the pipeline.
-
-### 6.2 Reviewing Generated Code
-
-![CodeGeneration_Image2](CodeGen_2.png)
-
-After the pipeline finishes execution, the user is presented with the final, generated Java code in an editor view. This interface provides standard controls to copy the code to the clipboard or download it as a .java file for immediate use.
-
-
-### 6.3 Inspecting the Analysis Report
-
-![CodeGeneration_Image3](CodeGen_3.png)
-
-Alongside the code, the Analysis Result from CogniCrypt is displayed.
-
-- In this example, the generated code has passed all security checks, and the tool reports that no violations were found.
-
-- If the iterative process had been unable to resolve all issues within the iteration limit, this panel would instead display the detailed CogniCrypt report, outlining the remaining violations for the user to address manually.
-
-***
-
-## **7 API Key Setup Guide**
-
-### **7.1 OpenAI API Key Configuration**
+### 5.1 OpenAI API Key Configuration
 
 **Obtaining an OpenAI API Key**:
 1. Visit the [OpenAI Platform](https://platform.openai.com/api-keys)
@@ -207,7 +138,7 @@ Alongside the code, the Analysis Result from CogniCrypt is displayed.
 
 **Pricing**: OpenAI operates on a pay-per-use model. Check current pricing at [OpenAI Pricing](https://openai.com/pricing).
 
-### **7.2 Google Gemini API Key Configuration**
+### 5.2 Google Gemini API Key Configuration
 
 **Obtaining a Google Gemini API Key**:
 1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
@@ -235,7 +166,7 @@ Alongside the code, the Analysis Result from CogniCrypt is displayed.
 - `getEnvVariable`: Retrieves API keys from environment variables. [2]
 
 
-**`openAI_LLM.java`, `ollama_LLM.java`** 
+**`openAI_LLM.java`, `gemini_LLM.java`** 
 
 - `Generate`: Constructs the prompt for the initial code generation, including the user query and all CrySL rules. [3]
 
