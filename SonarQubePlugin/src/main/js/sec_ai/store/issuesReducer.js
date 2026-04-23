@@ -7,7 +7,7 @@ const initialState = {
   sourceCode: null,
   aiSolution: null,
   AiModel: "OPENAI:gpt-4.1",
-  Iteration: 1,
+  Iteration: 2,
   sourceCodeResults: null,
 };
 
