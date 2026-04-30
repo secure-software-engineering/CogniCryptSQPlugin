@@ -55,7 +55,7 @@ export async function fetchMetricIssues(projectKey) {
 
     const json = await res.json();
     const rawValue = json?.component?.measures?.[0]?.value ?? null;
-    if (!rawValue) return [];
+    if (!rawValue) return { lastAnalysis: null , metricIssues: []};
 
 
     const parsed = safeJSONParse(rawValue, []);

@@ -9,15 +9,14 @@ import { setGithubUsername, setGithubRepourl, setGithubPATtoken, selectGithubRep
 import { MODEL_OPTIONS } from '../../utils/modelOptions';
 import { VerificationBadge } from '../../utils/verification';
 import filterCpgField from '../../utils/filterFields';
+import {fetchMetricIssues} from "../../utils/issuesService";
 
 // Build full error path including preceding and subsequent errors
 async function buildFullErrorPath(selectedNode, projectKey) {
     try {
         // Fetch the error tree data
-        const treeRes = await fetch(`/api/measures/component?component=${projectKey}&metricKeys=secai.cognicrypt.error.tree`);
-        const treeJson = await treeRes.json();
-        const rawValue = treeJson?.component?.measures?.[0]?.value ?? null;
-        const flatList = JSON.parse(rawValue || '[]');
+        let fetchedIssues = await fetchMetricIssues(projectKey);
+        const flatList = fetchedIssues.metricIssues;
         
         // Build graph map
         const graphMap = {};
