@@ -9,7 +9,8 @@ import { setGithubUsername, setGithubRepourl, setGithubPATtoken, selectGithubRep
 import { MODEL_OPTIONS } from '../../utils/modelOptions';
 import { VerificationBadge } from '../../utils/verification';
 import filterCpgField from '../../utils/filterFields';
-import {fetchMetricIssues} from "../../utils/issuesService";
+import { fetchMetricIssues } from "../../utils/issuesService";
+import { collectSubtree, collectPathToRoot, extractSourceCodeFromPath } from "../errorTree/helperCalls";
 
 // Build full error path including preceding and subsequent errors
 async function buildFullErrorPath(selectedNode, projectKey) {
@@ -21,28 +22,28 @@ async function buildFullErrorPath(selectedNode, projectKey) {
         // Build graph map
         const graphMap = {};
         flatList.forEach(n => {
-            graphMap[n.hashcode] = n.subsequentErrors || [];
+            graphMap[n.hashcode ?? n.key] = n.subsequentErrors || n._raw?.subsequentErrors || [];
         });
         
         // Collect path to root
-        const pathToRoot = collectPathToRoot(selectedNode.hashcode, graphMap, flatList);
-        
+        const pathToRoot = collectPathToRoot(selectedNode.hashcode, graphMap);
+
         // Collect subtree
-        const subtree = collectSubtree(selectedNode.hashcode, graphMap, flatList);
+        const subtree = collectSubtree(selectedNode.hashcode, graphMap);
         
         // Build full path from root to bottom
         const fullPath = [];
         
         // Add path from root to current node
         pathToRoot.forEach(nodeId => {
-            const fullNode = flatList.find(n => n.hashcode === nodeId);
+            const fullNode = flatList.find(n => n.hashcode === nodeId || n.key === nodeId);
             if (fullNode) fullPath.push(fullNode);
         });
         
         // Add subtree nodes (from current to bottom)
         subtree.forEach(nodeId => {
             if (!pathToRoot.includes(nodeId)) {
-                const fullNode = flatList.find(n => n.hashcode === nodeId);
+                const fullNode = flatList.find(n => n.hashcode === nodeId || n.key === nodeId);
                 if (fullNode) fullPath.push(fullNode);
             }
         });
@@ -52,52 +53,6 @@ async function buildFullErrorPath(selectedNode, projectKey) {
         console.error('Failed to build full error path:', error);
         return [selectedNode];
     }
-}
-
-// Collect path to root for AiFix
-function collectPathToRoot(startId, graphMap, flatList) {
-    const visited = new Set();
-    const resultNodes = [];
-    
-    const reverseGraph = {};
-    for (const [parent, children] of Object.entries(graphMap)) {
-        for (const child of children) {
-            if (!reverseGraph[child]) reverseGraph[child] = [];
-            reverseGraph[child].push(parent);
-        }
-    }
-    
-    function dfs(nodeId) {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        resultNodes.push(nodeId);
-        const parents = reverseGraph[nodeId] || [];
-        for (const parent of parents) {
-            dfs(parent);
-        }
-    }
-    
-    dfs(startId);
-    return resultNodes.reverse(); // Return from root to current
-}
-
-// Collect subtree for AiFix
-function collectSubtree(startId, graphMap, flatList) {
-    const visited = new Set();
-    const resultNodes = [];
-    
-    function dfs(nodeId) {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        resultNodes.push(nodeId);
-        const children = graphMap[nodeId] || [];
-        for (const child of children) {
-            dfs(child);
-        }
-    }
-    
-    dfs(startId);
-    return resultNodes;
 }
 
 const CopyIcon = ({ size = 16 }) => (
@@ -258,7 +213,6 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
         if (issue) {
             try {
                 fullPath = await buildFullErrorPath(issue, projectKey);
-                const { extractSourceCodeFromPath } = await import('../errorTree/helperCalls');
                 sourceCodeResults = await extractSourceCodeFromPath(fullPath, projectKey);
                 dispatch(setSourceCodeResults(sourceCodeResults));
 
