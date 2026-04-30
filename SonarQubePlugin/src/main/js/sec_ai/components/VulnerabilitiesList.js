@@ -33,7 +33,7 @@ import QuickFixCard from './Description/QuickFixCard';
 import DiffView from './Description/DiffView';
 import { SERVER_IP } from '../utils/settings';
 
-const BASE_NAVS = ['Root Cause', 'How to Fix', 'AI Fix', 'More Info'];
+const BASE_NAVS = ['Root Cause', 'How to Fix', 'AIFix', 'More Info'];
 
 const Spinner = ({ size = 14 }) => (
     <svg width={size} height={size} viewBox="0 0 50 50" style={{ marginLeft: 6, verticalAlign: 'middle' }}>
@@ -227,7 +227,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
         if (hasQuickFix) {
             list.push('Quick Fix');
         }
-        list.push('AI Fix');
+        list.push('AIFix');
         if (aiSolution && aiSolution.Final_Secure_Code_Snippet) {
             list.push('Diff View');
         }
@@ -357,7 +357,7 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
                         </div>
 
                         <div style={styles.tabContent}>
-                            {selectedTab === "AI Fix" && <AiFix sourceSnippet={sourceSnippet} _oldRule={sonarRuleKey} />}
+                            {selectedTab === "AIFix" && <AiFix sourceSnippet={sourceSnippet} _oldRule={sonarRuleKey} />}
                             {selectedTab === "Root Cause" && <DetailedDescription description={rootCauseHTML} />}
                             {selectedTab === "How to Fix" && <DetailedDescription description={howToFixHTML} />}
                             {selectedTab === "Quick Fix" && <QuickFixCard fixes={selectedIssue?._raw?.quickFixes || []} />}
