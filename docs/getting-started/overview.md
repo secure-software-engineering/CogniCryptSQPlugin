@@ -50,7 +50,7 @@ How to configure your SonarQube instance depends on whether you are creating a n
 
 ### For a new SonarQube server
 
-The server configuration in the `docker-compose.yml` is not meant for production use. Please **adjust** the configuration to your needs using the [official SonarQube documentation](https://docs.sonarsource.com/sonarqube-server/server-installation). You may also need to change the image used in the `Dockerfile`.
+This setup uses the embedded SonarQube database. However, this makes it impossible to update to newer SonarQube versions as the database cannot be migrated. This is why the server configuration in the `docker-compose.yml` is **not meant for production use**. Please **adjust** the configuration to your needs using the [official SonarQube documentation](https://docs.sonarsource.com/sonarqube-server/server-installation). You may also need to change the image used in the `Dockerfile`.
 
 ### Extending an existing SonarQube server
 
