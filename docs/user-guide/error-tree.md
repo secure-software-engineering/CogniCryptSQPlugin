@@ -6,9 +6,9 @@ This feature can be accessed through the second tab inside the custom *SecAI* we
 
 The error tree shows how different issues are connected.
 
-On each level of the tree errors of the same type are grouped together in one big node titled with the error type. The legend in the bottom right provides an overview mapping the node colors to the different error types. Each node inside the group nodes represents an issue and is labeled with the violating line and which part of the Java Cryptography Architecture (JCA) was misused. 
+On each level of the tree errors of the same type are grouped together in one large node titled with the error type. The legend in the bottom right provides an overview mapping the node colors to the different error types. Each node inside the group nodes represents an issue and is labeled with the violating line and which part of the Java Cryptography Architecture (JCA) was misused. 
 
-Hovering over a node will open a tooltip with additional information, namely the class containing the error, the code snippet, and the error message. **View More** opens the detailed error view described [here](./vulnerabilies-list.md) and **AIFix** opens the interface to generate an [*AIFix*](./aifix.md).
+Hovering over a node will open a tooltip with additional information, namely the class containing the error, the code snippet, and the error message. **View More** opens the detailed error view described [here](./vulnerabilities-list.md) and **AIFix** opens the interface to generate an [*AIFix*](./aifix.md).
 
 ![Error node tooltip](./images/error-tooltip.PNG)
 

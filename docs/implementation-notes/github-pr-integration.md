@@ -1,6 +1,6 @@
 # GitHub Pull Request Integration
 
-The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with code fixes directly from the plugin interface. This feature is available in both the [*AIFix*](../user-guide/aifix.md) and [*Quick Fix*](../user-guide/vulnerabilies-list.md#quick-fixes) components.
+The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with code fixes directly from the plugin interface. This feature is available in both the [*AIFix*](../user-guide/aifix.md) and [*Quick Fix*](../user-guide/vulnerabilities-list.md#quick-fixes) components.
 
 For details on the setup, configuration and usage refer to the [user guide](../user-guide/github-pr-integration.md).
 

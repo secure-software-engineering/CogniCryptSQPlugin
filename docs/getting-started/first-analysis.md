@@ -28,7 +28,7 @@ On your homepage (or under the **Projects** tab) in the top right you can click 
 
 The plugin will only be executed when at least one SonarQube rule from the `CogniCrypt Security Rules` repository is activated in the active quality profile (**Project Settings > Quality Profiles**) of the project.
 
-You can choose to use the integrated `SecAI` quality profile, which contains all `CogniCrypt Security Rules` but no others. Or, you can extend an existing profile such as the default `Sonar way` profiles. For this, go to the **Quality Profiles** menu at the very top of the page. As you can see below, you then click on the three dots of the `Sonar way` profile for **Java** and select **Extend**. You will be prompted to give the new profile a name.
+You can choose to use the integrated `SecAI` quality profile, which contains all `CogniCrypt Security Rules` but no others. Or, you can extend an existing profile such as the default `Sonar way` profile. For this, go to the **Quality Profiles** menu at the very top of the page. As you can see below, you then click on the three dots of the `Sonar way` profile for **Java** and select **Extend**. You will be prompted to give the new profile a name.
 
 ![Extend quality profile](images/quality-profiles.PNG)
 
@@ -82,7 +82,7 @@ For a Maven project use the following command and replace `<projectKey>`, `<proj
 
 ```bash
 mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=<projectKey> -Dsonar.projectName='<projectName>' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=<token>
-  ```
+```
 
 ### Analyzing a Gradle Project
 
@@ -90,7 +90,7 @@ For a Gradle project use the following command and replace `<projectKey>`, `<pro
 
 ```bash
 ./gradlew sonar -Dsonar.projectKey=<projectKey> -Dsonar.projectName='<projectName>' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=<token>
-  ```
+```
 
 > **Note:** On Windows you may have to use `.\gradlew` instead of `./gradlew`.
 

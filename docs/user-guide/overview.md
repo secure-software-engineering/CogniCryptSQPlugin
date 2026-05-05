@@ -31,7 +31,7 @@ Not all information and features could be integrated in the native SonarQube int
 
 ![Screenshot showing how to access the custom *SecAI* web page using the right-most tab called **More**](images/access-custom-pages.PNG)
 
-The custom page opens to a vulnerabilities list similar to the issue list of the native SonarQube interface. However, this list only includes the issues detected by *CogniCrypt<sub>SAST</sub>*. From this list you can open a detail view for each issue which includes [*Confidence Scores* and *Quick Fixes*](vulnerabilies-list.md) as well as access to the [*AIFix*](./aifix.md) feature.
+The custom page opens to a vulnerabilities list similar to the issue list of the native SonarQube interface. However, this list only includes the issues detected by *CogniCrypt<sub>SAST</sub>*. From this list you can open a detail view for each issue which includes [*Confidence Scores* and *Quick Fixes*](vulnerabilities-list.md) as well as access to the [*AIFix*](./aifix.md) feature.
 
 However, there two more tabs. As the names imply, the [*Error Tree*](error-tree.md) displays the connections between different errors and [*Code Gen*](./code-gen.md) offers code generation using LLMs which is then verified using the integrated analysis tool *CogniCrypt<sub>SAST</sub>*.
 

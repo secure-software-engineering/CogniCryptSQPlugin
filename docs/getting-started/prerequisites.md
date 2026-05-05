@@ -31,7 +31,7 @@ Where to install Java depends on how your SonarQube instance is installed:
 
 ## API Keys
 
-In order to use the *AIFix* and *Code Generation* features you API keys. If you only intend to use one of the two platforms you do not need keys for both. You will need to copy the generated keys during the *SecAI* setup.
+In order to use the *AIFix* and *Code Generation* features you need API keys. If you only intend to use one of the two platforms you do not need keys for both. You will need to copy the generated keys during the *SecAI* setup.
 
 ### OpenAI API Key
 

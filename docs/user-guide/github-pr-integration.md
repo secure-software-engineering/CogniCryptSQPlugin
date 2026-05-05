@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with the code fixes directly from the plugin interface. This feature is available in both the [*AIFix*](./aifix.md) and [*Quick Fix*](./vulnerabilies-list.md#quick-fixes) components.
+The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with the code fixes directly from the plugin interface. This feature is available in both the [*AIFix*](./aifix.md) and [*Quick Fix*](./vulnerabilities-list.md#quick-fixes) components.
 
 ---
 

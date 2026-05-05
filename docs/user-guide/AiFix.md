@@ -2,7 +2,7 @@
 
 This feature can be accessed through the custom *SecAI* web pages. If you are unsure how to reach this part of the interface, refer to the [this overview](overview.md#custom-web-pages-within-sonarqube).
 
-More specifically, you can find the *AIFix* feature by selecting the **AIFix** tab when viewing an issue in the [vulnerabilities list](./vulnerabilies-list.md) or by clicking an error node in the [error tree](error-tree.md).
+More specifically, you can find the *AIFix* feature by selecting the **AIFix** tab when viewing an issue in the [vulnerabilities list](./vulnerabilities-list.md) or by clicking an error node in the [error tree](error-tree.md).
 
 ![AIFix tab in the detailed issue view](./images/aifix-in-detail-view.PNG)
 

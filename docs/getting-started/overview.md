@@ -10,6 +10,7 @@ Before proceeding with the installation check out the [prerequisites](prerequisi
 ## Prepare Files for Installation
 
 Download the following files from the [release page](https://github.com/secure-software-engineering/CogniCryptSQPlugin/releases):
+
 - zip archive: `secai-for-exist-sq` if you already have a SonarQube server, `secai-for-new-sq` if you intend to create a new one
 - *SecAI* plugin jar
 
@@ -39,6 +40,7 @@ The resulting file structure should look like this for `secai-for-new-sq`:
 For `secai-for-exist-sq` the only difference should be that there is no `Dockerfile` at the top level, though the contents of the `docker-compose.yml` are also slightly different.
 
 In the file `Flaskapp/aifix/.env`:
+
 - Replace the placeholders for the API keys of the LLMs you intend to use.
 - Unless you are hosting all components **including the projects to analyse** on the same machine, change the `FLASK_IP` to the IP address of the host machine
 
@@ -69,6 +71,7 @@ This builds and runs two docker containers `nginx` and `flaskapp`. If you are cr
 ## Installing the *SecAI* plugin
 
 Add the plugin jar to the plugin folder:
+
 - **With a SonarQube docker:** If you used our docker compose file for your server there should be a `plugins` folder in the base directory that is connected directly to the correct location inside the container. Copy the jar into this folder.
 
     Alternatively, use the command below to move the file to `/opt/sonarqube/extensions/plugins` (on the running container `sonarqube`):
@@ -78,6 +81,7 @@ Add the plugin jar to the plugin folder:
     ```
 
     > Note: On Windows the **jar path** should use backslash ("\\") instead of forward slash ("/").
+    
 - **With SonarQube installed [from a zip file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file):** Locate the `extensions/plugins` folder inside your SonarQube distribution and move the jar into it.
 
 Restart the SonarQube instance for the changes to take effect. You should receive a warning about third-party plugins and the plugin should be listed under **Administration > Marketplace > Plugins > Installed**.
