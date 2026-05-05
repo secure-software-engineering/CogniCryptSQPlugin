@@ -96,7 +96,7 @@ export default function TooltipNode({ data }) {
             textAlign: 'left'
           }}
         >
-          <strong>Class: {matchedIssue.class}</strong><br />
+          <strong>Class:</strong> {matchedIssue.class}<br />
           <code>{matchedIssue.codeSnippet}</code><br />
           <strong>{matchedIssue.message}</strong>
           <br />
