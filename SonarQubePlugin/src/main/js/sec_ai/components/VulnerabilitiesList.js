@@ -22,7 +22,7 @@ import {
     selectProjectKey,
     selectSelectedIssue,
     selectSourceCode,
-    selectSourceCodeResults,
+    selectSourceCodeResults, selectVisibleIssues,
     setAiSolution,
     setIssues,
     setProjectKey,
@@ -65,6 +65,7 @@ const formatPercent = (val) => {
 function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
     const dispatch = useDispatch();
     const issues = useSelector(selectIssues);
+    const visibleIssues = useSelector(selectVisibleIssues);
     const selectedIssue = useSelector(selectSelectedIssue);
     const sourceSnippet = useSelector(selectSourceCode);
     const projectKey = useSelector(selectProjectKey);
@@ -252,15 +253,15 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
     return (
         <div style={styles.container}>
             <div style={styles.sidebar}>
-                <Filter fileList={["src/main/java/Main.java", "src/main/java/component/C2.java"]}/>
+                <Filter />
                 {loading ? (
                     <p style={styles.loadingText}>Loading issues and calculating confidence scores... If there are many issues this may take a while.</p>
                 ) : (
                     <ul style={styles.issueList}>
-                        {(issues || []).length === 0 ? (
+                        {(visibleIssues || []).length === 0 ? (
                             <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis and that the flask server is up.</p>
                         ) : (
-                            issues.map(issue => (
+                            visibleIssues.map(issue => (
                                 <IssueListItem
                                     key={issue.key}
                                     issue={issue}
