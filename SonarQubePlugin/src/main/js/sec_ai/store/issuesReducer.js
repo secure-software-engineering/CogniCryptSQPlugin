@@ -10,7 +10,7 @@ const initialState = {
     AiModel: "OPENAI:gpt-4.1",
     Iteration: 1,
     sourceCodeResults: null,
-    fileList: new Set(),
+    fileList: [],
     filter: {}
 };
 
@@ -25,15 +25,15 @@ const issuesSlice = createSlice({
             state.issues = action.payload;
 
             // Create file list
-            state.fileList = new Set();
+            let files = new Set();
             for (let issue of state.issues) {
-                const file = issue.reportLocation.className || issue._raw.reportLocation.className;
-                state.fileList.add(file);
+                const file = issue.reportLocation?.className || issue._raw.reportLocation.className;
+                files.add(file);
             }
+            state.fileList = new Array(...files).sort();
 
             // Update visible issues
             state.visibleIssues = filterIssues(state.issues, state.filter); // ??? Use {} instead to reset filter?
-            console.log(state);
         },
         setSelectedIssue(state, action) {
             state.selectedIssue = action.payload;
@@ -91,6 +91,8 @@ export const selectAiModel = (state) => state.issues.AiModel;
 export const selectIteration = (state) => state.issues.Iteration;
 export const selectSourceCodeResults = (state) => state.issues.sourceCodeResults;
 export const selectFileList = (state) => state.issues.fileList;
+export const selectFilter = (state) => state.issues.filter;
+export const selectClassesFromFilter = (state) => state.issues.filter.files || [];
 
 function filterIssues(original, filter) {
     let res = [];
@@ -102,7 +104,7 @@ function filterIssues(original, filter) {
         for (let issue of original) {
             // file filter
             if (filter.files) {
-                const file = issue.reportLocation.className || issue._raw.reportLocation.className;
+                const file = issue.reportLocation?.className || issue._raw.reportLocation.className;
 
                 // If the file isn't part of the filter, skip this issue
                 if (file && filter.files.indexOf(file) === -1) {

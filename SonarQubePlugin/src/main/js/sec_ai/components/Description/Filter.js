@@ -1,34 +1,75 @@
 import React, {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {selectFileList} from "../../store/issuesReducer";
+import {
+    selectClassesFromFilter,
+    selectFileList,
+    selectFilter,
+    selectIssues,
+    setVisibleIssues
+} from "../../store/issuesReducer";
 import HoverTip from "../errorTree/HoverTip";
 import {FiHelpCircle} from "react-icons/fi";
 import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 
 export function Filter() {
     const fileList = useSelector(selectFileList);
+    console.log(fileList);
+    let currentFilter = useSelector(selectFilter);
     const [showFilter, setShowFilter] = useState(false);
 
-    return (<div>
-        <button>
-            onClick={() => setShowFilter(true)}
-            style={{
-                marginTop: '8px',
-                padding: '5px 10px',
-                fontSize: '12px',
-                borderRadius: '5px',
-                border: `1px solid #2b4c7e`,
-                backgroundColor: '#2b4c7e',
-                color: 'white',
-                cursor: 'pointer'
-            }}
+    // Check which data is available
+    let issuesLoaded = useSelector(selectIssues).length > 0;
+    // TODO: check if confidence scores are available -> disable confidence + priority
+
+    // Button handlers
+    const toggleFilter = () => setShowFilter(!showFilter);
+    const resetFilter = () => setVisibleIssues({});
+    const applyFilter = () => {
+        let filter = {};
+
+        // Get selected files
+
+        // Get confidence threshold
+
+        // Get priority threshold
+
+        // Get selected severities
+
+        setVisibleIssues(filter);
+    };
+
+    return (
+        <div>
+            <div style={{display: 'grid', gridTemplateColumns: '80% 20%'}}>
+        <button
+            onClick={toggleFilter}
+            style={{...btnStyle('#2b4c7e', '0px'),
+
+                cursor: issuesLoaded ? 'pointer' : 'not-allowed',
+                opacity: !issuesLoaded ? 0.7 : 1,
+                background: issuesLoaded ? '#2b4c7e' : '#ccc'}}
+            disabled={!issuesLoaded}
+            >
+            Filter
         </button>
+        <HoverTip text={"Reset Filter"}>
+            <button
+                onClick={resetFilter}
+                style={{ ...btnStyle('#2b4c7e', '0px'),
+
+                    cursor: issuesLoaded ? 'pointer' : 'not-allowed',
+                    opacity: !issuesLoaded ? 0.7 : 1,
+                    background: issuesLoaded ? '#2b4c7e' : '#ccc' }}>
+                ✖
+            </button>
+        </HoverTip>
+            </div>
 
         {showFilter && ReactDOM.createPortal(
             <>
                 {/* Backdrop */}
                 <div
-                    onClick={() => setShowFilter(false)}
+                    onClick={toggleFilter}
                     style={{
                         position: 'fixed',
                         top: 0,
@@ -60,21 +101,32 @@ export function Filter() {
                     <div style={{ textAlign: 'right' }}>
                         {/* Exit button in the corner */}
                         <button
-                            onClick={() => setShowFilter(false)}
+                            onClick={toggleFilter}
                             style={{ background: 'transparent', border: 'none', fontSize: '16px', cursor: 'pointer' }}>
                             ✖
                         </button>
                     </div>
                     {/* Create filters (in a table for easier alignment) */}
-                    <h4 style="margin:0 0 8px 0; font-size:18px; font-weight:600;">Filter Issues</h4>
-                    <table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;">
+                    <h4 style={{margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600}}>Filter Issues</h4>
+                    <table style={{width: '100%', borderCollapse: 'collapse', margin: '16px 0', fontSize: '14px'}}>
                         <tbody>
                             {/* File filter */}
                             <tr>
                                 <td>Location:</td>
                                 <td>
-                                    <ClassSelector fileList={fileList} selector={} setter={}/>
+                                    <ClassSelector fileList={fileList} selector={selectClassesFromFilter}/>
                                 </td>
+                            </tr>
+                            {/* Buttons */}
+                            <tr>
+                                <td><button
+                                    style={btnStyle('#2b4c7e')}
+                                    >Reset Filter
+                                </button></td>
+                                <td><button
+                                    style={{...btnStyle('#51c9a6'), justifySelf: 'right' }}
+                                    >Apply Filter
+                                </button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,29 +142,78 @@ export function Filter() {
 * @param fileList list of classes that can be selected
 * @param selector React selector to get selected classes
 * @param setter React reducer to dispatch update to selected classes
-* @param hoverText text to show when hovering over the question mark. Default: "Select/Deselect Java Classes"
+* @param hoverText text to show when hovering over the question mark next to the newly added label. Default: "Select/Deselect Java Classes"
 */
-export function ClassSelector(fileList, selector, setter, hoverText = "Select/Deselect Java Classes") {
+export function ClassSelector({fileList, selector, setter = null, hoverText = null}) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef();
     const dispatch = useDispatch();
 
     // Get the current setting
     const current = useSelector(selector);
+    let initialChecked = {};
+    // get checked state of each file
+    for (let f of fileList) {
+        initialChecked[f] = current.length === 0 || current.indexOf('all') !== -1 || current.indexOf(f) !== -1;
+    }
+    // all selector
+    initialChecked.all = current.length === 0 || current.indexOf('all') !== -1;
+    const [checkboxes, setCheckboxes] = useState(initialChecked);
+
+    const selectAll = (check) => {
+        console.log(check ? "Checking" : "Unchecking", " all classes");
+        let newChecked = {};
+        for (let f in checkboxes) {
+            newChecked[f] = check;
+        }
+        setCheckboxes(newChecked);
+        console.log(newChecked);
+    }
+
+    const selectOne = (check, file) => {
+        let res = [];
+        let newChecked = {};
+        console.log(check ? "Checking " : "Unchecking ", file);
+
+        // Get all checkboxes marked as true but only include file if check is true
+        for (let f in checkboxes) {
+            if (f === file) {
+                newChecked[f] = check;
+                if (check) res.push(f);
+            } else {
+                newChecked[f] = checkboxes[f];
+                if (checkboxes[f]) res.push(f);
+            }
+        }
+
+        if (res.length === fileList.length) {
+            // Either all files are selected and 'all' isn't
+            if (res.indexOf('all') === -1) {
+                newChecked.all = true;
+                res.push('all');
+            } else {
+                // Or 'all' was selected and one file was deselected
+                newChecked.all = false;
+                res = res.filter((f) => f !== 'all');
+            }
+        }
+        setCheckboxes(newChecked);
+        console.log(newChecked);
+        return res;
+    }
 
     const handleSelect = (file) => {
         if (file === 'all') {
-            dispatch(setter(['all'])); // Deselect all?
+            checkboxes.all ? selectAll(false) : selectAll(true);
+            if (setter) {
+                dispatch(setter(['all'])); // Deselect all?
+            }
         } else {
-            const newSelection = current.includes(file)
-                ? current.filter(f => f !== file)
-                : [...current.filter(f => f !== 'all'), file];
-            dispatch(setter(newSelection));
+            const newSelection = checkboxes[file] ? selectOne(false, file) : selectOne(true, file);
+            if (setter) {
+                dispatch(setter(newSelection));
+            }
         }
-    };
-
-    const handleReset = () => {
-        dispatch(setter(['all']));
     };
 
     const isAllSelected = !current || current.length === 0 || current.includes('all');
@@ -121,12 +222,13 @@ export function ClassSelector(fileList, selector, setter, hoverText = "Select/De
         : `${current.length} selected`;
 
     return <div style={{ position: 'relative' }} ref={dropdownRef}>
+        { hoverText &&
         <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#555', display: 'flex', alignItems: 'center' }}>
             Java Class
             <HoverTip text={hoverText}>
                 <FiHelpCircle size={14} style={{ marginLeft: '6px', cursor: 'help' }} />
             </HoverTip>
-        </label>
+        </label> }
         <div
             onClick={() => setOpen(prev => !prev)}
             style={{
@@ -163,43 +265,37 @@ export function ClassSelector(fileList, selector, setter, hoverText = "Select/De
                 boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
                 minWidth: '200px'
             }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', marginBottom: '6px' }}>
+                <label key="all" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', marginBottom: '6px' }}>
                     <input
                         type="checkbox"
-                        checked={current.includes('all')}
+                        checked={checkboxes.all}
                         onChange={() => handleSelect('all')}
                     />
-                    All Classes
+                    Select/Deselect All Classes
                 </label>
 
                 {fileList.map(file => (
                     <label key={file} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', marginBottom: '4px' }}>
                         <input
                             type="checkbox"
-                            checked={current.includes(file)}
+                            checked={checkboxes[file]}
                             onChange={() => handleSelect(file)}
                         />
                         {file.split('.').pop()} ({file})
                     </label>
                 ))}
-
-                <div style={{ marginTop: '8px', textAlign: 'right' }}>
-                    <button
-                        onClick={handleReset} // Instead make first item select/deselect?
-                        style={{
-                            fontSize: '12px',
-                            padding: '4px 8px',
-                            background: '#f44336',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        Reset All
-                    </button>
-                </div>
             </div>
         )}
     </div>
 }
+
+const btnStyle = (bg, br = '5px') => ({
+    marginTop: '8px',
+    padding: '5px 10px',
+    fontSize: '12px',
+    borderRadius: br,
+    border: `1px solid ${bg}`,
+    backgroundColor: bg,
+    color: 'white',
+    cursor: 'pointer'
+});
