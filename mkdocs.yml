@@ -49,7 +49,7 @@ nav:
     - Overview: user-guide/overview.md
     - Confidence Scores and Quick Fixes: user-guide/vulnerabilities-list.md
     - Error Tree: user-guide/error-tree.md
-    - AIFix: user-guide/AiFix.md
+    - AIFix: user-guide/aifix.md
     - Code Generation: user-guide/code-gen.md
     - GitHub Pull Request Integration: user-guide/github-pr-integration.md
   - Implementation Notes:
