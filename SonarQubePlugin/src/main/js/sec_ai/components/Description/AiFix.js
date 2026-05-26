@@ -9,41 +9,41 @@ import { setGithubUsername, setGithubRepourl, setGithubPATtoken, selectGithubRep
 import { MODEL_OPTIONS } from '../../utils/modelOptions';
 import { VerificationBadge } from '../../utils/verification';
 import filterCpgField from '../../utils/filterFields';
+import { fetchMetricIssues } from "../../utils/issuesService";
+import { collectSubtree, collectPathToRoot, extractSourceCodeFromPath } from "../errorTree/helperCalls";
 
 // Build full error path including preceding and subsequent errors
 async function buildFullErrorPath(selectedNode, projectKey) {
     try {
         // Fetch the error tree data
-        const treeRes = await fetch(`/api/measures/component?component=${projectKey}&metricKeys=secai.cognicrypt.error.tree`);
-        const treeJson = await treeRes.json();
-        const rawValue = treeJson?.component?.measures?.[0]?.value ?? null;
-        const flatList = JSON.parse(rawValue || '[]');
+        let fetchedIssues = await fetchMetricIssues(projectKey);
+        const flatList = fetchedIssues.metricIssues;
         
         // Build graph map
         const graphMap = {};
         flatList.forEach(n => {
-            graphMap[n.hashcode] = n.subsequentErrors || [];
+            graphMap[n.hashcode ?? n.key] = n.subsequentErrors || n._raw?.subsequentErrors || [];
         });
         
         // Collect path to root
-        const pathToRoot = collectPathToRoot(selectedNode.hashcode, graphMap, flatList);
-        
+        const pathToRoot = collectPathToRoot(selectedNode.hashcode, graphMap);
+
         // Collect subtree
-        const subtree = collectSubtree(selectedNode.hashcode, graphMap, flatList);
+        const subtree = collectSubtree(selectedNode.hashcode, graphMap);
         
         // Build full path from root to bottom
         const fullPath = [];
         
         // Add path from root to current node
         pathToRoot.forEach(nodeId => {
-            const fullNode = flatList.find(n => n.hashcode === nodeId);
+            const fullNode = flatList.find(n => n.hashcode === nodeId || n.key === nodeId);
             if (fullNode) fullPath.push(fullNode);
         });
         
         // Add subtree nodes (from current to bottom)
         subtree.forEach(nodeId => {
             if (!pathToRoot.includes(nodeId)) {
-                const fullNode = flatList.find(n => n.hashcode === nodeId);
+                const fullNode = flatList.find(n => n.hashcode === nodeId || n.key === nodeId);
                 if (fullNode) fullPath.push(fullNode);
             }
         });
@@ -53,52 +53,6 @@ async function buildFullErrorPath(selectedNode, projectKey) {
         console.error('Failed to build full error path:', error);
         return [selectedNode];
     }
-}
-
-// Collect path to root for AiFix
-function collectPathToRoot(startId, graphMap, flatList) {
-    const visited = new Set();
-    const resultNodes = [];
-    
-    const reverseGraph = {};
-    for (const [parent, children] of Object.entries(graphMap)) {
-        for (const child of children) {
-            if (!reverseGraph[child]) reverseGraph[child] = [];
-            reverseGraph[child].push(parent);
-        }
-    }
-    
-    function dfs(nodeId) {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        resultNodes.push(nodeId);
-        const parents = reverseGraph[nodeId] || [];
-        for (const parent of parents) {
-            dfs(parent);
-        }
-    }
-    
-    dfs(startId);
-    return resultNodes.reverse(); // Return from root to current
-}
-
-// Collect subtree for AiFix
-function collectSubtree(startId, graphMap, flatList) {
-    const visited = new Set();
-    const resultNodes = [];
-    
-    function dfs(nodeId) {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        resultNodes.push(nodeId);
-        const children = graphMap[nodeId] || [];
-        for (const child of children) {
-            dfs(child);
-        }
-    }
-    
-    dfs(startId);
-    return resultNodes;
 }
 
 const CopyIcon = ({ size = 16 }) => (
@@ -133,7 +87,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
 
 
     // state variables
-    const issue = customIssue || selectedIssue;
+    const issue = customIssue || selectedIssue._raw;
 
     const [apiLoading, setApiLoading] = useState(false);
     const [prSettingsValid, setPrSettingsValid] = useState(true);
@@ -256,14 +210,13 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
         }
         
         // Extract source code analysis before AI fix
-        if (issue._raw) {
+        if (issue) {
             try {
-                fullPath = await buildFullErrorPath(issue._raw, projectKey);
-                const { extractSourceCodeFromPath } = await import('../errorTree/helperCalls');
+                fullPath = await buildFullErrorPath(issue, projectKey);
                 sourceCodeResults = await extractSourceCodeFromPath(fullPath, projectKey);
                 dispatch(setSourceCodeResults(sourceCodeResults));
 
-                cleanSelectedNodes = filterCpgField(issue._raw);
+                cleanSelectedNodes = filterCpgField(issue);
                 fullPath = filterCpgField(fullPath);
 
             } catch (error) {
@@ -274,8 +227,8 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
         dispatch(setAiSolution(null));
         setApiLoading(true);
 
-        const codeSnippet = issue?._raw?.codeSnippet || sourceSnippet;
-        if (codeSnippet && fullPath && sourceCodeResults && issue._raw) {
+        const codeSnippet = issue?.codeSnippet || sourceSnippet;
+        if (codeSnippet && fullPath && sourceCodeResults && issue) {
             try {
                 const _res = await sendToExternalApi(
                     codeSnippet,
@@ -307,7 +260,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
 
     const handleRequest = (issue) => {
         // Just get the relative path after the last colon (SonarQube convention)
-        let filePath = issue.component;
+        let filePath = issue.component || issue.reportLocation?.filePath;
         const parts = filePath.split(':');
         if (parts.length > 1) {
             filePath = parts[parts.length - 1];
@@ -322,8 +275,8 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 fileUri: filePath,          // relative path!
-                line: issue.line || 1,
-                column: issue.column || 1
+                line: issue.reportLocation?.start[0] || issue.line || 1,
+                column: issue.reportLocation?.start[1] || issue.column || 1
             })
         });
 
@@ -453,7 +406,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
                 </div>
             )}
 
-            {aiFix && issue && issue.component && issue.line && (
+            {aiFix && issue && (issue.component || issue.reportLocation?.filePath) && issue.line && (
                 <button
                     style={{ marginTop: '10px', background: '#ccc', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 14px', fontWeight: 'bold', cursor: 'not-allowed' }}
                     onClick={() =>
@@ -465,7 +418,7 @@ export default function AiFix({ sourceSnippet, customIssue = null, _oldRule = nu
                 </button>
             )}
 
-            {aiFix && issue && issue.component && issue.line && (
+            {aiFix && issue && (issue.component || issue.reportLocation?.filePath) && issue.line && (
                 <>
                     <button
                         style={{

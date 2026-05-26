@@ -86,7 +86,12 @@ function buildHighlightedCodeSnippetHTML(sourceCode, issue) {
         linesHtml.push(`<div style="${wrapperStyle}"><span style="${lineNumStyle}">${currentLine++}</span><span>${esc(line)}</span></div>`);
     });
 
-    return `<div style="background:#282c34; color:#abb2bf; padding:16px; border-radius:8px; overflow-x:auto; font-family:'Fira Code', Menlo, monospace; font-size:14px;"><pre style="margin:0; padding:0; background:none; white-space:pre;"><code>${linesHtml.join('\n')}</code></pre></div>`;
+    return `
+        <div style="background:#282c34; color:#abb2bf; padding:16px; border-radius:8px; overflow-x:auto; font-family:'Fira Code', Menlo, monospace; font-size:14px; max-width:100%;">
+            <pre style="margin:0; padding:0; background:none; white-space:pre; max-width:100%;">
+                <code>${linesHtml.join('\n')}</code>
+            </pre>
+        </div>`;
 }
 
 /**

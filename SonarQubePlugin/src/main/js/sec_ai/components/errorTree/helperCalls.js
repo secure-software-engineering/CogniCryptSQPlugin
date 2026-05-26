@@ -180,38 +180,41 @@ export const buildReactFlowElements = (flatList, highlighted = { nodes: [], edge
 
 
 // Highlighting the subtree from a given node
-// This function collects all nodes and edges in the subtree starting from a given node ID.
-// It returns an object containing the node IDs and edge IDs that form the subtree.
+// This function collects all nodes in the subtree starting from a given node ID.
+// It returns an object containing the node IDs that form the subtree.
 // This is useful for visualizing the structure of a tree or graph from a specific point.
-export function collectSubtree(startId, graphMap) {
+export function collectSubtree(startId, graphMap, edges = false) {
     const visited = new Set();
-    const resultNodes = new Set();
-    const resultEdges = new Set();
+    const resultNodes = [];
+    const resultEdges = [];
 
     function dfs(nodeId) {
         if (visited.has(nodeId)) return;
         visited.add(nodeId);
-        resultNodes.add(nodeId);
+        resultNodes.push(nodeId);
         const children = graphMap[nodeId] || [];
         for (const child of children) {
-            resultEdges.add(`${nodeId}->${child}`);
+            resultEdges.push(`${nodeId}->${child}`);
             dfs(child);
         }
     }
 
     dfs(startId);
-    return { nodeIds: Array.from(resultNodes), edgeIds: Array.from(resultEdges) };
+    if (!edges)
+        return resultNodes;
+    else
+        return { nodeIds: resultNodes, edgeIds: resultEdges };
 }
 
 
 // Highlighting the path to the root node
 // This function collects the path from a given node to the root node in a directed graph
-// It returns an object containing the node IDs and edge IDs that form the path.
+// It returns an object containing the node IDs that form the path.
 // This is useful for visualizing the ancestry of a node in a tree structure.
-export function collectPathToRoot(startId, graphMap) {
+export function collectPathToRoot(startId, graphMap, edges = false) {
     const visited = new Set();
-    const resultNodes = new Set();
-    const resultEdges = new Set();
+    const resultNodes = [];
+    const resultEdges = [];
 
     const reverseGraph = {};
     for (const [parent, children] of Object.entries(graphMap)) {
@@ -224,16 +227,19 @@ export function collectPathToRoot(startId, graphMap) {
     function dfs(nodeId) {
         if (visited.has(nodeId)) return;
         visited.add(nodeId);
-        resultNodes.add(nodeId);
+        resultNodes.push(nodeId);
         const parents = reverseGraph[nodeId] || [];
         for (const parent of parents) {
-            resultEdges.add(`${parent}->${nodeId}`);
+            resultEdges.push(`${parent}->${nodeId}`);
             dfs(parent);
         }
     }
 
     dfs(startId);
-    return { nodeIds: resultNodes, edgeIds: resultEdges };
+    if (!edges)
+        return resultNodes.reverse(); // Return from root to c
+    else
+        return { nodeIds: resultNodes, edgeIds: resultEdges };
 }
 
 // Extract source code for all nodes in the path
@@ -243,7 +249,7 @@ export async function extractSourceCodeFromPath(fullPathNodes, projectKey) {
     for (const node of fullPathNodes) {
         try {
             // Get component path - handle both formats
-            let componentPath = node.reportLocation?.filePath || '';
+            let componentPath = node.reportLocation?.filePath || node._raw?.reportLocation?.filePath || '';
             if (componentPath && !componentPath.includes(':')) {
                 componentPath = `${projectKey}:${componentPath}`;
             }
@@ -263,12 +269,12 @@ export async function extractSourceCodeFromPath(fullPathNodes, projectKey) {
             const lines = sourceCode.split('\n');
             
             // Get the specific line and context
-            const lineNumber = node.line || node.reportLocation?.start?.[0] || 1;
+            const lineNumber = node._raw?.reportLocation?.start?.[0] || node.reportLocation?.start?.[0] || node.line || 1;
             const targetLine = lines[lineNumber - 1] || '';
             
             sourceCodeResults.push({
-                nodeId: node.hashcode,
-                errorType: node.errorType,
+                nodeId: node._raw?.hashcode || node.hashcode,
+                errorType: node._raw?.errorType || node.errorType,
                 rule: node.rule,
                 line: lineNumber,
                 filePath: componentPath,

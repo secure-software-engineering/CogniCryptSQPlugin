@@ -96,8 +96,8 @@ export default function TooltipNode({ data }) {
             textAlign: 'left'
           }}
         >
-          Class: {matchedIssue.class}<br />
-          {matchedIssue.codeSnippet}<br />
+          <strong>Class:</strong> {matchedIssue.class}<br />
+          <code>{matchedIssue.codeSnippet}</code><br />
           <strong>{matchedIssue.message}</strong>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
@@ -111,7 +111,7 @@ export default function TooltipNode({ data }) {
               onClick={handleOpenAiFix}
               style={btnStyle('#51c9a6')}
             >
-              AI Fix
+              AIFix
             </button>
           </div>
         </div>
@@ -149,7 +149,10 @@ export default function TooltipNode({ data }) {
             boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
             minWidth: '400px',
             maxWidth: '500px',
-            animation: 'scaleFade 0.25s ease'
+            animation: 'scaleFade 0.25s ease',
+            maxHeight: '95%',
+            overflow: 'auto',
+            scrollbarWidth: '5px'
           }}>
             <div style={{ textAlign: 'right' }}>
               <button onClick={() => setShowAiFix(false)} style={{ background: 'transparent', border: 'none', fontSize: '16px', cursor: 'pointer' }}>

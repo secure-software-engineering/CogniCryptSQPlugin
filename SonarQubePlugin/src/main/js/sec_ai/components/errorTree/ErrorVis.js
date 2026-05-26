@@ -73,7 +73,8 @@ function ErrorVis({ onJumpToIssue }) {
 
                 const treeJson = await treeRes.json();
                 const rawValue = treeJson?.component?.measures?.[0]?.value ?? null;
-                const flatList = JSON.parse(rawValue || '[]');
+                const parsed = JSON.parse(rawValue || '{ "issues": []}');
+                const flatList = parsed.issues;
                 allIssuesRef.current = issuesRes || [];
                 flatListRef.current = flatList;
 
@@ -119,7 +120,7 @@ function ErrorVis({ onJumpToIssue }) {
     useEffect(() => {
         setNodes((nds) =>
             nds.map((n) => {
-                if (n.id === activeNodeId) {
+                if (n.id === activeNodeId && n instanceof TooltipNode) {
                     let errorType = n.data.full.errorType;
                      if (errorType === 'AlternativeReqPredicateError') {
                         errorType = 'RequiredPredicateError';
@@ -146,8 +147,8 @@ function ErrorVis({ onJumpToIssue }) {
 
     const handleHighlight = (nodeId) => {
         const visibleItems = getFilteredItems();
-        const ancestor = collectPathToRoot(nodeId, graphMapRef.current);
-        const children = collectSubtree(nodeId, graphMapRef.current);
+        const ancestor = collectPathToRoot(nodeId, graphMapRef.current, true);
+        const children = collectSubtree(nodeId, graphMapRef.current, true);
         const merged = { nodeIds: new Set(), edgeIds: new Set() };
 
         if (highlightMode === 'ancestor' || highlightMode === 'chain') {
@@ -204,14 +205,14 @@ function ErrorVis({ onJumpToIssue }) {
         const allNodes = flatListRef.current;
         
         // Add path from root to current node
-        pathToRoot.nodeIds.forEach(nodeId => {
+        pathToRoot.forEach(nodeId => {
             const fullNode = allNodes.find(n => n.hashcode === nodeId);
             if (fullNode) rootToBottomPath.push(fullNode);
         });
         
         // Add subtree nodes (from current to bottom)
-        subtree.nodeIds.forEach(nodeId => {
-            if (!Array.from(pathToRoot.nodeIds).includes(nodeId)) {
+        subtree.forEach(nodeId => {
+            if (!Array.from(pathToRoot).includes(nodeId)) {
                 const fullNode = allNodes.find(n => n.hashcode === nodeId);
                 if (fullNode) rootToBottomPath.push(fullNode);
             }

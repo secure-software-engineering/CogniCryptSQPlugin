@@ -1,14 +1,14 @@
 import subprocess
 import os
 import time
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 from typing import Tuple
 import json
 import glob
 from aifix.utils.code_sanitizer import extract_java_source
 
 
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 
 def find_sarif_report(report_dir):
     # Look for SARIF JSON files in the folder

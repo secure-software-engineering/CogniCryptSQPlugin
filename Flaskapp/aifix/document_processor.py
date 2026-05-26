@@ -3,9 +3,9 @@ import os
 import re
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from aifix.logger_config import get_logger
+from logger_config import get_aifix_logger
 
-logger = get_logger(__name__)
+logger = get_aifix_logger(__name__)
 # Document process class is for all the functions which are related to preprocessing documents and creating vector DB
 class DocumentProcessor:
     def __init__(self, chunk_size=1000, chunk_overlap=200):

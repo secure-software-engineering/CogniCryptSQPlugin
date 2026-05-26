@@ -16,7 +16,7 @@ jest.mock('../../main/js/sec_ai/components/APIs/api', () => ({
 }));
 
 // --- Child mocks ---
-jest.mock('../../main/js/sec_ai/components/Description/IssueList', () => {
+jest.mock('../../main/js/sec_ai/components/Description/IssueListItem', () => {
   return function MockIssueList({ issue, handleIssueClick }) {
     // NOTE: renders data-testid="issue-issue-1"
     return (

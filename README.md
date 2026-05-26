@@ -104,19 +104,14 @@ The features *AIFix* and *Confidence Score* require an additional python backend
 > [!NOTE]
 > The folder [`Flaskapp/confidence`](Flaskapp/confidence) contains only the trained model used for the calculation of the confidence score. The code for training the model can be found in [this repository](https://github.com/secure-software-engineering/SecAI_FalsePositiveDetector).
 
-### AIFix
+---
 
-Inside the [AIFix](AIFix) folder there is the code for the web server managing only the *AIFix* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
+## Releases
 
-> [!WARNING]
-> *AIFix* was combined with *Confidence Score* in a new directory [Flaskapp](Flaskapp). The code in the [AIFix directory](AIFix) is deprecated and will be removed.
+After running `mvn clean package -DskipTests` in the root directory a folder `release` will be created with the following contents:
 
-### Confidence
+- `secai-for-existing-sq-<version>.zip`: zip archive containing the source code for *AIFix* and *Confidence Score* and the **docker compose** for just these containers
+- `secai-for-new-sq-<version>.zip`: zip archive containing the source code for *AIFix* and *Confidence Score* and the **docker compose** for a new SonarQube setup
+- `secai-docs-<version>.zip`: zip archive containing the Markdown files of the documentation
 
-The directory [Confidence](Confidence) contains the backend for only the *confidence score* extension. For further details, consult the [documentation](#documentation). <!-- add actual docs links -->
-
-> [!NOTE]
-> This folder contains only the trained model used for the calculation of the confidence score. The code for training the model  can be found in [this repository](https://github.com/secure-software-engineering/SecAI_FalsePositiveDetector).
-
-> [!WARNING]
-> *Confidence Score* was combined with *AIFix* in a new directory [Flaskapp](Flaskapp). The code in the [Confidence directory](Confidence) is deprecated and will be removed.
+An up-to-date version of the plugin jar is generated in the `SonarQubePlugin/target/` directory.
