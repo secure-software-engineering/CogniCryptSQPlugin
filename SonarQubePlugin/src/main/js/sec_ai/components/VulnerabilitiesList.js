@@ -17,6 +17,7 @@ import {
 import {fetchFPScores, fetchMetricIssues, fetchSingleFPScore, getPriorityFromScore} from '../utils/issuesService';
 
 import {
+    clearSelectedIssue,
     selectAiSolution,
     selectIssues,
     selectProjectKey,
@@ -258,8 +259,10 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
                     <p style={styles.loadingText}>Loading issues and calculating confidence scores... If there are many issues this may take a while.</p>
                 ) : (
                     <ul style={styles.issueList}>
-                        {(visibleIssues || []).length === 0 ? (
+                        {(issues || []).length === 0 ? (
                             <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis and that the flask server is up.</p>
+                        ) : ((visibleIssues || []).length === 0 ? (
+                            <p style={styles.loadingText}>No issues matched to current filter.</p>
                         ) : (
                             visibleIssues.map(issue => (
                                 <IssueListItem
@@ -268,7 +271,7 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
                                     handleIssueClick={() => handleIssueClick(issue)}
                                 />
                             ))
-                        )}
+                        ))}
                     </ul>
                 )}
             </div>

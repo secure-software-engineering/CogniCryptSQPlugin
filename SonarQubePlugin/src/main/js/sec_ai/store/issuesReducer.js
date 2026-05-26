@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {useSelector} from "react-redux";
 
 const initialState = {
     projectKey: null,
@@ -11,8 +12,11 @@ const initialState = {
     Iteration: 1,
     sourceCodeResults: null,
     fileList: [],
-    filter: {}
+    filter: {},
+    sortBy: ["alph-asc", "priority-desc", "severity-desc", "fp-desc"]
 };
+
+export const defaultSort = ["alph-asc", "priority-desc", "severity-desc", "fp-desc"]
 
 const issuesSlice = createSlice({
     name: 'issues',
@@ -33,7 +37,7 @@ const issuesSlice = createSlice({
             state.fileList = new Array(...files).sort();
 
             // Update visible issues
-            state.visibleIssues = filterIssues(state.issues, state.filter); // ??? Use {} instead to reset filter?
+            state.visibleIssues = sortIssues(filterIssues(state.issues, state.filter), state.sortBy); // ??? Use {} instead to reset filter?
         },
         setSelectedIssue(state, action) {
             state.selectedIssue = action.payload;
@@ -59,8 +63,9 @@ const issuesSlice = createSlice({
             state.sourceCodeResults = action.payload;
         },
         setVisibleIssues(state, action) {
-            state.filter = action.payload;
-            state.visibleIssues = filterIssues(state.issues, state.filter);
+            state.filter = action.payload.filter;
+            state.sortBy = action.payload.sortBy || state.sortBy;
+            state.visibleIssues = sortIssues(filterIssues(state.issues, state.filter), state.sortBy);
         }
     },
 });
@@ -93,12 +98,30 @@ export const selectSourceCodeResults = (state) => state.issues.sourceCodeResults
 export const selectFileList = (state) => state.issues.fileList;
 export const selectFilter = (state) => state.issues.filter;
 export const selectClassesFromFilter = (state) => state.issues.filter.files || [];
+export const selectSeverityFromFilter = (state) => state.issues.filter.severity || [];
+export const selectSortBy = (state) => state.issues.sortBy;
+export const getIssueStatus = (state) => {
+    const issuesLoaded = state.issues.issues.length > 0;
+    let fpLoaded = true;
+    let priorityLoaded = true;
+    if (issuesLoaded) {
+        for (let i of state.issues.issues) {
+            if (i.fp_score === -1) fpLoaded = false;
+            if (i.priority === -1) priorityLoaded = false;
+        }
+    } else {
+        // no issues -> no scores
+        fpLoaded = false;
+        priorityLoaded = false;
+    }
+    return {issuesLoaded, fpLoaded, priorityLoaded};
+};
 
 function filterIssues(original, filter) {
     let res = [];
 
     // If the filter is empty select all issues
-    if (filter === {}) {
+    if (!filter || Object.keys(filter).length === 0) {
         res = original.slice();
     } else {
         for (let issue of original) {
@@ -111,9 +134,23 @@ function filterIssues(original, filter) {
                     continue;
                 }
             }
+            // severity filter
+            if (filter.severity) {
+                const severity = issue.severity || issue._raw.severity;
+
+                // If the severity isn't part of the filter, skip this issue
+                if (severity && filter.severity.indexOf(severity) === -1) {
+                    continue;
+                }
+            }
 
             // Confidence filter, skip issue if too low
-            if (filter.confidence && issue.fp_score < filter.confidence) {
+            if (filter.confidence && (1 - issue.fp_score) < filter.confidence) {
+                continue;
+            }
+
+            // Priority filter, skip issue if too low
+            if (filter.priority && issue.priority < filter.priority) {
                 continue;
             }
 
@@ -123,4 +160,59 @@ function filterIssues(original, filter) {
     }
 
     return res;
+}
+
+function sortIssues(original, sortBy) {
+    // Decide order descending/ascending
+    const desc = (a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+    };
+    const asc = (a, b) => {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+    };
+
+    // Pick attribute to compare
+    const pick = (issue, attr) => {
+        switch (attr) {
+            case "priority":
+                return issue.priority;
+            case "severity":
+                let sev = issue.severity || issue._raw.severity;
+                return sev == "HIGH" ? 3 : (sev == "MEDIUM" ? 2 : (sev == "LOW" ? 1 : (sev == "INFO" ? 0 : 4)));
+            case "fp":
+                return 1 - issue.fp_score;
+            case "alph":
+                return issue.class || issue.reportLocation?.className || issue._raw.class || issue._raw.reportLocation.className;
+        }
+    }
+
+    const createSorter = (sortBy) => (a, b) => {
+        for (const rule of sortBy) {
+            const [metric, dir] = rule.split("-");
+            const cmp = dir === "asc" ? asc : desc;
+            const av = pick(a, metric);
+            const bv = pick(b, metric);
+            const res = cmp(av, bv);
+            //console.log(metric, ": ", av, cmp.name, bv, " => ", res);
+            if (res !== 0) return res;
+        }
+        return 0;
+    };
+
+    let sorted = [...original].sort(createSorter(sortBy));
+    /*let reduceLogs = (issue) => {
+        let reducedIssue = {};
+        reducedIssue.key = issue.key;
+        reducedIssue.class = issue._raw.class;
+        reducedIssue.fp = issue.fp_score;
+        reducedIssue.priority = issue.priority;
+        reducedIssue.severity = issue._raw.severity;
+        return reducedIssue;
+    }
+    console.log(sorted.map(reduceLogs), original.map(reduceLogs));//*/
+    return sorted;
 }
