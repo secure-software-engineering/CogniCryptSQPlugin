@@ -7,7 +7,7 @@
   <groupId>org.sonarsource.plugins.secai</groupId>
   <artifactId>secai-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>1.2.0_SNAPSHOT</version>
+  <version>1.2.0</version>
 
   <name>SecAI Plugin for SonarQube Server 10.x</name>
   <description>SecAI Plugin for SonarQube Server: Detecting Cryptographic API misuse using CogniCrypt</description>

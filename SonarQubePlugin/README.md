@@ -1,55 +1,61 @@
-# SonarQubePlugin
-Repository for the SecAI project group for the SonarQube plugin development
+# *SecAI* Plugin for SonarQube
 
+This is a short guide on how to install the *SecAI* custom plugin.
 
-This is a short guide on how to setup Sonarqube on your system, and install the "SecAI" custom plugin.
+## Installing the *SecAI* plugin
 
-1. **SonarQube installation**
-There are two methods to install SonarQube on your system, either from a ZIP file or via Docker.
-    Method 1:
-    - Go to this link https://www.sonarsource.com/products/sonarqube/downloads/
-    - Download the community edition by giving the mail-id.
-    - Extract the files
-    - Go to bin->select the environment->run the startsonar file.
+1. Add the plugin jar to the plugin folder:
+    - With a SonarQube docker: If you used our docker compose file for your server there should be a `plugins` folder in the base directory that is connected directly to the correct location inside the container. Copy the jar into this folder.
     
-    Method 2:
-    - Download Docker https://www.docker.com/products/docker-desktop/
-    - Once downloaded run this command in CMD  docker run -d --name sonarqube -e             SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
-    - Wait for some time depending on your machine resources and visit
-    http://localhost:9000/default 
-    user: admin
-    password: admin 
+        Alternatively, use the command below to move the file to `/opt/sonarqube/extensions/plugins` (on the running container `sonarqube`):
 
-2. **Creating a project in SonarQube**
-- Once the local host is running then go to projects and select create a local project.
-- Select the display name and project key (I put “secai” in both),.
-- Click next and select use global settings.
-- And click create project.
-- Select analysis method as locally for now.
-- In next step select generate project token and expiration as no expiration. Click next
-- Then you will get a command to run for project on which you want to analyse the code.
-    NOTE: Run this command in cmd/terminal of the host machine not from the IDE terminal (It will not work)
-    - Here If you get an error when you first run that command run the below command
-    mvn clean install org.sonarsource.scanner.maven:sonar-maven-plugin:3.5.0.1254:sonar
-    - then restart the cmd --- again run the provided command from SonarQube.
-- Once the analysis done you will get report on the webpage. 
+        ```bash
+        docker cp ./secai-plugin-1.2.0.jar sonarqube:/opt/sonarqube/extensions/plugins
+        ```
+    - With SonarQube installed from a zip file: Locate the `extensions/plugins` folder inside your SonarQube distribution and move the jar into it.
+2. Restart the SonarQube instance for the changes to take effect. You should receive a warning about third-party plugins and the plugin should be listed under **Administration > Marketplace > Plugins > Installed**.
 
-3. **Running the SecAI plugin**
-- Clone this github repository
-- Run “mvn clean package"
-- Go to /target/sonar-plugin-example-x.x.x.jar and copy that file into the directory -> sonarqube server file extensions/plugins/
-    - If you are using Docker then 
-    docker cp /path/to/your/generated/jar/file {docker_containerID}:/opt/sonarqube/extensions/plugins/
-    {docker_containerID} : run docker ps  to get Id of the running container
-- Restart the SonarQube server
-- Your plugin should be working now!
+## Automated Plugin Deployment 
 
+If you intend to further develop this plugin, you can use the provided script (`deploy-sonarqube-plugin.sh`) for automating the deployment of the *SecAI* plugin to a SonarQube docker container. 
 
-# Automated Plugin Deployment 
-Here provided a script for automating the deployment of the Sonarqube Plugin using Docker.
+The script first builds the plugin jar using Maven. Therefore, if you are intending to use the plugin as is, it is recommended to simply download the compiled plugin from the [release page](https://github.com/secure-software-engineering/CogniCryptSQPlugin/releases).
 
-### Usage
-Everytime the changes being made, just run following commands to automate the deployment process:
+At the start of the file there is a set of variables you may need to adjust to your setup, though the `PLUGIN_SOURCE_DIR` and `SONARQUBE_PLUGIN_DIR` should remain unchanged in most cases.
+
+```bash
+# Variables
+DOCKER_CONTAINER_NAME="sonarqube"   # Name of your SonarQube container
+PLUGIN_SOURCE_DIR="./target"        # plugin target directory
+JAR_FILE="secai-plugin-1.2.0.jar"  # JAR name of plugin JAR
+SONARQUBE_PLUGIN_DIR="/opt/sonarqube/extensions/plugins"
+```
+
+Everytime changes are made, simply run following command to automatically copy the new plugin jar into the docker container and restart the `sonarqube` container.
+
 ``` bash
 ./deploy-sonarqube-plugin.sh 
 ```
+
+
+## Adding pages to the webapp
+
+If you you wish add to or make changes to the custom pages of the webapp, refer to the [official SonarQube documentation](https://docs.sonarsource.com/sonarqube-community-build/extension-guide/developing-a-plugin/adding-pages-to-the-webapp).
+
+For easy testing and debugging run a SonarQube docker with the plugin installed.
+
+You can then run the following commands:
+- Install the dependencies with
+
+  ```bash
+  npm install
+  ```
+- Start a local version of the webapp
+
+  ```bash
+  npm start
+  ```
+
+  This server can be reached under `http://localhost:3000` and uses your local JavaScript files directly. The interface gets updated everytime a file is saved without needing a server restart.
+
+  For further instructions, including changing the port and url, refer to SonarQube's [custom plugin example](https://github.com/SonarSource/sonar-custom-plugin-example/).

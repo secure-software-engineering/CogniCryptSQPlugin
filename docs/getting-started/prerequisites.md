@@ -8,7 +8,7 @@ Some prerequisites must be fulfilled before you can proceed with the installatio
 
 If you intend to set up a new SonarQube server instead of using an existing one you can check [here](https://docs.sonarsource.com/sonarqube-server/server-installation/server-host-requirements) for the exact hardware requirements. In general, it is recommended to have at least 4 GB RAM. They also suggest at least 30 GB disk space, though this depends on how much code you intend to analyze; the size of the docker image itself is less than 2 GB.
 
-For the *SecAI* plugin two additional docker containers will be installed. Combined, the two images will require roughly 15 GB of disk space.
+For the *SecAI* plugin two additional docker containers will be installed. Combined, the two images will require roughly 9 GB of disk space.
 
 ---
 
@@ -20,12 +20,12 @@ The components required for the features *Confidence Score* and *AIFix* are inst
 
 ### Java
 
-The *Code Generation* feature requires Java 17+ to verify the generated code. If you are using this guide to set up a new SonarQube server then this is handled automatically. However, if you are expanding an exiting SonarQube instance this step is necessary to be able to use this feature. 
+The *Code Generation* feature requires Java compiler of Java 17+ to verify the generated code. If you are using this guide to set up a new SonarQube server then this is handled automatically. However, if you are expanding an existing SonarQube instance this step is necessary to be able to use this feature, as the JRE included in the standard SonarQube installation does not contain a compiler. 
 
 Where to install Java depends on how your SonarQube instance is installed:
 
 1. If you are running SonarQube [from a **ZIP** file](https://docs.sonarsource.com/sonarqube-server/server-installation/from-zip-file) then you can simply install Java 17+ on your host machine. <!-- TODO: check if JAVA_HOME is needed -->
-2. If you are using [a **Docker** image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image) TODO
+2. If you are using [a **Docker** image](https://docs.sonarsource.com/sonarqube-server/server-installation/from-docker-image) then adding a Java compiler afterwards will be difficult as only files located in volumes persist between container restarts.
 
 ---
 

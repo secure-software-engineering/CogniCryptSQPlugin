@@ -42,10 +42,8 @@ theme:
 nav:
   - Home: index.md
   - Getting Started:
-    - Overview: getting-started/overview.md
+    - Setup: getting-started/overview.md
     - Prerequisites: getting-started/prerequisites.md
-    - New Server Setup: getting-started/server-setup.md
-    - Add to Existing SonarQube Server: getting-started/add-to-existing.md
     - First Analysis: getting-started/first-analysis.md
   - User Guide:
     - Issue Management: user-guide/issue-management.md

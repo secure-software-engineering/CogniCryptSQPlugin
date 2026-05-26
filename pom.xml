@@ -6,7 +6,7 @@
 
     <groupId>org.sonarsource.plugins.secai</groupId>
     <artifactId>secai</artifactId>
-    <version>1.2.0_SNAPSHOT</version>
+    <version>1.2.0</version>
     <name>SecAI</name>
 
     <modules>

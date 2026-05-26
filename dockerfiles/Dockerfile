@@ -1,5 +1,5 @@
-# Chnage the base image to the latest SonarQube LTS version or any other preferred version
-FROM sonarqube:25.2.0.102705-community 
+# Change the base image to the latest SonarQube LTS version or any other preferred version
+FROM sonarqube:26.3.0.120487-community 
 
 USER root
 
