@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import IssueList from '../../main/js/sec_ai/components/Description/IssueList';
+import IssueListItem from '../../main/js/sec_ai/components/Description/IssueListItem';
 
 const renderWithStore = (ui, { selectedIssue = null } = {}) => {
   const preloadedState = { issues: { selectedIssue } };
@@ -27,7 +27,7 @@ describe('IssueList', () => {
     const handleIssueClick = jest.fn();
 
     renderWithStore(
-      <IssueList issue={issue} handleIssueClick={handleIssueClick} />
+      <IssueListItem issue={issue} handleIssueClick={handleIssueClick} />
     );
 
     // Message shown
@@ -44,7 +44,7 @@ describe('IssueList', () => {
     const handleIssueClick = jest.fn();
 
     renderWithStore(
-      <IssueList issue={issue} handleIssueClick={handleIssueClick} />
+      <IssueListItem issue={issue} handleIssueClick={handleIssueClick} />
     );
 
     fireEvent.click(screen.getByTestId('issue-issue-1'));
@@ -57,7 +57,7 @@ describe('IssueList', () => {
     const handleIssueClick = jest.fn();
 
     renderWithStore(
-      <IssueList issue={issue} handleIssueClick={handleIssueClick} />
+      <IssueListItem issue={issue} handleIssueClick={handleIssueClick} />
     );
 
     const item = screen.getByTestId('issue-issue-1');
@@ -72,7 +72,7 @@ describe('IssueList', () => {
     const handleIssueClick = jest.fn();
 
     const { getByTestId } = renderWithStore(
-      <IssueList issue={issue} handleIssueClick={handleIssueClick} />,
+      <IssueListItem issue={issue} handleIssueClick={handleIssueClick} />,
       { selectedIssue: issue } // mark it selected
     );
 
@@ -89,7 +89,7 @@ describe('IssueList', () => {
     const handleIssueClick = jest.fn();
 
     renderWithStore(
-      <IssueList issue={issue} handleIssueClick={handleIssueClick} />
+      <IssueListItem issue={issue} handleIssueClick={handleIssueClick} />
     );
 
     // Message is there

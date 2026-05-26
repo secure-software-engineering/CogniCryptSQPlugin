@@ -6,7 +6,7 @@ import {
     getRuleDescriptor
 } from './APIs/api';
 
-import IssueList from './Description/IssueList';
+import IssueListItem from './Description/IssueListItem';
 import AiFix from './Description/AiFix';
 import DetailedDescription from './Description/DetailedDescription';
 import {
@@ -17,12 +17,13 @@ import {
 import {fetchFPScores, fetchMetricIssues, fetchSingleFPScore, getPriorityFromScore} from '../utils/issuesService';
 
 import {
+    clearSelectedIssue,
     selectAiSolution,
     selectIssues,
     selectProjectKey,
     selectSelectedIssue,
     selectSourceCode,
-    selectSourceCodeResults,
+    selectSourceCodeResults, selectVisibleIssues,
     setAiSolution,
     setIssues,
     setProjectKey,
@@ -32,6 +33,7 @@ import {
 import QuickFixCard from './Description/QuickFixCard';
 import DiffView from './Description/DiffView';
 import { SERVER_IP } from '../utils/settings';
+import {Filter} from "./Description/Filter";
 
 const BASE_NAVS = ['Root Cause', 'How to Fix', 'AIFix', 'More Info'];
 
@@ -61,9 +63,10 @@ const formatPercent = (val) => {
     return `${pct.toFixed(2)}%`;
 };
 
-function DetailedFix({ jumpTarget, clearJumpTarget }) {
+function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
     const dispatch = useDispatch();
     const issues = useSelector(selectIssues);
+    const visibleIssues = useSelector(selectVisibleIssues);
     const selectedIssue = useSelector(selectSelectedIssue);
     const sourceSnippet = useSelector(selectSourceCode);
     const projectKey = useSelector(selectProjectKey);
@@ -252,21 +255,24 @@ function DetailedFix({ jumpTarget, clearJumpTarget }) {
     return (
         <div style={styles.container}>
             <div style={styles.sidebar}>
+                <Filter />
                 {loading ? (
                     <p style={styles.loadingText}>Loading issues and calculating confidence scores... If there are many issues this may take a while.</p>
                 ) : (
                     <ul style={styles.issueList}>
                         {(issues || []).length === 0 ? (
-                            <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis.</p>
+                            <p style={styles.loadingText}>No issues found. If you think this is incorrect, check that at least one CogniCrypt issue was found during the last analysis and that the flask server is up.</p>
+                        ) : ((visibleIssues || []).length === 0 ? (
+                            <p style={styles.loadingText}>No issues matched to current filter.</p>
                         ) : (
-                            issues.map(issue => (
-                                <IssueList
+                            visibleIssues.map(issue => (
+                                <IssueListItem
                                     key={issue.key}
                                     issue={issue}
                                     handleIssueClick={() => handleIssueClick(issue)}
                                 />
                             ))
-                        )}
+                        ))}
                     </ul>
                 )}
             </div>
@@ -506,4 +512,4 @@ const styles = {
     errorType: { fontSize: '12px', color: '#555', marginTop: '4px' }
 };
 
-export default DetailedFix;
+export default VulnerabilitiesList;

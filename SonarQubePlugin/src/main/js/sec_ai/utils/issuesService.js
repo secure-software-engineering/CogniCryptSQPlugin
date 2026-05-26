@@ -39,6 +39,7 @@ export const mapTreeNodeToIssue = (node, idx = 0) => {
         component,
         line,
         fp_score: -1, // This will be set after fetching the issues
+        priority: -1, // This will be set after fetching the issues
         _raw: node,
         _descriptorSections: null // This will now be fetched on click
     };
@@ -105,13 +106,13 @@ export async function fetchFPScores(lastAnalysis, metricIssues, projectKey, bran
         let json = {};
         try {
             json = text ? JSON.parse(text) : {};
-        } catch (_) {
-        }
+        } catch (_) {}
 
         // Save generated fp scores
         // Results are in the same order as the issues
         metricIssues.forEach((issue, i) => {
             issue.fp_score = json.fp_scores[i].probability_score;
+            issue.priority = getPriorityFromScore(issue.fp_score, issue._raw.severity);
         });
     } catch (err) { /* This means there was most likely a network error, so we just leave the issues as they are */  }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import ErrorVis from './errorTree/ErrorVis';
 import { ReactFlowProvider } from 'reactflow';
-import DetailedFix from './VulnerabilitiesList';
+import VulnerabilitiesList from './VulnerabilitiesList';
 import CodeGen  from './codeGeneration/codeGen';
 import { useDispatch } from 'react-redux';
 import { setSelectedTab } from '../store/issuesReducer';
@@ -69,7 +69,7 @@ function NavigationBar() {
             </div>
 
             <div style={styles.chatPane}>
-                {activeTab === 'vulnerabilities' && <DetailedFix jumpTarget={jumpTarget} clearJumpTarget={() => setJumpTarget(null)} />}
+                {activeTab === 'vulnerabilities' && <VulnerabilitiesList jumpTarget={jumpTarget} clearJumpTarget={() => setJumpTarget(null)} />}
                 <ReactFlowProvider>
                     {activeTab === 'errorTree' && <ErrorVis onJumpToIssue={handleJumpToIssue} />}
                 </ReactFlowProvider>

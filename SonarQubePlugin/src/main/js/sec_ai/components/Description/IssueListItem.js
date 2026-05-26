@@ -2,7 +2,7 @@ import React from 'react'
 import { selectSelectedIssue } from '../../store/issuesReducer';
 import { useSelector } from 'react-redux';
 
-function IssueList({ key, issue, handleIssueClick }) {
+function IssueListItem({ key, issue, handleIssueClick }) {
     const selectedIssue = useSelector(selectSelectedIssue);
 
     // Safe filename extraction even if component is missing
@@ -42,4 +42,4 @@ const styles = {
     },
 }
 
-export default IssueList
+export default IssueListItem
