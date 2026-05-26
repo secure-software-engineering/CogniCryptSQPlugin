@@ -142,7 +142,7 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
 
                 const hashcode = String(getIssueHashcode(issue) || '');
                 const projectKey = new URLSearchParams(window.location.search).get('id');
-                const activeBranch = new URLSearchParams(window.location.search).get('branch');
+                const activeBranch = new URLSearchParams(window.location.search).get('branch') ?? "main";
 
                 const json = await fetchSingleFPScore(hashcode, dotGraph, projectKey, activeBranch);
 

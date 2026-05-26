@@ -40,7 +40,7 @@ def get_fp_score(hashcode, project, branch, last_analysis):
         if not last_analysis is datetime:
             try:
                 last_analysis = datetime.fromtimestamp(last_analysis)
-            except OSError:
+            except (OSError, ValueError) as e:
                 last_analysis = datetime.fromtimestamp(last_analysis / 1000)
 
         # If the last analysis happened before the entry was created, then it's still up-to-date
@@ -63,7 +63,7 @@ def is_outdated(last_analysis, project, branch) -> bool:
         if not last_analysis is datetime:
             try:
                 last_analysis = datetime.fromtimestamp(last_analysis)
-            except OSError:
+            except (OSError, ValueError) as e:
                 last_analysis = datetime.fromtimestamp(last_analysis / 1000)
 
         cursor.execute("""
