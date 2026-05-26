@@ -35,7 +35,7 @@ import DiffView from './Description/DiffView';
 import { SERVER_IP } from '../utils/settings';
 import {Filter} from "./Description/Filter";
 
-const BASE_NAVS = ['Root Cause', 'How to Fix', 'AI Fix', 'More Info'];
+const BASE_NAVS = ['Root Cause', 'How to Fix', 'AIFix', 'More Info'];
 
 const Spinner = ({ size = 14 }) => (
     <svg width={size} height={size} viewBox="0 0 50 50" style={{ marginLeft: 6, verticalAlign: 'middle' }}>
@@ -91,6 +91,7 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
     const getIssueHashcode = (issue) => issue?._raw?.hashcode || issue?.key || null;
 
     const handleIssueClick = async (issue) => {
+        if (issue instanceof String) issue = issues.find(i => i.key == issue || i._raw.hashcode == issue);
         if (!issue) return;
         dispatch(setAiSolution(null));
         dispatch(setSelectedIssue(issue));
@@ -229,7 +230,7 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
         if (hasQuickFix) {
             list.push('Quick Fix');
         }
-        list.push('AI Fix');
+        list.push('AIFix');
         if (aiSolution && aiSolution.Final_Secure_Code_Snippet) {
             list.push('Diff View');
         }
@@ -362,7 +363,7 @@ function VulnerabilitiesList({ jumpTarget, clearJumpTarget }) {
                         </div>
 
                         <div style={styles.tabContent}>
-                            {selectedTab === "AI Fix" && <AiFix sourceSnippet={sourceSnippet} _oldRule={sonarRuleKey} />}
+                            {selectedTab === "AIFix" && <AiFix sourceSnippet={sourceSnippet} _oldRule={sonarRuleKey} />}
                             {selectedTab === "Root Cause" && <DetailedDescription description={rootCauseHTML} />}
                             {selectedTab === "How to Fix" && <DetailedDescription description={howToFixHTML} />}
                             {selectedTab === "Quick Fix" && <QuickFixCard fixes={selectedIssue?._raw?.quickFixes || []} />}

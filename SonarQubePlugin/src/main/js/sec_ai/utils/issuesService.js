@@ -56,7 +56,7 @@ export async function fetchMetricIssues(projectKey) {
 
     const json = await res.json();
     const rawValue = json?.component?.measures?.[0]?.value ?? null;
-    if (!rawValue) return [];
+    if (!rawValue) return { lastAnalysis: null , metricIssues: []};
 
 
     const parsed = safeJSONParse(rawValue, []);
@@ -87,28 +87,34 @@ export async function fetchFPScores(lastAnalysis, metricIssues, projectKey, bran
     metricIssues.forEach((issue) => {
         fp_data.push({hashcode: issue.key || issue._raw?.hashcode, dot_graph: issue._raw?.cpgBase64Gz});
     });
-    const res = await fetch(`http://${SERVER_IP}/fpall`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-            last_analysis: lastAnalysis,
-            project: projectKey,
-            branch: branchName,
-            errors: fp_data })
-    });
 
-    // Parse results
-    const text = await res.text();
-    let json = {};
-    try { json = text ? JSON.parse(text) : {}; } catch (_) { }
+    try {
+        const res = await fetch(`http://${SERVER_IP}/fpall`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+            body: JSON.stringify({
+                last_analysis: lastAnalysis,
+                project: projectKey,
+                branch: branchName,
+                errors: fp_data
+            })
+        });
 
-    // Save generated fp scores
-    // Results are in the same order as the issues
-    metricIssues.forEach((issue, i) => {
-        issue.fp_score = json.fp_scores[i].probability_score;
-        issue.priority = getPriorityFromScore(issue.fp_score, issue._raw.severity);
-    });
+        // Parse results
+        const text = await res.text();
+        let json = {};
+        try {
+            json = text ? JSON.parse(text) : {};
+        } catch (_) {}
+
+        // Save generated fp scores
+        // Results are in the same order as the issues
+        metricIssues.forEach((issue, i) => {
+            issue.fp_score = json.fp_scores[i].probability_score;
+            issue.priority = getPriorityFromScore(issue.fp_score, issue._raw.severity);
+        });
+    } catch (err) { /* This means there was most likely a network error, so we just leave the issues as they are */  }
 
     return metricIssues;
 }
