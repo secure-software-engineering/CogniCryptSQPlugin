@@ -46,30 +46,41 @@ nav:
     - Prerequisites: getting-started/prerequisites.md
     - First Analysis: getting-started/first-analysis.md
   - User Guide:
-    - Issue Management: user-guide/issue-management.md
+    - Overview: user-guide/overview.md
+    - Confidence Scores and Quick Fixes: user-guide/vulnerabilities-list.md
     - Error Tree: user-guide/error-tree.md
-    - AiFix: user-guide/AiFix.md
+    - AIFix: user-guide/aifix.md
     - Code Generation: user-guide/code-gen.md
-    - Github PR: user-guide/github-pr-integration.md
-    - Diff-View: user-guide/diff-view.md
-  - CogniCrypt:
-    - Overview: cognicrypt/overview.md
-    - Extracting Additional Information: cognicrypt/cc-message-deconstruction.md
-    - Editing the Error Message: cognicrypt/cc-message-edit.md
-    - Accurate Error Location: cognicrypt/cc-location.md
-    - Severity: cognicrypt/severity.md
-    - False Positive Detection: cognicrypt/false-positive-detection.md
-    - CogniCrypt Rules in SonarQube: cognicrypt/cc-rules.md
+    - GitHub Pull Request Integration: user-guide/github-pr-integration.md
   - Extension Guide:
     - Adding New Analysis Tools: extension-guide/add-tool.md
     - Custom SonarQube Properties: extension-guide/custom-properties.md
-    - Jar Generation: extension-guide/jar-generation.md
-    - Code Snippet: extension-guide/code-snippet.md
-  - Testing:
-    - Overview: testing/overview.md
-    - Running Tests: testing/running-tests.md
-    - Writing Tests: testing/writing-tests.md
-    - Test Data: testing/test-data.md
+    - Useful Classes:
+      - Jar Generation: extension-guide/jar-generation.md
+      - Code Snippet: extension-guide/code-snippet.md
+  - Implementation Notes:
+    - Overview: implementation-notes/overview.md
+    - Custom SonarQube Web Page:
+      - Issue Management: implementation-notes/issue-management.md
+      - Error Tree: implementation-notes/error-tree.md
+      - Diff-View: implementation-notes/diff-view.md
+      - Github PR: implementation-notes/github-pr-integration.md
+    - AI Features:
+      - AiFix: implementation-notes/AiFix.md
+      - Code Generation: implementation-notes/code-gen.md
+    - CogniCrypt Integration:
+      - Overview: cognicrypt/overview.md
+      - Extracting Additional Information: cognicrypt/cc-message-deconstruction.md
+      - Editing the Error Message: cognicrypt/cc-message-edit.md
+      - Accurate Error Location: cognicrypt/cc-location.md
+      - Severity: cognicrypt/severity.md
+      - False Positive Detection: cognicrypt/false-positive-detection.md
+      - CogniCrypt Rules in SonarQube: cognicrypt/cc-rules.md
+    - Testing During Development:
+      - Overview: testing/overview.md
+      - Running Tests: testing/running-tests.md
+      - Writing Tests: testing/writing-tests.md
+      - Test Data: testing/test-data.md
   - API Reference: api-reference.md
   - Contributing: contributing.md
 

@@ -2,24 +2,13 @@
 
 ## Overview
 
-The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with AI-generated code fixes directly from the plugin interface. This feature is available in both the AI Fix and Quick Fix components.
+The SecAI SonarQube plugin includes GitHub integration that allows users to automatically create pull requests with the code fixes directly from the plugin interface. This feature is available in both the [*AIFix*](./aifix.md) and [*Quick Fix*](./vulnerabilities-list.md#quick-fixes) components.
 
 ---
 
 ## Setup and Configuration
 
-### 1. Sonarqube settings Variables
-
-Configure the following variables in your SonarQube instance under project settings:
-
-```bash
-# GitHub Configuration
-GITHUB_TOKEN=your_github_personal_access_token
-GITHUB_OWNER=your_github_username_or_organization
-GITHUB_REPO=your_repository_name
-```
-
-### 2. GitHub Personal Access Token Setup
+### GitHub Personal Access Token Setup
 
 1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Click "Generate new token (classic)"
@@ -28,73 +17,21 @@ GITHUB_REPO=your_repository_name
    - `workflow` (Update GitHub Action workflows)
 4. Copy the generated token and add it to your SonarQube settings
 
-![Github_Pr_Settings](github-pr-settings.png)
+### SonarQube Settings
+
+Configure the **GitHub Pull Request** settings in your SonarQube instance under your project **Project Settings > General Settings > SecAI**:
+
+> **Note:** In the current implementation the same GitHub configuration will be used project-wide for each pull request regardless of the executing SonarQube user. This means that all pull requests will be authored by the user specified in the settings.
+
+![Github_Pr_Settings](images/github-pr-settings.png)
 
 ---
 
 ## Usage
 
-### AI Fix Component
+Navigate to the **AIFix** or **Quick Fix** tab for a selected issue. For *AIFix* you must first generate a fix; for *Quick Fix* simply select one of the options. You can then at the bottom of the page select **Create GitHub PR** and a pull request will be created automatically.
 
-1. Navigate to an issue in the SecAI plugin
-2. Go to the "AI Fix" tab
-3. Click "Generate the fix" to get AI-generated code
-4. Click "Create GitHub PR" to automatically create a pull request
-5. Review the generated fix in the "Diff View" [here](diff-view.md) tab
-
-### Quick Fix Component
-
-1. Select an issue from the issue list
-2. Go to the "Quick Fix" tab
-3. Choose from available quick fix options
-4. Click "Apply Quick Fix & Create PR" to apply the fix and create a pull request
-
----
-
-## Technical Implementation
-
-### Core Components
-
-#### GitHub API Integration
-Both components use the Octokit library for GitHub API interactions:
-
-```javascript
-import { Octokit } from "@octokit/rest";
-
-const octokit = new Octokit({
-    auth: GITHUB_TOKEN,
-});
-```
-
-#### Pull Request Creation Flow
-
-1. **Branch Creation**: Creates a new branch with a unique name based on the issue
-2. **File Update**: Updates the target file with the fixed code
-3. **Pull Request**: Creates a PR with descriptive title and body
-4. **User Feedback**: Displays success message with PR link
-
-### API Endpoints Used
-
-- `GET /repos/{owner}/{repo}/contents/{path}` - Fetch file content
-- `PUT /repos/{owner}/{repo}/contents/{path}` - Update file content
-- `POST /repos/{owner}/{repo}/pulls` - Create pull request
-
----
-
-## Error Handling
-
-The integration includes comprehensive error handling for:
-
-- **Authentication Issues**: Invalid or expired GitHub tokens
-- **Repository Access**: Insufficient permissions or non-existent repositories
-- **File Operations**: File not found or merge conflicts
-- **Network Issues**: API rate limits or connectivity problems
-
-Common error messages:
-- "GitHub token not configured"
-- "Repository not found or access denied"
-- "File not found in repository"
-- "Failed to create pull request"
+> Note: All previously described [SonarQube settings](#sonarqube-settings) must be set for the option to be selectable.
 
 ---
 
@@ -107,22 +44,21 @@ Common error messages:
 
 ---
 
-## Troubleshooting
 
-### Common Issues
+## Common Issues
 
-**Issue**: "GitHub token not configured"
+### "GitHub token not configured"
 
-- **Solution**: Verify the `GITHUB_TOKEN` environment variable is set correctly
+Verify the `githubpattoken` setting is set correctly
 
-**Issue**: "Repository not found"
+### "Repository not found"
 
-- **Solution**: Check `GITHUB_OWNER` and `GITHUB_REPO` values match your repository
+Check `githubusername` and `githubrepourl` settings in SonarQube match your repository
 
-**Issue**: "Insufficient permissions"
+### "Insufficient permissions"
 
-- **Solution**: Ensure your GitHub token has `repo` scope permissions
+Ensure your GitHub token has `repo` scope permissions
 
-**Issue**: Pull request creation fails
+### Pull request creation fails
 
-- **Solution**: Verify the target branch exists and you have write access to the repository
+Verify the target branch exists and you have write access to the repository

@@ -1,8 +1,9 @@
 # SecAI Plugin
 
-A comprehensive SonarQube plugin for enhanced code analysis and quality management.
+This SonarQube plugin extends the standard capabilities of SonarQube by providing additional rules, sensors, and analysis features. The focus lies in improving the usability of analysis tools by integrating their execution into the general SonatQube analysis and visualizing the results in a web interface.
 
-## Overview
+For instructions on how to set up the plugin check out [**_Getting Started_**](./getting-started/overview.md). Afterwards, the [**_User Guide_**](./user-guide/overview.md) will introduce you to the plugin's features.
 
-This SonarQube plugin extends the standard capabilities of SonarQube by providing additional rules, sensors, and analysis features. It is designed to improve code quality detection and provide deeper insights into your codebase.
+If you want to know more about how this plugin was developed, check out the [**_Implementation Notes_**](./implementation-notes/overview.md). 
 
+Currently, the SecAI plugin only integrates *CogniCrypt<sub>SAST</sub>*. If you want to extend the plugin by adding additional tools, consider referring to the [**_Extension Guide_**](./extension-guide/add-tool.md).
