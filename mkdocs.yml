@@ -52,6 +52,12 @@ nav:
     - AIFix: user-guide/aifix.md
     - Code Generation: user-guide/code-gen.md
     - GitHub Pull Request Integration: user-guide/github-pr-integration.md
+  - Extension Guide:
+    - Adding New Analysis Tools: extension-guide/add-tool.md
+    - Custom SonarQube Properties: extension-guide/custom-properties.md
+    - Useful Classes:
+      - Jar Generation: extension-guide/jar-generation.md
+      - Code Snippet: extension-guide/code-snippet.md
   - Implementation Notes:
     - Overview: implementation-notes/overview.md
     - Custom SonarQube Web Page:
@@ -75,12 +81,6 @@ nav:
       - Running Tests: testing/running-tests.md
       - Writing Tests: testing/writing-tests.md
       - Test Data: testing/test-data.md
-  - Extension Guide:
-    - Adding New Analysis Tools: extension-guide/add-tool.md
-    - Custom SonarQube Properties: extension-guide/custom-properties.md
-    - Useful Classes:
-      - Jar Generation: extension-guide/jar-generation.md
-      - Code Snippet: extension-guide/code-snippet.md
   - API Reference: api-reference.md
   - Contributing: contributing.md
 

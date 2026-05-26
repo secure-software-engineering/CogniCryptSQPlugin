@@ -6,7 +6,7 @@ More specifically, you can find the *AIFix* feature by selecting the **AIFix** t
 
 ![AIFix tab in the detailed issue view](./images/aifix-in-detail-view.PNG)
 
-![AIFix in error tree node]()
+![AIFix in error tree node](./images/aifix-error-tree.PNG)
 
 At the top you can select which model to use. Also, similar to [*Code Generation*](code-gen.md), a *CogniCrypt<sub>SAST</sub>* analysis is run on the generated code to check for unresolved issues. If you increase the number of iterations the AI will attempt to fix persisting issues before returning a result.
 
@@ -14,11 +14,15 @@ The result includes an explanation, the code fix and *CWE* mappings. You will al
 
 ![Generated AIFix](./images/aifix-generated-fix.PNG)
 
+The same is shown when executing the *AIFix* from the error tree:
+
+![Generated AIFix from error tree](./images/aifix-error-tree-fix.PNG)
+
 At the bottom, you can also choose to generate a GitHub pull request for this fix. For more details see [here](./github-pr-integration.md)
 
 ![Generated AIFix - GitHub PR](./images/aifix-generated-fix-bottom.PNG)
 
-A diff view comparing the proposed changes to the original code can viewed in the newly created **Diff View** tab in the detailed error view, or, if you used the shortcut from the error tree ...
+A diff view comparing the proposed changes to the original code can viewed in the newly created **Diff View** tab in the detailed error view. If you used the shortcut from the error tree a diff view is not available.
 
 ![Diff view](./images/diff-view-in-detail-view.PNG)
 

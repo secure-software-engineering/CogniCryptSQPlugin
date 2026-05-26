@@ -4,17 +4,21 @@ The custom page opens to a vulnerabilities list similar to the issue list of the
 
 Once the list of issues is populated you can open a [detail view](#detailed-issue-information) for each issue which includes [*Confidence Scores*](#confidence-severity-and-priority-scores) and [*Quick Fixes*](#quick-fixes) as well as access to the [*AIFix*](./aifix.md) feature. The list itself contains the error messages and file names.
 
+You can filter and sort the list using the filter button at the top of the list. The `x` next to it resets the filter.
+
+![Filter popup](./images/issue-list-filter.PNG)
+
 ## Detailed Issue Information
 
 The header of the detail view contains the error message, the error type right below the message, and three scores which are explained [below](#confidence-severity-and-priority-scores). Underneath the header there are tabs to switch between different sections of the detail view: **Root Cause**, **How to Fix**, [**Quick Fix**](#quick-fixes), **AIFix** (see [here](./aifix.md)), and **More Info**.
 
 The initial tab is **Root Cause** which contains a highlighted code snippet and a general description of the error type. The tab **How to Fix** instead explains the CrySL rule that the SonarQube rule was [based on](../cognicrypt/cc-rules.md). However, as these descriptions are static the dynamically generated error message above tends to contain the most relevant information.
 
-![Initial detail view]()
+![Initial detail view](./images/issue-list-detail.PNG)
 
 Under the **More Info** tab you can find additional information, such as CWE references and a link to the relevant official Java documentation. This tab also lists the number of preceding and subsequent issues, though the [*error tree*](./error-tree.md) provides a much better overview.
 
-![More info tab]()
+![More info tab](./images/issue-list-more-info.PNG)
 
 ### Confidence, Severity, and Priority Scores
 
@@ -30,7 +34,7 @@ Out of the previous two scores a *Priority Score* is calculated to give the user
 
 For some error types we offer pre-computed *Quick Fixes*. If there are no quick fixes available for an issue then the tab will be listed.
 
-![Quick Fix tab]()
+![Quick Fix tab](./images/issue-list-quickfix.PNG)
 
 Here, you can choose one of the suggested secure values and copy the edited line into your project at the given location. It is also possible to use our [GitHub PR](./github-pr-integration.md) integration.
 
