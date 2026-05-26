@@ -149,7 +149,10 @@ export default function TooltipNode({ data }) {
             boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
             minWidth: '400px',
             maxWidth: '500px',
-            animation: 'scaleFade 0.25s ease'
+            animation: 'scaleFade 0.25s ease',
+            maxHeight: '95%',
+            overflow: 'auto',
+            scrollbarWidth: '5px'
           }}>
             <div style={{ textAlign: 'right' }}>
               <button onClick={() => setShowAiFix(false)} style={{ background: 'transparent', border: 'none', fontSize: '16px', cursor: 'pointer' }}>

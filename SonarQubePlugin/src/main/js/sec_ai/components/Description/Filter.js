@@ -35,7 +35,7 @@ export function Filter() {
 
         // Can't figure out how to reset the selection for the classes dropdown
         const classesAll = filterForm["classes"].children[0].children[0];
-        console.log(classesAll);
+        //console.log(classesAll);
         if (!classesAll.checked) {
             classesAll.checked = true;
             const event = new Event("change", {bubbles: true});

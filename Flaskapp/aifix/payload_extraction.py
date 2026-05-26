@@ -42,15 +42,28 @@ def _extract_node_details(node):
     """Extracts detailed information from a single error node."""
     # ... (function content is the same as before) ...
     if not node: return {}
-    report_location = node.get('reportLocation', {})
-    return {
-        "hashcode": node.get('hashcode'), "severity": node.get('severity'), "line": node.get('line'),
-        "message": node.get('message'), "codeSnippet": node.get('codeSnippet'),
-        "errorType": node.get('errorType'), "rule": node.get('rule'), "method": node.get('method'),
-        "className": report_location.get('className'), "filePath": report_location.get('filePath'),
-        "start_location": report_location.get('start'), "end_location": report_location.get('end'),
-        "precedingErrors": node.get('precedingErrors', []), "subsequentErrors": node.get('subsequentErrors', [])
-    }
+    # depending on the input the needed values are inside the _raw dict instead of the top-level one
+    if "_raw" in node.keys():
+        raw = node["_raw"];
+        report_location = raw.get('reportLocation', {})
+        return {
+            "hashcode": raw.get('hashcode'), "severity": raw.get('severity'), "line": node.get('line'),
+            "message": node.get('message'), "codeSnippet": raw.get('codeSnippet'),
+            "errorType": raw.get('errorType'), "rule": node.get('rule'), "method": raw.get('method'),
+            "className": report_location.get('className'), "filePath": report_location.get('filePath'),
+            "start_location": report_location.get('start'), "end_location": report_location.get('end'),
+            "precedingErrors": raw.get('precedingErrors', []), "subsequentErrors": raw.get('subsequentErrors', [])
+        }
+    else:
+        report_location = node.get('reportLocation', {})
+        return {
+            "hashcode": node.get('hashcode'), "severity": node.get('severity'), "line": node.get('line'),
+            "message": node.get('message'), "codeSnippet": node.get('codeSnippet'),
+            "errorType": node.get('errorType'), "rule": node.get('rule'), "method": node.get('method'),
+            "className": report_location.get('className'), "filePath": report_location.get('filePath'),
+            "start_location": report_location.get('start'), "end_location": report_location.get('end'),
+            "precedingErrors": node.get('precedingErrors', []), "subsequentErrors": node.get('subsequentErrors', [])
+        }
 
 # --- Main Processing Function ---
 def process_payload(payload: dict) -> dict:
@@ -75,12 +88,15 @@ def process_payload(payload: dict) -> dict:
     # --- 2. Build simplified error trace flow ---
     logger.info("--- Simplified Error Trace Flow ---")
     # ... (function content is the same as before) ...
-    error_map = {node['hashcode']: node for node in full_path}
-    root_node = next((node for node in full_path if not node.get('precedingErrors')), None)
+    error_map = {node.get('hashcode', node['_raw']['hashcode']): node for node in full_path}
+    root_node = next((node for node in full_path if not (node.get('precedingErrors') or node.get('_raw').get('precedingErrors'))), None)
     error_trace_flow = []
     if root_node:
         current_node = root_node
         while current_node:
+            # depending on the input the needed values are inside the _raw dict instead of the top-level one
+            if "_raw" in current_node.keys():
+                current_node = current_node["_raw"]
             error_trace_flow.append(current_node.get('hashcode'))
             subsequent_hashes = current_node.get('subsequentErrors', [])
             current_node = error_map.get(subsequent_hashes[0]) if subsequent_hashes else None
@@ -91,7 +107,7 @@ def process_payload(payload: dict) -> dict:
     logger.info("--- Source Code Analysis ---")
     # ... (function content is the same as before) ...
     source_code_map = {item['nodeId']: item['fullSourceCode'] for item in source_code_analysis}
-    details_map = {node['hashcode']: node for node in all_nodes_details}
+    details_map = {node.get('hashcode'): node for node in all_nodes_details}
     class_names_in_trace_order = [details_map[hashcode]['className'] for hashcode in error_trace_flow]
     seen_classes = set()
     ordered_unique_classes = [cls for cls in class_names_in_trace_order if not (cls in seen_classes or seen_classes.add(cls))]
