@@ -49,11 +49,14 @@ def entry_point_all():
 
         if not outdated:
             saved_score = get_fp_score(hashcode, project, branch, last_analysis)
-            result["fp_scores"].append({
-                "hashcode": hashcode,
-                "prediction": saved_score[0],
-                "probability_score": saved_score[1]
-            })
+            if saved_score:
+                result["fp_scores"].append({
+                    "hashcode": hashcode,
+                    "prediction": saved_score[0],
+                    "probability_score": saved_score[1]
+                })
+            else:
+                result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph, project, branch))
         else:
             result.get("fp_scores").append(calculating_confidence(hashcode, dot_graph, project, branch))
 
