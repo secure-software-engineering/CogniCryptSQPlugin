@@ -8,7 +8,7 @@ use_directory_urls: false
 # Repository info
 repo_name: secure-software-engineering/CogniCryptSQPlugin
 repo_url: https://github.com/secure-software-engineering/CogniCryptSQPlugin
-edit_uri: edit/testing/docs/ # Change to main branch when needed!
+edit_uri: edit/main/docs/
 
 
 # Theme configuration
