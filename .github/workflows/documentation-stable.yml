@@ -1,0 +1,31 @@
+name: Deploy Stable Documentation
+
+on:
+  push:
+    tags:
+      - '*'
+
+concurrency:
+  group: gh-pages
+
+jobs:
+  deploy-stable:
+    name: Deploy stable documentation
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Deploy Stable Documentation
+        uses: secure-software-engineering/actions/documentation/deployment@develop
+        with:
+          name: ${{ github.ref_name }}
+          title: ${{ github.ref_name }}
+          stable: true

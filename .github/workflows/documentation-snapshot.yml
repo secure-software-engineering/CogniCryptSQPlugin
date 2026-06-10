@@ -1,0 +1,39 @@
+name: Deploy Documentation Snapshot
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - mkdocs.yml
+      - docs/**
+      - .github/workflows/documentation-snapshot.yml
+
+concurrency:
+  group: gh-pages
+
+jobs:
+  deploy-snapshot:
+    name: Deploy documentation snapshot
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Maven Version
+        id: version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Deploy Snapshot Documentation
+        uses: secure-software-engineering/actions/documentation/deployment@develop
+        with:
+          name: ${{ steps.version.outputs.version }}
+          title: ${{ steps.version.outputs.version }}
