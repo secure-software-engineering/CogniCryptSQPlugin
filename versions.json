@@ -2,6 +2,8 @@
   {
     "version": "pr-11",
     "title": "PR 11 - Add documentation workflow for gh pages",
-    "aliases": []
+    "aliases": [
+      "latest"
+    ]
   }
 ]
